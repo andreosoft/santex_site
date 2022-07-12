@@ -1,0 +1,366 @@
+// Ref: https://github.com/nuxt-community/vuetify-module#customvariables
+//
+// The variables you want to modify
+// $font-size-root: 20px; 
+
+@font-face {
+  font-family: helveticaneuecyr;
+  src: url(/fonts/HelveticaNeueCyr-Roman.ttf);
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: helveticaneuecyr;
+  src: url(/fonts/HelveticaNeueCyr-Medium.ttf);
+  font-weight: bold;
+}
+
+@font-face {
+  font-family: helveticaneuecyr;
+  src: url(/fonts/HelveticaNeueCyr-BoldItalic.ttf);
+  font-weight: bold;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: helveticaneuecyr;
+  src: url(/fonts/HelveticaNeueCyr-Light.ttf);
+  font-weight: lighter;
+}
+
+@font-face {
+  font-family: helveticaneuecyr;
+  src: url(/fonts/HelveticaNeueCyr-LightItalic.ttf);
+  font-weight: lighter;
+  font-style: italic;
+}
+
+.v-application {
+  font-family: 'helveticaneuecyr', serif !important;
+}
+
+.s-btn-text>.v-btn__content {
+  padding-top: 4px;
+
+  .v-icon {
+    margin-top: -4px;
+  }
+}
+
+
+
+.container {
+  max-width: 1375px;
+}
+
+hr.style-1 {
+  overflow: visible;
+  height: 0;
+  max-width: 100px;
+  margin: 20px auto;
+  color: #000;
+  border: none;
+  border-bottom: solid 2px #000;
+}
+
+img {
+  vertical-align: middle;
+}
+
+.v-application a {
+  color: #0c0c0c;
+  text-decoration: none;
+}
+
+.underlined {
+  text-decoration: underline !important;
+}
+.underlined-onhover:hover {
+  text-decoration: underline !important;
+}
+h1 {
+  font-size: 46px;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+h2 {
+  font-size: 32px;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+h3 {
+  font-size: 32px;
+  font-weight: normal;
+  padding-bottom: 20px;
+}
+
+h4 {
+  font-size: 20px;
+  font-weight: bold;
+  padding-bottom: 20px;
+}
+
+.s-text-h2 {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.s-card-good {
+  border: 1px solid #c0c0c0!important;
+  border-radius: 0!important;
+
+  &:hover {
+    box-shadow: 0px 3px 1px -2px rgb(0 0 0 / 20%), 0px 2px 2px 0px rgb(0 0 0 / 14%), 0px 1px 5px 0px rgb(0 0 0 / 12%) !important;
+  }
+}
+
+.theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:not(.v-data-table__mobile-row), .theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > th:not(.v-data-table__mobile-row) {
+  border-bottom: none;
+}
+
+.s-catalog-gallery {
+  border: 1px solid #DDDDDD!important;
+  &.active {
+    border-bottom: 3px solid #030303!important;
+  }
+}
+
+.v-sheet.v-card {
+  border-radius: 0;
+}
+
+.s-btn-cart {
+  padding: 20px 34px!important;
+  font-weight: bold;
+}
+
+.s-btn-cart-small {
+  padding: 20px 16px !important;
+  font-weight: bold;
+}
+
+ol>li {
+  margin-bottom: 10px;
+}
+
+.v-carousel {
+  overflow: inherit !important;
+}
+
+.v-application--is-ltr .v-window__next {
+  right: -75px;
+}
+
+.v-application--is-ltr .v-window__prev {
+  left: -75px;
+}
+
+tbody tr:nth-of-type(odd) {
+  background-color: rgba(0, 0, 0, .05);
+}
+
+/* ===== Scrollbar CSS ===== */
+/* Firefox */
+* {
+  scrollbar-width: auto;
+  scrollbar-color: #797979 #ffffff;
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #797979;
+  border-radius: 10px;
+  border: 3px solid #ffffff;
+}
+
+.s-menu-catalog {
+  z-index: 1000;
+  position: absolute;
+  top: 220px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: block;
+  background-color: #f2f2f2;
+
+  &.show {
+    display: block;
+  }
+
+  .s-catalog-brends {
+    margin-top: 40px;
+    border-top: #c4c4c4 solid 2px;
+    padding-top: 40px;
+
+    .s-catalog-brends-links a {
+      color: #c4c4c4 !important;
+    }
+  }
+
+}
+
+.s-catalog-links {
+  .s-catalog-links-el {
+    .s-catalog-links-el-icon {
+      filter: invert(60%);
+      width: 40px;
+      display: inline-block;
+    }
+
+    cursor: pointer;
+    font-size: 16px;
+    display: inline-block;
+    margin: 0;
+    padding: 10px;
+    width: 100%;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.03);
+    }
+
+    &.active {
+      background: rgba(0, 0, 0, 1);
+      color: #fff !important;
+    }
+  }
+}
+
+.s-menu-catalog-left {
+  border-right: solid 2px #c4c4c4;
+  width: 400px;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: 0;
+}
+
+.s-menu-catalog-right {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  top: 0;
+  left: 400px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
+  opacity: 0;
+}
+
+.v-btn--is-elevated {
+  box-shadow: none;
+}
+
+.theme--light.v-btn.v-btn--has-bg {
+  background-color: #fff;
+  border: 1px solid rgb(99, 99, 99);
+}
+
+.s-btn-main {
+  padding: 23px 54px !important;
+}
+
+.v-btn--fab .v-btn__content {
+  padding-top: 0px !important;
+}
+
+.theme--light.v-btn--active::before {
+  opacity: 0;
+}
+
+.v-sheet.v-card:not(.v-sheet--outlined) {
+  box-shadow: none;
+}
+
+.s-btn-else {
+  i {
+    background: #000;
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+}
+
+.v-tab {
+  text-transform: none;
+  font-weight: bold;
+}
+
+.s-popup {
+  background: #fff;
+  padding: 10px;
+  overflow: auto;
+}
+
+.v-date-picker-header.theme--light {
+  background: #222222;
+}
+.theme--light.v-btn.v-btn--icon {
+  color: #fff;
+}
+
+.theme--light.v-date-picker-header .v-date-picker-header__value:not(.v-date-picker-header__value--disabled) button:not(:hover):not(:focus) {
+  color: #fff;
+}
+
+.row.s-row {
+  margin: -23px;
+  .col, .col-auto, .col-12, .col-11, .col-10, .col-9, .col-8, .col-7, .col-6, .col-5, .col-4, .col-3, .col-2, .col-1  {
+    padding: 23px;
+  }
+}
+
+.s-tail-header {
+  display: flex;
+  flex: 1 1 auto;
+  font-weight: bold;
+  font-size: 20px;
+  border-bottom: 1px solid #C4C4C4;
+  margin-bottom: 20px;
+  .s-tail-header-title {
+    color: #222222;
+    border-bottom: 3px solid transparent;
+    padding: 10px 0;
+    margin: 0 24px 0 0 ;
+    opacity: .3;
+    cursor: pointer;
+    img {
+      padding-right: 16px;
+    }
+    &.active { 
+      opacity: 1;
+      border-bottom: 3px solid #222222;
+    }
+    .s-taile-count {
+      display: inline-block;
+      font-size: 14px;
+      vertical-align: super;
+      margin-left: 10px;
+    }
+  }
+}
+
+.s-btn-tail-select {
+  width: 48px;
+  text-transform: lowercase;
+}

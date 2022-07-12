@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="86" height="18" viewBox="0 0 86 18">
+  <g id="pay_qr" transform="translate(-1236 -1485)">
+    <text id="QR_Pay" data-name="QR Pay" transform="translate(1265 1500)" font-size="16" font-family="HelveticaNeueCyr-Bold, HelveticaNeueCyr" font-weight="700"><tspan x="0" y="0">QR Pay</tspan></text>
+    <path id="Path_7143" data-name="Path 7143" d="M16,17V16H13V13h3v2h2v2H17v2H15v2H13V18h2V17Zm5,4H17V19h2V17h2ZM3,3h8v8H3ZM5,9H9V5H5Zm8-6h8v8H13Zm2,6h4V5H15ZM3,13h8v8H3Zm2,6H9V15H5Zm13-6h3v2H18ZM6,6H8V8H6ZM6,16H8v2H6ZM16,6h2V8H16Z" transform="translate(1233 1482)"/>
+  </g>
+</svg>

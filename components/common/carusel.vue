@@ -1,0 +1,66 @@
+<template>
+  <div style="position: relative">
+    <div style="position: absolute; top: calc(50% - 28px); left: -80px">
+      <v-btn fab @click="prev()"><i class="fa fa-chevron-left"></i></v-btn>
+    </div>
+    <v-window v-model="carouselModel">
+      <v-window-item v-for="(els, i) in data" :key="i">
+        <slot :els="els"></slot>
+      </v-window-item>
+    </v-window>
+    <div style="position: absolute; top: calc(50% - 28px); right: -80px">
+      <v-btn fab @click="next()"><i class="fa fa-chevron-right"></i></v-btn>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    items: Array,
+    type: {
+      type: Number,
+      default: 2,
+    },
+  },
+  data() {
+    return {
+      carouselModel: 0,
+    };
+  },
+  computed: {
+    data() {
+      let r = [];
+      if (this.items) {
+        for (let i = 0; i < this.items.length / this.type; i++) {
+          r[i] = [];
+          for (let k = 0; k < this.type; k++) {
+            let a = i * this.type + k;
+            if (this.items[a]) r[i].push(this.items[a]);
+          }
+        }
+      }
+      return r;
+    },
+    length() {
+      return this.items.length / this.type;
+    },
+  },
+  methods: {
+    next() {
+      this.carouselModel =
+        this.carouselModel + 1 === this.length ? 0 : this.carouselModel + 1;
+    },
+    prev() {
+      this.carouselModel =
+        this.carouselModel - 1 < 0 ? this.length - 1 : this.carouselModel - 1;
+    },
+  },
+};
+</script>
+
+<style lang="scss">
+.s-carusel-blog .v-carousel__controls {
+  background: none;
+}
+</style>

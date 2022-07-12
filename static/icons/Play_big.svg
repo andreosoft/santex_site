@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="265" height="265" viewBox="0 0 265 265">
+  <defs>
+    <filter id="Ellipse_392" x="0" y="0" width="265" height="265" filterUnits="userSpaceOnUse">
+      <feOffset dx="5" dy="5" input="SourceAlpha"/>
+      <feGaussianBlur stdDeviation="27.5" result="blur"/>
+      <feFlood flood-opacity="0.161"/>
+      <feComposite operator="in" in2="blur"/>
+      <feComposite in="SourceGraphic"/>
+    </filter>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_643" data-name="Rectangle 643" width="19.138" height="24" fill="none"/>
+    </clipPath>
+  </defs>
+  <g id="Play_big" transform="translate(-1027.5 -535.5)">
+    <g transform="matrix(1, 0, 0, 1, 1027.5, 535.5)" filter="url(#Ellipse_392)">
+      <circle id="Ellipse_392-2" data-name="Ellipse 392" cx="50" cy="50" r="50" transform="translate(77.5 77.5)" fill="#fff"/>
+    </g>
+    <g id="Group_646" data-name="Group 646" transform="translate(1145 651)">
+      <g id="Group_470" data-name="Group 470" clip-path="url(#clip-path)">
+        <path id="Path_973" data-name="Path 973" d="M18.336,13.474l-7.788,5.109L2.72,23.734A1.784,1.784,0,0,1,.288,23.2,1.6,1.6,0,0,1,0,22.251V1.731A1.741,1.741,0,0,1,1.731,0a1.709,1.709,0,0,1,1.03.33l7.788,5.109,7.788,5.109a1.743,1.743,0,0,1,.536,2.39,1.658,1.658,0,0,1-.536.536" fill-rule="evenodd"/>
+      </g>
+    </g>
+  </g>
+</svg>

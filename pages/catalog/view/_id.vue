@@ -1,0 +1,407 @@
+<template>
+  <v-container class="mb-14">
+    <v-divider class="mb-8" />
+    <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
+    <h1>{{ data.name }}</h1>
+    <v-row class="mt-4">
+      <v-col cols="6">
+        <div>
+          <v-card class="ma-2">
+            <v-img :src="data.image[0]" />
+          </v-card>
+          <div>
+            <div class="d-flex">
+              <v-card class="ma-2 s-catalog-gallery" style="position: relative;">
+                <v-img width="100" :src="data.image[0]" />
+                <div style="position: absolute; left:0; right: 0; top: 0; bottom: 0;"
+                  class="d-flex justify-center align-center">
+                  <v-btn class="white" icon title="Проиграть видео"><i style="margin-left: 4px;
+    margin-bottom: 3px;" class="fa fa-play"></i></v-btn>
+                </div>
+              </v-card>
+              <v-card v-for="(el, i) in data.image" :key="i" class="ma-2 s-catalog-gallery"
+                :class="{ active: galleryModel == i }" @click="galleryModel = i">
+                <v-img width="100" :src="el" />
+              </v-card>
+            </div>
+          </div>
+        </div>
+      </v-col>
+      <v-col cols="6">
+        <div class="d-flex justify-space-between">
+          <div>
+            <catalog-available :value="data.available" />
+          </div>
+          <div style="font-size: 14px;" class="grey--text"><span>Код товара: </span><span>{{ data.code }}</span></div>
+        </div>
+        <div class="my-3">{{ data.decription }}</div>
+        <v-divider />
+        <div class="my-3 d-flex justify-space-between align-center">
+          <div>
+            <span style="font-size: 46px; font-weight: bold;">
+              <number :value="data.price" /> <span style="font-weight: normal;">₽</span>
+            </span>
+            <span class="ml-4 grey--text" style="
+                display: inline-block;
+                padding-top: 6px;
+                font-size: 22px;
+                vertical-align: top;
+                text-decoration: line-through;
+              " v-if="data.old_price">
+              <number :value="data.old_price" /> ₽
+            </span>
+          </div>
+          <div><a>
+              <v-img :src="data.brend_logo" contain height="100" />
+            </a></div>
+        </div>
+        <div class="my-4">
+          <table>
+            <tr>
+              <td style="width: 50%"><b>Доставка:</b></td>
+              <td>Послезавтра (700 ₽ )</td>
+            </tr>
+            <tr>
+              <td><b>Самовывоз:</b></td>
+              <td>Завтра (бесплатно )</td>
+            </tr>
+          </table>
+        </div>
+        <v-divider />
+        <div class="my-4">
+          <div v-for="(el, i) in data.params" :key="i">
+            <div class="my-2 grey--text">{{ el.name }}</div>
+            <div class="d-flex" style="margin: -2px">
+              <div class="ma-1" v-for="(e, k) in el.options" :key="k">
+                <v-btn class="s-btn-text">{{ e.text }}</v-btn>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="my-8">
+          <div class="d-flex justify-space-between align-center">
+            <div>
+              <span>
+                <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" dark>Купить</v-btn>
+              </span><span class="ml-4">
+                <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" @click="showBuyeoneclick = true">Купить в 1 клик</v-btn>
+              </span>
+              <s-popup-buyoneclick v-model="showBuyeoneclick" />
+            </div>
+            <div>
+              <v-btn plain small><img src="/icon-similar.png" alt="" /></v-btn>
+              <v-btn plain small><img src="/icon-like.png" alt="" /></v-btn>
+            </div>
+          </div>
+        </div>
+        <div class="my-4">
+          <div class="mb-4">
+            <v-simple-table dense>
+              <tbody>
+                <tr v-for="(el, i) in data.params_info" :key="i">
+                  <td>
+                    <b>{{ el.name }}</b>
+                  </td>
+                  <td>{{ el.value }}</td>
+                </tr>
+              </tbody>
+            </v-simple-table>
+          </div>
+          <div>
+            <a class="grey--text underlined">Все характеристики</a>
+          </div>
+        </div>
+      </v-col>
+    </v-row>
+    <v-divider class="my-4 mb-14" />
+    <div class="mb-14">
+      <h2 class="mb-8">Соберите комплект и получите скидку</h2>
+      <catalog-complect-block :data="data.complect_data" />
+    </div>
+    <div class="mb-8">
+      <v-tabs class=" mb-14" style="border-bottom: 1px solid #ddd" v-model="tabModel">
+        <v-tab>Описание и характеристики</v-tab>
+        <v-tab>Комплектующие</v-tab>
+        <v-tab>С этим товаром покупают</v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tabModel">
+        <v-tab-item>
+          <div class="mb-6" v-html="data.fullDecription" />
+          <div class="mb-4">
+            <v-row>
+              <v-col :cols="6">
+                <v-simple-table dense>
+                  <tbody>
+                    <tr v-for="(el, i) in data.params_info" :key="i">
+                      <td>
+                        <b>{{ el.name }}</b>
+                      </td>
+                      <td>{{ el.value }}</td>
+                    </tr>
+                  </tbody>
+                </v-simple-table>
+              </v-col>
+              <v-col :cols="6">
+                <v-simple-table dense>
+                  <tbody>
+                    <tr v-for="(el, i) in data.params_info" :key="i">
+                      <td>
+                        <b>{{ el.name }}</b>
+                      </td>
+                      <td>{{ el.value }}</td>
+                    </tr>
+                  </tbody>
+                </v-simple-table>
+              </v-col>
+            </v-row>
+
+          </div>
+        </v-tab-item>
+        <v-tab-item>
+          <catalog-complect-block :data="data.complect_data" />
+        </v-tab-item>
+        <v-tab-item>
+          <div class="d-flex mt-2">
+            <div class="s-catalog-links" style="width: 360px;">
+              <div v-for="(el, i) in data.with_buy_groups" :key="i" class="s-catalog-links-el" :class="{
+                active: i == activeEl_with_buy_groups
+              }" @click="activeEl_with_buy_groups = i"> <b>{{ el }}</b>
+              </div>
+            </div>
+            <div  class="pl-4 ml-4" style="border-left: 1px solid #ddd;">
+              <div class="">
+                <div v-for="(el, i) in data.similar_data" :key="i" class="ma-2 d-inline-block">
+                  <catalog-item-list-small-type-2 :data="el" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
+    <v-divider class="mb-10" />
+    <div>
+      <a><i class="fas fa-long-arrow-alt-left mr-4"></i>Вернуться назад</a>
+    </div>
+  </v-container>
+</template>
+
+<script>
+import Number from "../../../components/number.vue";
+export default {
+  data() {
+    return {
+      showBuyeoneclick: false,
+      tabModel: 0,
+      galleryModel: 0,
+      activeEl_with_buy_groups: 0
+    };
+  },
+  async asyncData(params) {
+    Number;
+    console.log(params);
+    const data = {
+      id: 100,
+      name: "УГЛОВАЯ КОРЗИНКА ДЛЯ ДУША",
+      image: ["/img/catalog/1.png", "/img/catalog/1.png", "/img/catalog/1.png"],
+      decription: `Из 2-х частей: металлическая корзинка и вынимающаяся, небьющаяся, стойкая
+к мыльному налету и невосприимчивая к воздействию ультрафиолетовых
+лучей пластиковая вставка`,
+      fullDecription: `Из 2-х частей: металлическая корзинка и вынимающаяся, небьющаяся, стойкая
+к мыльному налету и невосприимчивая к воздействию ультрафиолетовых
+лучей пластиковая вставка`,
+      brend_logo: "/img/catalog/keuco.png",
+      code: "4554545",
+      price: 1540,
+      old_price: 8220,
+      brend_name: "Название бренда",
+      size: "44 x 75 x 20",
+      available: 1,
+      params: [
+        {
+          name: "Какой то параметр",
+          options: [{ text: "65" }, { text: "80" }, { text: "100" }],
+        },
+      ],
+      params_info: [
+        {
+          name: "Производитель:",
+          value: "Royal Bath",
+        },
+        {
+          name: "Коллекция:",
+          value: "HP",
+        },
+        {
+          name: "Код товара:",
+          value: "RB8120-HP1-M-L",
+        },
+        {
+          name: "Ширина:",
+          value: "120",
+        },
+        {
+          name: "Дина:",
+          value: "80",
+        },
+        {
+          name: "Высота:",
+          value: "217",
+        },
+        {
+          name: "Материал:",
+          value: "Аллюминий, стекло, акрил",
+        },
+        {
+          name: "Цвет:",
+          value: "Белый",
+        },
+        {
+          name: "Вес:",
+          value: "77,7",
+        },
+        {
+          name: "Стилистика дизайнера:",
+          value: "С совеременным дизайном",
+        },
+        {
+          name: "Гарантия:",
+          value: "10 лет",
+        },
+        {
+          name: "Страна:",
+          value: "Германия",
+        },
+      ],
+      complect_data: [
+        {
+          id: 100,
+          name: `Название товара на сайте в несколько строк`,
+          image: ["/img/catalog/2.png"],
+          price: 7222,
+          old_price: 8200,
+        },
+        {
+          id: 100,
+          name: `Название товара на сайте в несколько строк`,
+          image: ["/img/catalog/2.png"],
+          price: 7222,
+          old_price: 8200,
+        },
+        {
+          id: 100,
+          name: `Название товара на сайте в несколько строк`,
+          image: ["/img/catalog/3.png"],
+          price: 7222,
+          old_price: 8200,
+        },
+        {
+          id: 100,
+          name: `Название товара на сайте в несколько строк`,
+          image: ["/img/catalog/4.png"],
+          price: 7222,
+          old_price: 8200,
+        },
+      ],
+      similar_data: [
+        {
+          id: 100,
+          name: "Название товара",
+          image: ["/img/favorite/1.png"],
+          code: "4554545",
+          price: 1540,
+          old_price: 8220,
+          brend_name: "Название бренда",
+          size: "44 x 75 x 20",
+          available: 1,
+        },
+        {
+          id: 100,
+          name: "Название товара",
+          image: ["/img/favorite/2.png"],
+          code: "4554545",
+          price: 1540,
+          old_price: 8220,
+          brend_name: "Название бренда",
+          size: "44 x 75 x 20",
+          available: 1,
+        },
+        {
+          id: 100,
+          name: "Название товара",
+          image: ["/img/favorite/3.png"],
+          code: "4554545",
+          price: 1540,
+          old_price: 8220,
+          brend_name: "Название бренда",
+          size: "44 x 75 x 20",
+          available: 1,
+        },
+        {
+          id: 100,
+          name: "Название товара",
+          image: ["/img/favorite/4.png"],
+          code: "4554545",
+          price: 1540,
+          old_price: 8220,
+          brend_name: "Название бренда",
+          size: "44 x 75 x 20",
+          available: 1,
+        },
+        {
+          id: 100,
+          name: "Название товара",
+          image: ["/img/favorite/5.png"],
+          code: "4554545",
+          price: 1540,
+          old_price: 8220,
+          brend_name: "Название бренда",
+          size: "44 x 75 x 20",
+          available: 1,
+        },
+        {
+          id: 100,
+          name: "Название товара",
+          image: ["/img/favorite/1.png"],
+          code: "4554545",
+          price: 1540,
+          old_price: 8220,
+          brend_name: "Название бренда",
+          size: "44 x 75 x 20",
+          available: 1,
+        },
+        {
+          id: 100,
+          name: "Название товара",
+          image: ["/img/favorite/1.png"],
+          code: "4554545",
+          price: 1540,
+          old_price: 8220,
+          brend_name: "Название бренда",
+          size: "44 x 75 x 20",
+          available: 1,
+        },
+      ],
+      with_buy_groups: [
+        "Все","Комплектующие","Защита от протечек воды","Кнопки смыва","Унитаз","Душ"
+      ]
+    };
+    const breadcrumbsData = [
+      {
+        url: "",
+        title: "Каталог",
+      },
+      {
+        url: "/catalog/1",
+        title: "Аксессуары",
+      },
+      {
+        url: "",
+        title: data.name,
+      },
+    ];
+    return { data, breadcrumbsData };
+  },
+};
+</script>
