@@ -11,7 +11,7 @@
                             </v-col>
                             <v-col cols="6">
                                 <div class="text-center mx-16">
-                                    <h2 class="my-4">Получи помощь по комплектации санузла</h2>
+                                    <h2 class="my-4">Получи помощь</br> по комплектации санузла</h2>
                                     <hr class="style-1" />
                                     <div>
                                         <p>Наши эксперты салона SantehKomfort Elite могут помочь вам
