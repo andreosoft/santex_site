@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative">
-    <div style="position: absolute; top: calc(50% - 28px); left: -80px">
+    <div class="s-carusel-contols left">
       <v-btn fab @click="prev()"><i class="fa fa-chevron-left"></i></v-btn>
     </div>
     <v-window v-model="carouselModel">
@@ -8,7 +8,7 @@
         <slot :els="els"></slot>
       </v-window-item>
     </v-window>
-    <div style="position: absolute; top: calc(50% - 28px); right: -80px">
+    <div class="s-carusel-contols right">
       <v-btn fab @click="next()"><i class="fa fa-chevron-right"></i></v-btn>
     </div>
   </div>
@@ -62,5 +62,23 @@ export default {
 <style lang="scss">
 .s-carusel-blog .v-carousel__controls {
   background: none;
+}
+.s-carusel-contols {
+  position: absolute; top: calc(40% - 28px); 
+  z-index: 1;
+  &.left {
+    left: -80px;
+  }
+  &.right {
+    right: -80px;
+  }
+  @media only screen and (max-width: 1600px) {
+    &.left {
+      left: 10px;
+    }
+    &.right {
+      right: 10px;
+  }
+  }
 }
 </style>
