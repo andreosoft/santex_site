@@ -2,7 +2,7 @@
     <div>
         <h1>О компании</h1>
         <div>
-            <common-video :item="videoItem" />
+            <common-video fullWidth :item="videoItem" />
         </div>
         <p></p>
         <p>

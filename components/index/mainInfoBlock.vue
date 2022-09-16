@@ -2,7 +2,8 @@
   <v-container>
     <v-row class="my-3" align="center">
       <v-col cols="12" lg="7">
-        <img class="s-title-img" style="width: 800px" src="/img/main-block1.png" />
+        <img class="s-title-img s-title-img1" style="width: 800px" src="/img/main-block1.png" />
+        <img class="s-title-img s-title-img2" src="/img/main-block1-small.png" />
       </v-col>
       <v-col cols="12" lg="5" class="">
         <div class="s-title-header text-center">
@@ -28,12 +29,32 @@
   font-size: 43px;
   font-weight: bold;
 }
+
 .s-title-text {
   font-size: 20px;
 }
+
 @media (min-width: 1264px) {
   .s-title-img {
     margin-left: -45px;
+  }
+}
+
+.s-title-img2 {
+  display: none;
+}
+
+@media only screen and (max-width: 1600px) {
+  .s-title-img2 {
+    display: block;
+  }
+
+  .s-title-img {
+    margin-left: 0;
+  }
+
+  .s-title-img1 {
+    display: none;
   }
 }
 </style>

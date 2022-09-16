@@ -43,7 +43,7 @@
 <script>
 export default {
     props: {
-        value: Boolean,
+        value: String,
     },
     data() {
         return {

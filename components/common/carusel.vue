@@ -63,22 +63,33 @@ export default {
 .s-carusel-blog .v-carousel__controls {
   background: none;
 }
+
 .s-carusel-contols {
-  position: absolute; top: calc(40% - 28px); 
+  position: absolute;
+  top: calc(40% - 28px);
   z-index: 1;
+
   &.left {
     left: -80px;
   }
+
   &.right {
     right: -80px;
   }
+
   @media only screen and (max-width: 1600px) {
+    .v-btn--fab.v-size--default {
+      height: 36px;
+      width: 36px;
+    }
+
     &.left {
       left: 10px;
     }
+
     &.right {
       right: 10px;
-  }
+    }
   }
 }
 </style>

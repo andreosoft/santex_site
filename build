@@ -2,6 +2,10 @@
 
 npm run build
 scp -i ~/.ssh/id_rsa -r -P 22 .nuxt andrey@92.63.192.228:/srv/santex/site
-scp -i ~/.ssh/id_rsa -r -P 22 static andrey@92.63.192.228:/srv/santex/site
+#scp -i ~/.ssh/id_rsa -r -P 22 static andrey@92.63.192.228:/srv/santex/site
 
-scp -i ~/.ssh/id_rsa -r -P 22 package.json andrey@92.63.192.228:/srv/santex/site
+#scp -i ~/.ssh/id_rsa -r -P 22 package.json andrey@92.63.192.228:/srv/santex/site
+
+git add .
+git commit -m 'commit'
+git push origin master

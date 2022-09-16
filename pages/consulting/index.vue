@@ -11,9 +11,9 @@
                             </v-col>
                             <v-col cols="6">
                                 <div class="text-center mx-16">
-                                    <h2 class="my-4">Получи помощь</br> по комплектации санузла</h2>
+                                    <h2 class="">Получи помощь</br> по комплектации санузла</h2>
                                     <hr class="style-1" />
-                                    <div>
+                                    <div class="mt-11">
                                         <p>Наши эксперты салона SantehKomfort Elite могут помочь вам
                                             выбрать качественную сантехнику, которая прослужит
                                             долгие годы. SantehKomfort Elite — лидер по комплектации

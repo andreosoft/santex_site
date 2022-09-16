@@ -81,6 +81,17 @@ export default {
     right: -2em;
   }
 
+  @media only screen and (max-width: 1600px) {
+
+    .splide__arrow--prev {
+      left: 8em;
+    }
+
+    .splide__arrow--next {
+      right: 8em;
+    }
+  }
+
   .splide__pagination {
     height: 50px;
     bottom: -19px;
@@ -95,6 +106,7 @@ export default {
         background: #fff;
         border: 1px solid #242424;
         margin: 5px;
+
         &.is-active {
           background: #242424;
           transform: none;
