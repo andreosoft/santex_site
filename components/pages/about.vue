@@ -81,7 +81,7 @@
                 <v-col cols="6">
                     <v-img src="/img/main-block1.png" />
                     <div class="mt-16 text-center">
-                        <v-btn dark class="s-btn-main s-btn-text">Заказать консультацию</v-btn>
+                        <v-btn dark class="s-btn-main s-btn-text" @click="showPopupConsult = true">Заказать консультацию</v-btn>
                     </div>
                 </v-col>
             </v-row>
@@ -97,12 +97,13 @@
                     <v-col cols="8" class="mb-16">
                         <div v-html="el.content" />
                         <div>
-                            <v-btn dark class="s-btn-main s-btn-text">Заказать консультацию</v-btn>
+                            <v-btn dark class="s-btn-main s-btn-text" @click="showPopupConsult = true">Заказать консультацию</v-btn>
                         </div>
                     </v-col>
                 </v-row>
             </div>
         </div>
+        <s-popup-consult v-model="showPopupConsult"></s-popup-consult>
     </div>
 </template>
 
@@ -111,6 +112,7 @@
 export default {
     data() {
         return {
+            showPopupConsult: false,
             videoItem: {
                 img: "/img/coll1.png"
             },

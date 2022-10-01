@@ -116,6 +116,10 @@
 export default {
     props: {
         value: Boolean,
+        managerId: {
+            type: Number,
+            default: 0
+        }
     },
     data() {
         return {

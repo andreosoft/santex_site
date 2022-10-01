@@ -1,5 +1,8 @@
 <template>
-    <div class="s-common-video" :class="{'s-common-video-width': !fullWidth}" style="position: relative">
+    <div class="s-common-video" :class="{'s-common-video-width': !fullWidth}">
+        <iframe :src="item.video" frameborder="0" allowfullscreen class="video"></iframe>
+    </div>
+    <!-- <div class="s-common-video" :class="{'s-common-video-width': !fullWidth}" style="position: relative">
         <v-img :src="item.img" />
         <div style="position: absolute; left: 0; right: 0; top: 0; bottom: 0" class="d-flex justify-center ">
             <v-btn @click="dialog = true" class="align-self-center" fab title="Проиграть видео"><i class="fa fa-play"></i></v-btn>
@@ -17,7 +20,7 @@
                 </div>
             </div>
         </v-dialog>
-    </div>
+    </div> -->
 </template>
 
 <script>
@@ -38,10 +41,23 @@ export default {
 </script>
 
 <style lang="scss">
-    .s-common-video {
-        margin: auto;
+.s-common-video {
+    margin: auto;
+    position: relative;
+    width: 100%;
+    height: 0;
+    padding-bottom: 56.25%;
+
+    .video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
     }
-    .s-common-video-width {
-        max-width: 1000px;
-    }
+}
+
+.s-common-video-width {
+    max-width: 1000px;
+}
 </style>
