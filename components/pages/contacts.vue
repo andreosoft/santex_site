@@ -84,7 +84,7 @@
             <v-img src="/img/about/6.png" />
         </div>
         <div class="mb-8">
-            <common-video :item="{ img: '/img/contact/1.png' }" />
+            <common-video fullWidth :item="videoItem" />
         </div>
         <div class="">
             <div>
@@ -140,3 +140,16 @@
         </div>
     </div>
 </template>
+
+<script>
+export default {
+data() {
+    return {
+        showPopupConsult: false,
+        videoItem: {
+                video: "https://www.youtube.com/embed/nOKam63GgzQ"
+            },
+        }
+    }
+}
+</script>

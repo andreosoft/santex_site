@@ -114,7 +114,8 @@ export default {
         return {
             showPopupConsult: false,
             videoItem: {
-                img: "/img/coll1.png"
+                img: "/img/coll1.png",
+                video: "https://www.youtube.com/embed/nOKam63GgzQ"
             },
             aboutCommand: [
                 {
