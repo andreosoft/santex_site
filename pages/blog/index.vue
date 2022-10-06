@@ -4,9 +4,9 @@
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>Блог</h1>
     <h2>Полезные советы в ремонте</h2>
-    <p>
+    <div>
       <blog-carusel :items="blogData1" />
-    </p>
+    </div>
 
     <v-divider class="my-10 pa-0" />
     <h2>Обзор квартир и домов</h2>
