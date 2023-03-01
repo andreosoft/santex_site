@@ -1,5 +1,5 @@
 <template>
-    <v-container style="max-width: 400px;">
+    <v-container style="max-width: 400px;" v-if="this.value.limit">
         <v-pagination :value="page" @input="onPage($event)" :length="length" circle></v-pagination>
     </v-container>
 </template>
@@ -16,7 +16,7 @@ export default {
     },
     computed: {
         length() {
-            return Math.ceil(this.value.count / this.value.limit);
+            if (this.value.limit > 0) return Math.ceil(this.value.count / this.value.limit);
         },
         page() {
             return Number(this.value.page) + 1
