@@ -1,5 +1,5 @@
 <template>
-    <v-container style="max-width: 400px;" v-if="this.value.limit">
+    <v-container style="max-width: 400px;" v-if="length">
         <v-pagination :value="page" @input="onPage($event)" :length="length" circle></v-pagination>
     </v-container>
 </template>
