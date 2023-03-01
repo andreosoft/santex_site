@@ -1,11 +1,19 @@
 #!/bin/sh
 
 npm run build
-scp -i ~/.ssh/id_rsa -r -P 22 .nuxt andrey@92.63.192.228:/srv/santex/site
+
+# scp -i ~/.ssh/id_rsa -r -P 22 .nuxt andrey@92.63.192.228:/srv/santex/site
 # scp -i ~/.ssh/id_rsa -r -P 22 static andrey@92.63.192.228:/srv/santex/site
+tar -czvf build.tar.gz -C .nuxt .
+ssh -p 22 andrey@92.63.192.228 rm -r /srv/santex/site/.nuxt
+scp -r -P 22 build.tar.gz andrey@92.63.192.228:/srv/santex/site/
+ssh -p 22 andrey@92.63.192.228 mkdir /srv/santex/site/.nuxt
+ssh -p 22 andrey@92.63.192.228 tar -xvzf /srv/santex/site/build.tar.gz -C /srv/santex/site/.nuxt
 
 scp -i ~/.ssh/id_rsa -r -P 22 nuxt.config.js andrey@92.63.192.228:/srv/santex/site
 scp -i ~/.ssh/id_rsa -r -P 22 package.json andrey@92.63.192.228:/srv/santex/site
+
+ssh andrey@92.63.192.228 pm2 restart 1
 
 git add .
 git commit -m 'commit'

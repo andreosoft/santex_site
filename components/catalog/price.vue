@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="range[0] != null && range[1] != null">
     <b>{{ title }}</b>
     <v-row class="my-1">
       <v-col cols="6">
