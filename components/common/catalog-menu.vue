@@ -13,7 +13,7 @@
                   @mouseover="activeEl = i"
                   :key="i"
                 >
-                  <span class="s-catalog-links-el-icon"><img :src="el.icon"/></span>{{ el.title }}
+                  <span class="s-catalog-links-el-icon"><img :src="el.icon"/></span>{{ el.name }}
                 </div>
               </div>
             </div>
@@ -30,8 +30,8 @@
                       :key="i"
                       @click="$emit('input')"
                     >
-                      <nuxt-link :to="el.url" class="s-catalog-links-el">{{
-                        el.title
+                      <nuxt-link :to="'/catalog/' + el.id" class="s-catalog-links-el">{{
+                        el.name
                       }}</nuxt-link>
                     </v-col>
                   </v-row>
@@ -45,7 +45,7 @@
                         :key="i"
                         @click="$emit('input')"
                       >
-                        <nuxt-link class="underlined" :to="el.url">{{ el.title }}</nuxt-link>
+                        <nuxt-link class="underlined" :to="el.url">{{ el.name }}</nuxt-link>
                       </v-col>
                     </v-row>
                   </div>
@@ -55,7 +55,7 @@
                 <div class="text-center pt-10" v-if="items[activeEl].ads">
                   <v-img :src="items[activeEl].ads.img" />
                   <p class="pt-4">
-                    <b>{{ items[activeEl].ads.title }}</b>
+                    <b>{{ items[activeEl].ads.name }}</b>
                   </p>
                   <div @click="$emit('input')">
                     <nuxt-link class="underlined" :to="items[activeEl].ads.url">Подробнее</nuxt-link>

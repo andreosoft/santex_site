@@ -2,24 +2,24 @@
   <v-card class="s-card-good pa-4">
     <div>
       <nuxt-link :to="'/catalog/view/' + el.id">
-        <div style="position: relative;">
-          <v-img :src="el.image[0]" />
+        <div style="position: relative;" class="mb-2">
+          <v-img v-if="el.images && el.images[0]" :src="$config.baseImageURL+el.images[0]+'?width=270&height=270'" />
         </div>
-        <div class="d-flex justify-space-between mb-4">
+        <div class="d-flex justify-space-between mb-2">
           <div style="margin: 3px 0; font-size: 13px">
-            <catalog-available :value="el.available" />
+            <catalog-available :value="el.store" />
           </div>
           <div style="margin: 3px 0; font-size: 13px; color: #949494">
-            Код товара: {{ el.code }}
+            Код товара: {{ el.factory_article }}
           </div>
         </div>
         <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
-          <div>
+          <!-- <div>
             <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.size }}</span>
-          </div>
+          </div> -->
           <div>
-            <span style="color: #949494">Бренд: </span><span>{{ el.brend_name }}</span>
+            <span style="color: #949494">Бренд: </span><span>{{ el.brand }}</span>
           </div>
         </div>
         <div class="my-2" style=" font-weight: bold;">

@@ -5,34 +5,14 @@
     <h1>{{ data.name }}</h1>
     <v-row class="mt-4">
       <v-col cols="6">
-        <div>
-          <v-card class="ma-2">
-            <v-img :src="data.image[0]" />
-          </v-card>
-          <div>
-            <div class="d-flex">
-              <v-card class="ma-2 s-catalog-gallery" style="position: relative;">
-                <v-img width="100" :src="data.image[0]" />
-                <div style="position: absolute; left:0; right: 0; top: 0; bottom: 0;"
-                  class="d-flex justify-center align-center">
-                  <v-btn class="white" icon title="Проиграть видео"><i style="margin-left: 4px;
-    margin-bottom: 3px;" class="fa fa-play"></i></v-btn>
-                </div>
-              </v-card>
-              <v-card v-for="(el, i) in data.image" :key="i" class="ma-2 s-catalog-gallery"
-                :class="{ active: galleryModel == i }" @click="galleryModel = i">
-                <v-img width="100" :src="el" />
-              </v-card>
-            </div>
-          </div>
-        </div>
+        <common-image-gallery :value="data.images" />
       </v-col>
       <v-col cols="6">
         <div class="d-flex justify-space-between">
           <div>
             <catalog-available :value="data.available" />
           </div>
-          <div style="font-size: 14px;" class="grey--text"><span>Код товара: </span><span>{{ data.code }}</span></div>
+          <div style="font-size: 14px;" class="grey--text"><span>Код товара: </span><span>{{ data.factory_article }}</span></div>
         </div>
         <div class="my-3">{{ data.decription }}</div>
         <v-divider />
@@ -42,12 +22,12 @@
               <number :value="data.price" /> <span style="font-weight: normal;">₽</span>
             </span>
             <span class="ml-4 grey--text" style="
-                display: inline-block;
-                padding-top: 6px;
-                font-size: 22px;
-                vertical-align: top;
-                text-decoration: line-through;
-              " v-if="data.old_price">
+                  display: inline-block;
+                  padding-top: 6px;
+                  font-size: 22px;
+                  vertical-align: top;
+                  text-decoration: line-through;
+                " v-if="data.old_price">
               <number :value="data.old_price" /> ₽
             </span>
           </div>
@@ -84,7 +64,8 @@
               <span>
                 <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" dark>Купить</v-btn>
               </span><span class="ml-4">
-                <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" @click="showBuyeoneclick = true">Купить в 1 клик</v-btn>
+                <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" @click="showBuyeoneclick = true">Купить в 1
+                  клик</v-btn>
               </span>
               <s-popup-buyoneclick v-model="showBuyeoneclick" />
             </div>
@@ -98,7 +79,7 @@
           <div class="mb-4">
             <v-simple-table dense>
               <tbody>
-                <tr v-for="(el, i) in data.params_info" :key="i">
+                <tr v-for="(el, i) in data.filters.slice(0, 10)" :key="i">
                   <td>
                     <b>{{ el.name }}</b>
                   </td>
@@ -108,16 +89,16 @@
             </v-simple-table>
           </div>
           <div>
-            <a class="grey--text underlined">Все характеристики</a>
+            <a class="grey--text underlined" href="#full-info">Все характеристики</a>
           </div>
         </div>
       </v-col>
     </v-row>
     <v-divider class="my-4 mb-14" />
-    <div class="mb-14">
+    <!-- <div class="mb-14">
       <h2 class="mb-8">Соберите комплект и получите скидку</h2>
       <catalog-complect-block :data="data.complect_data" />
-    </div>
+    </div> -->
     <div class="mb-8">
       <v-tabs class=" mb-14" style="border-bottom: 1px solid #ddd" v-model="tabModel">
         <v-tab>Описание и характеристики</v-tab>
@@ -126,13 +107,13 @@
       </v-tabs>
       <v-tabs-items v-model="tabModel">
         <v-tab-item>
-          <div class="mb-6" v-html="data.fullDecription" />
+          <div class="mb-6" v-html="data.content" />
           <div class="mb-4">
-            <v-row>
+            <v-row id="full-info">
               <v-col :cols="6">
                 <v-simple-table dense>
                   <tbody>
-                    <tr v-for="(el, i) in data.params_info" :key="i">
+                    <tr v-for="(el, i) in data.filters.slice(0, Math.ceil(data.filters.length / 2))" :key="i">
                       <td>
                         <b>{{ el.name }}</b>
                       </td>
@@ -144,7 +125,7 @@
               <v-col :cols="6">
                 <v-simple-table dense>
                   <tbody>
-                    <tr v-for="(el, i) in data.params_info" :key="i">
+                    <tr v-for="(el, i) in data.filters.slice(Math.ceil(data.filters.length / 2))" :key="i">
                       <td>
                         <b>{{ el.name }}</b>
                       </td>
@@ -168,7 +149,7 @@
               }" @click="activeEl_with_buy_groups = i"> <b>{{ el }}</b>
               </div>
             </div>
-            <div  class="pl-4 ml-4" style="border-left: 1px solid #ddd;">
+            <div class="pl-4 ml-4" style="border-left: 1px solid #ddd;">
               <div class="">
                 <div v-for="(el, i) in data.similar_data" :key="i" class="ma-2 d-inline-block">
                   <catalog-item-list-small-type-2 :data="el" />
@@ -189,6 +170,30 @@
 
 <script>
 import Number from "../../../components/number.vue";
+
+async function getData({ route, $axios, $config }) {
+  let id = route.params.id;
+  const res = await $axios.get($config.baseURL + '/api/site/catalog/' + id);
+  const data = res.data.data;
+  const resCat = await $axios.get($config.baseURL + '/api/site/categories/' + data.category_id);
+  const dataCat = resCat.data.data;
+  console.log(dataCat);
+  const breadcrumbsData = [
+    {
+      url: "",
+      title: "Каталог",
+    },
+    {
+      url: "/catalog/" + dataCat.id,
+      title: dataCat.name,
+    },
+    {
+      url: "",
+      title: data.name,
+    },
+  ];
+  return { data, breadcrumbsData };
+}
 export default {
   data() {
     return {
@@ -198,7 +203,8 @@ export default {
       activeEl_with_buy_groups: 0
     };
   },
-  async asyncData(params) {
+  async asyncData({ route, $axios, $config }) {
+    return await getData({ route, $axios, $config });
     Number;
     console.log(params);
     const data = {
@@ -384,7 +390,7 @@ export default {
         },
       ],
       with_buy_groups: [
-        "Все","Комплектующие","Защита от протечек воды","Кнопки смыва","Унитаз","Душ"
+        "Все", "Комплектующие", "Защита от протечек воды", "Кнопки смыва", "Унитаз", "Душ"
       ]
     };
     const breadcrumbsData = [

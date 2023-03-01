@@ -1,6 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  publicRuntimeConfig: {
+    baseURL: process.env.BASE_URL || 'https://api.santehkomfort.ru',
+    baseImageURL: "https://api.santehkomfort.ru/api/image/download/"
+  },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
     titleTemplate: '%s - santex',
