@@ -1,9 +1,12 @@
 <template>
   <div>
     <b>{{ title }}</b>
-    <div v-for="(el, i) of params" :key="i">
-        <v-checkbox dense hide-details :value="el" :label="el"/>
+    <div class="a-catalog-check1" :class="{ close: !toggleOpen }">
+      <div v-for="(el, i) of params" :key="i">
+        <v-checkbox dense hide-details :value="el" :label="el" />
+      </div>
     </div>
+    <div v-if="needExpand" class="mt-2"><v-btn small plain @click="toggleOpen = !toggleOpen">{{ toggleOpen ? 'Скрыть': 'Показать все' }}</v-btn></div>
   </div>
 </template>
 
@@ -14,5 +17,26 @@ export default {
     params: Array,
     value: Array
   },
+  data() {
+    return {
+      toggleOpen: false
+    }
+  },
+  computed: {
+    needExpand() {
+      if (this.params.length > 8) return true;
+      return false;
+    }
+  }
 };
 </script>
+
+<style lang="scss">
+.a-catalog-check1 {
+  overflow: hidden;
+
+  &.close {
+    max-height: 290px;
+  }
+}
+</style>
