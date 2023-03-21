@@ -1,13 +1,19 @@
 <template>
-  <div>
+    <v-expansion-panels focusable>
+      <v-expansion-panel>
+        <v-expansion-panel-header>
     <b>{{ title }}</b>
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
     <div class="a-catalog-check1" :class="{ close: !toggleOpen }">
       <div v-for="(el, i) of params" :key="i">
-        <v-checkbox dense hide-details :value="el" :label="el" />
+        <v-checkbox class="ml-2" dense hide-details :value="el" :label="el" />
       </div>
     </div>
     <div v-if="needExpand" class="mt-2"><v-btn small plain @click="toggleOpen = !toggleOpen">{{ toggleOpen ? 'Скрыть': 'Показать все' }}</v-btn></div>
-  </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
 </template>
 
 <script>
@@ -39,4 +45,15 @@ export default {
     max-height: 290px;
   }
 }
+.space-check .v-item-group{
+  z-index: 0;
+  position: relative;
+  border: 0.2px black solid;
+  .v-expansion-panel::before{
+    box-shadow: unset;
+  }
+
+}
+
+
 </style>

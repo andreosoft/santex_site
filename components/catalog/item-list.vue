@@ -10,7 +10,7 @@
             <catalog-available :value="el.store" />
           </div>
           <div style="margin: 3px 0; font-size: 13px; color: #949494">
-            Код товара: {{ el.factory_article }}
+            Код товара: {{ el.id }}
           </div>
         </div>
         <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>

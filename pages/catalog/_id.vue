@@ -3,7 +3,7 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
-    <!-- <catalog-top-select /> -->
+<!--     <catalog-top-select />-->
     <v-row class="s-row">
       <v-col cols="3">
         <catalog-filter :value="dataFilters" />

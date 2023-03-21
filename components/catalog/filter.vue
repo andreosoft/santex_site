@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div>
+    <div class="space-check">
       <catalog-price title="Цена, руб." v-model="data.price" :max="value.price.max_price" :min="value.price.min_price" />
-      <v-divider class="my-4" />
+<!--      <v-divider class="my-4" />-->
     </div>
-    <div v-for="(el, i) in value.filters" :key="i">
+    <div class="space-check" v-for="(el, i) in value.filters" :key="i">
       <catalog-check1 :title="el.name" v-model="data.material" :params="el.filters" />
-      <v-divider class="my-4" />
+<!--      <v-divider class="my-4" />-->
     </div>
   </div>
 </template>

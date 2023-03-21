@@ -9,7 +9,8 @@
         </v-window>
 
         <div>
-            <div class="d-flex">
+<!--    <div class="d-flex overfow-auto img-cover">      -->
+            <div class="d-flex flex-wrap img-cover">
                 <!-- <v-card class="ma-2 s-catalog-gallery" style="position: relative;">
                 <v-img width="100" :src="data.images[0]" />
                 <div style="position: absolute; left:0; right: 0; top: 0; bottom: 0;"
@@ -20,7 +21,7 @@
               </v-card> -->
                 <v-card v-for="(el, i) in images" :key="i" class="ma-2 s-catalog-gallery"
                     :class="{ active: galleryModel == i }" @click="galleryModel = i">
-                    <v-img width="100" :src="$config.baseImageURL + el" contain/>
+                    <v-img width="100" height="100" :src="$config.baseImageURL + el" contain/>
                 </v-card>
             </div>
         </div>

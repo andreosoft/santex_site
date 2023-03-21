@@ -12,7 +12,7 @@
           <div>
             <catalog-available :value="data.available" />
           </div>
-          <div style="font-size: 14px;" class="grey--text"><span>Код товара: </span><span>{{ data.factory_article }}</span></div>
+          <div style="font-size: 14px;" class="grey--text"><span>Код товара: </span><span>{{ data.id }}</span></div>
         </div>
         <div class="my-3">{{ data.decription }}</div>
         <v-divider />
@@ -79,6 +79,17 @@
           <div class="mb-4">
             <v-simple-table dense>
               <tbody>
+              <tr>
+                <td>
+                  <b>Артикул</b>
+                </td>
+                <td v-if="data.inner_article">
+                  {{ data.inner_article}}
+                </td>
+                <td v-else>
+                  {{ data.factory_article}}
+                </td>
+              </tr>
                 <tr v-for="(el, i) in data.filters.slice(0, 10)" :key="i">
                   <td>
                     <b>{{ el.name }}</b>

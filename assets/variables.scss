@@ -1,7 +1,7 @@
 // Ref: https://github.com/nuxt-community/vuetify-module#customvariables
 //
 // The variables you want to modify
-// $font-size-root: 20px; 
+// $font-size-root: 20px;
 
 @font-face {
   font-family: helveticaneuecyr;
@@ -157,6 +157,13 @@ ol>li {
 
 tbody tr:nth-of-type(odd) {
   background-color: rgba(0, 0, 0, .05);
+}
+
+.img-cover .v-image__image--contain{
+  background-size: cover !important;
+}
+.space-check{
+    margin-top: 5px !important;
 }
 
 /* ===== Scrollbar CSS ===== */
@@ -345,7 +352,7 @@ tbody tr:nth-of-type(odd) {
     img {
       padding-right: 16px;
     }
-    &.active { 
+    &.active {
       opacity: 1;
       border-bottom: 3px solid #222222;
     }
