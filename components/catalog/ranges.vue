@@ -1,17 +1,16 @@
 <template>
   <div>
     <b> {{ title }} </b>
-    <v-row class="my-1">
+    <!-- <v-row class="my-1">
       <v-col cols="6">
-        <v-text-field outlined hide-details dense :placeholder="min" />
+        <v-text-field outlined hide-details dense v-model="min" />
       </v-col>
       <v-col cols="6">
-        <v-text-field outlined hide-details dense :placeholder="max"/>
+        <v-text-field outlined hide-details dense v-model="max"/>
       </v-col>
-    </v-row>
+    </v-row> -->
     <v-range-slider
       v-model="mass"
-      @change="$emit('rangeinput', rangevalues(values))"
       hide-details
       class="align-center"
       :min="min"
@@ -39,22 +38,22 @@ export default {
     }
   },
     methods: {
-      rangevalues(values){
-        values.forEach(item =>{
-          this.range.push(Number(item.replace(/\,/g, '.')))
-        })
-        this.range.sort(function qwe(a,b){
-          return a-b;
-        })
-        this.range.forEach(item=> {
-          if(item == this.mass[0]){
-            this.starter = item;
-          } else if(item == this.mass[1]){
-            this.end = item;
-          }
-        })
-          return this.range.slice(this.starter, this.end+1)
-      }
+      // rangevalues(values){
+      //   values.forEach(item =>{
+      //     this.range.push(Number(item.replace(/\,/g, '.')))
+      //   })
+      //   this.range.sort(function qwe(a,b){
+      //     return a-b;
+      //   })
+      //   this.range.forEach(item=> {
+      //     if(item == this.mass[0]){
+      //       this.starter = item;
+      //     } else if(item == this.mass[1]){
+      //       this.end = item;
+      //     }
+      //   })
+      //     return this.range.slice(this.starter, this.end+1)
+      // }
     }
 
 }
