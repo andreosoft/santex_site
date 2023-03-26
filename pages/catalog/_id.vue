@@ -3,10 +3,11 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
+<!--    <p> {{ dataFilters.filters }} </p>-->
 <!--     <catalog-top-select />-->
     <v-row class="s-row">
       <v-col cols="3">
-        <catalog-filter :value="dataFilters" />
+        <catalog-filter :value="dataFilters"/>
       </v-col>
       <v-col cols="9">
         <catalog-top-bar :count="pager.count" :sort="sort"/>
@@ -36,8 +37,53 @@ async function getData({ route, $axios, $config }) {
   const data = res.data.data;
   const resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id,);
   const resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filters} });
+
   const dataFilters = resFilters.data.data;
+
+  // console.log(typeof (dataFilters));
+
+  // dataFilters.filters.forEach(item => console.log(item));
   // console.log(dataFilters);
+  // console.log(typeof (data));
+  let mass = []
+  for (let key in dataFilters.filters) {
+    // console.log(key);
+    if(dataFilters.filters[key].type === 2){
+      // dataFilters.filters[key].filters.forEach(item =>{
+      // dataFilters.filters[key].num = Number(item.replace(/\,/g, '.'));
+      // })
+      // dataFilters.filters[key].filters.sort(function qwe (a,b){
+      //   return Number(a.replace(/\,/g, '.'))-Number(b.replace(/\,/g, '.'));
+      // })
+      dataFilters.filters[key].min = minvalue(dataFilters.filters[key].filters)
+      mass.length = 0
+      dataFilters.filters[key].max = maxvalue(dataFilters.filters[key].filters)
+      mass.length = 0
+      // dataFilters.filters[key].filters.forEach(item => {
+      // // key.num = Number(item.replace(/\,/g, '.'));
+      // })
+    }
+  }
+
+  function minvalue(arr){
+    arr.forEach(item =>{
+      mass.push(Number(item.replace(/\,/g, '.')))
+    })
+    mass.sort(function qwe(a,b){
+      return a-b;
+    })
+    return mass[0];
+  }
+
+  function maxvalue(arr){
+    arr.forEach(item =>{
+      mass.push(Number(item.replace(/\,/g, '.')))
+    })
+    mass.sort(function qwe(a,b){
+      return a-b;
+    })
+    return mass[mass.length - 1];
+  }
   const title = resCat.data.data.name;
   pager = res.data.pager;
   const breadcrumbsData = [
@@ -52,7 +98,10 @@ async function getData({ route, $axios, $config }) {
   ];
   return { title, data, breadcrumbsData, sort, pager, dataFilters };
 }
-
+// function stg(dataFilters){
+//   dataFilters.forEach(item => console.log(item));
+// }
+// stg(dataFilters);
 export default {
   data() {
     return {
