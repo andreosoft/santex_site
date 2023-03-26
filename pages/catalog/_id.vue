@@ -40,23 +40,11 @@ async function getData({ route, $axios, $config }) {
 
   let dataFilters = resFilters.data.data;
 
-  // console.log(typeof (dataFilters));
-
-  // dataFilters.filters.forEach(item => console.log(item));
-  // console.log(dataFilters);
-  // console.log(typeof (data));
   let mass = []
   let conutI = 0;
   const maxI = 5;
   for (let key in dataFilters.filters) {
-    // console.log(key);
     if (dataFilters.filters[key].type === 2) {
-      // dataFilters.filters[key].filters.forEach(item =>{
-      // dataFilters.filters[key].num = Number(item.replace(/\,/g, '.'));
-      // })
-      // dataFilters.filters[key].filters.sort(function qwe (a,b){
-      //   return Number(a.replace(/\,/g, '.'))-Number(b.replace(/\,/g, '.'));
-      // })
       conutI++;
       if (conutI > maxI) {
         dataFilters.filters[key].type = 1;
@@ -86,35 +74,9 @@ async function getData({ route, $axios, $config }) {
         console.log(dataFilters.filters[key]);
       }
 
-      // dataFilters.filters[key].min = minvalue(dataFilters.filters[key].filters)
-      // mass.length = 0
-      // dataFilters.filters[key].max = maxvalue(dataFilters.filters[key].filters)
-      // mass.length = 0
-      // dataFilters.filters[key].filters.forEach(item => {
-      // // key.num = Number(item.replace(/\,/g, '.'));
-      // })
     }
   }
 
-  // function minvalue(arr){
-  //   arr.forEach(item =>{
-  //     mass.push(Number(item.replace(/\,/g, '.')))
-  //   })
-  //   mass.sort(function qwe(a,b){
-  //     return a-b;
-  //   })
-  //   return mass[0];
-  // }
-
-  // function maxvalue(arr){
-  //   arr.forEach(item =>{
-  //     mass.push(Number(item.replace(/\,/g, '.')))
-  //   })
-  //   mass.sort(function qwe(a,b){
-  //     return a-b;
-  //   })
-  //   return mass[mass.length - 1];
-  // }
   const title = resCat.data.data.name;
   pager = res.data.pager;
   const breadcrumbsData = [
