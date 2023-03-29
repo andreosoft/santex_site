@@ -7,7 +7,7 @@
     <!--     <catalog-top-select />-->
     <v-row class="s-row">
       <v-col cols="3">
-        <catalog-filter :value="dataFilters" />
+        <catalog-filter :filters="dataFilters" v-model="valueFilters" />
       </v-col>
       <v-col cols="9">
         <catalog-top-bar :count="pager.count" :sort="sort" />
@@ -31,9 +31,11 @@ async function getData({ route, $axios, $config }) {
   pager.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
   const category_id = route.params.id;
-  const filters = { category_id: category_id };
+  const f = route.query.f ? JSON.parse(route.query.f) : {};
+  const addFilters = route.query.filters ? JSON.parse(route.query.filters) : {};
+  const filters = Object.assign({ category_id: category_id }, addFilters);
 
-  const res = await $axios.get($config.baseURL + '/api/site/catalog', { params: { filters: filters, sort: sort, pager: pager } });
+  const res = await $axios.get($config.baseURL + '/api/site/catalog', { params: { f: f, filters: filters, sort: sort, pager: pager } });
   const data = res.data.data;
   const resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id,);
   const resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filters } });
@@ -68,10 +70,10 @@ async function getData({ route, $axios, $config }) {
       if (minVal == NaN || maxVal == NaN) {
         dataFilters.filters[key].type = 1;
       } else {
-        dataFilters.filters[key].min = minVal;
-        dataFilters.filters[key].max = maxVal;
+        dataFilters.filters[key].min = Math.floor(minVal);
+        dataFilters.filters[key].max = Math.ceil(maxVal);
 
-        console.log(dataFilters.filters[key]);
+        // console.log(dataFilters.filters[key]);
       }
 
     }
@@ -89,7 +91,7 @@ async function getData({ route, $axios, $config }) {
       title: title,
     },
   ];
-  return { title, data, breadcrumbsData, sort, pager, dataFilters };
+  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters };
 }
 // function stg(dataFilters){
 //   dataFilters.forEach(item => console.log(item));
@@ -103,16 +105,27 @@ export default {
       filter: {
         price: {},
       },
+      valueFilters: {
+        f: {}
+      },
       filters: { parent_id: 0 },
       sort: { key: "name", order: "ASC" },
 
     };
   },
   watch: {
+    valueFilters(v) {
+      let filters = {};
+      if (v.price && v.price.length > 0) {
+        filters.price = v.price;
+      }
+      this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
+    },
     "$route": {
       async handler() {
         let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
         this.data = p.data;
+        this.pager = p.pager;
       }
     }
   },

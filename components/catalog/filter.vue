@@ -1,19 +1,22 @@
 <template>
   <div>
+    <div>
+      <v-btn @click="onUpdateData()">Показать</v-btn>
+    </div>
     <div class="space-check">
-      <catalog-price title="Цена, руб." v-model="data.price" :max="value.price.max_price" :min="value.price.min_price" />
-<!--      <v-divider class="my-4" />-->
-      <p>{{rangevalues}}</p>
+      <catalog-price title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price"
+        :min="filters.price.min_price" />
+      <v-divider class="my-4" />
     </div>
-<div v-for="(el, i) in value.filters" :key="i">
-    <div v-if="el.type == 2" class="space-check">
-      <catalog-ranges :title="el.name" :params="el.filters" :min="el.min" :max="el.max"/>
+    <div v-for="(el, i) in filters.filters" :key="i">
+      <div v-if="el.type == 2" class="space-check">
+        <catalog-ranges :title="el.name" v-model="dataF[i]" :params="el.numFilters" :min="el.min" :max="el.max" />
+      </div>
+      <div v-else class="space-check">
+        <catalog-check1 :title="el.name" v-model="dataF[i]" :params="el.filters" />
+        <v-divider class="my-4" />
+      </div>
     </div>
-    <div v-else class="space-check">
-      <catalog-check1 :title="el.name" v-model="data.material" :params="el.filters"/>
-<!--      <v-divider class="my-4" />-->
-    </div>
-</div>
   </div>
 </template>
 
@@ -21,23 +24,34 @@
 export default {
   props: {
     value: Object,
+    filters: Object
   },
   data() {
     return {
-      rangevalues: [],
-      data: {
-        price: [this.value.price.min_price, this.value.price.max_price],
-        material: [],
-      },
-      filter: {
-        price: {
-          max: 1000,
-          min: 0,
-        },
-        material: ["Один параметр", "Два параметр", "Три параметр"],
-      },
+      dataF: {},
+      dataPrice: [],
     };
   },
-
+  created() {
+    this.initValueFilters();
+  },
+  methods: {
+    initValueFilters() {
+      for (const key in this.filters.filters) {
+        let f = [];
+        if (this.value?.f[key]) f = this.value.f[key];
+        this.$set(this.dataF, key, f);
+      }
+    },
+    onUpdateData() {
+      let r = {};
+      for (const i in this.dataF) {
+        if (this.dataF[i].length > 0) {
+          r[i] = this.dataF[i];
+        }
+      }
+      this.$emit('input', { f: r, price: this.dataPrice });
+    }
+  }
 };
 </script>

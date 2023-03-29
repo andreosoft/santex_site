@@ -3,7 +3,7 @@
     <b>{{ title }}</b>
     <div class="a-catalog-check1" :class="{ close: !toggleOpen }">
       <div v-for="(el, i) of params" :key="i">
-        <v-checkbox class="ms-2" dense hide-details :value="el" :label="el" />
+        <v-checkbox class="ms-2" dense hide-details :value="el" v-model="v" :label="el" />
       </div>
     </div>
     <div v-if="needExpand" class="mt-2"><v-btn small plain @click="toggleOpen = !toggleOpen">{{ toggleOpen ? 'Скрыть': 'Показать все' }}</v-btn></div>
@@ -23,6 +23,14 @@ export default {
     }
   },
   computed: {
+    v: {
+      get() {
+        return this.value;
+      },
+      set(v) {
+        this.$emit('input', v);
+      }
+    },
     needExpand() {
       if (this.params.length > 8) return true;
       return false;
