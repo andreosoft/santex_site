@@ -45,7 +45,6 @@ export default {
           }
           if (minVal) d[0] = Math.floor(minVal);
           if (maxVal) d[1] = Math.ceil(maxVal);
-          
         }
         return d;
       },

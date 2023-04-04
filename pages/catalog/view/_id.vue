@@ -90,6 +90,14 @@
                   {{ data.factory_article}}
                 </td>
               </tr>
+              <tr>
+                <td>
+                  <b>Бренд</b>
+                </td>
+                <td>
+                  {{data.brand}}
+                </td>
+              </tr>
                 <tr v-for="(el, i) in data.filters.slice(0, 10)" :key="i">
                   <td>
                     <b>{{ el.name }}</b>

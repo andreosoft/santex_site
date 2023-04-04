@@ -2,11 +2,13 @@
   <v-container class="mb-10">
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
+<!--    <p>{{valueinput}}</p>-->
     <h1>Поиск</h1>
     <div class="mb-10">
         <p><b>Вы искали:</b> <span class="underlined">название искомово</span> , найдено 4 шт.</p>
     </div>
     <v-divider class="mb-10"/>
+<!--    <base-catalog :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort"/>-->
     <v-row  class="s-row">
       <v-col cols="3">
         <catalog-filter v-model="filter" />
@@ -27,7 +29,11 @@
 </template>
 
 <script>
+import BaseCatalog from "@/components/catalog/base-catalog.vue";
+// import { getData } from "@/pages/catalog/getData";
+
 export default {
+  components: {BaseCatalog},
   data() {
     return {
       carouselModel: 0,
@@ -150,7 +156,17 @@ export default {
         title: title,
       },
     ];
-    return { title, data, breadcrumbsData };
+    return {title, data, breadcrumbsData};
   },
-};
+  watch: {
+    "$route": {
+      async handler() {
+        // let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
+        // this.data = p.data;
+        // this.pager = p.pager;
+        console.log(this.$route);
+      },
+    }
+  }
+}
 </script>

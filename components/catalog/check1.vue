@@ -6,7 +6,9 @@
         <v-checkbox class="ms-2" dense hide-details :value="el" v-model="v" :label="el" />
       </div>
     </div>
-    <div v-if="needExpand" class="mt-2"><v-btn small plain @click="toggleOpen = !toggleOpen">{{ toggleOpen ? 'Скрыть': 'Показать все' }}</v-btn></div>
+    <div v-if="needExpand" class="mt-2">
+      <v-btn small plain @click="toggleOpen = !toggleOpen">{{ toggleOpen ? 'Скрыть': 'Показать все' }}</v-btn>
+    </div>
   </div>
 </template>
 
