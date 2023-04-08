@@ -41,7 +41,7 @@
           <div class="s-header-menu-search">
             <v-text-field v-model="search" single-line outlined dense label="Я хочу найти">
               <template v-slot:append>
-                <img @click="$router.push({ path: '/catalog/search/1' , query: {q: search}})" src="/icons/Search.svg" />
+                <img @click="$router.push({ path: '/catalog/search' , query: {q: search}})" src="/icons/Search.svg" />
               </template>
             </v-text-field>
           </div>
@@ -63,15 +63,6 @@ export default {
       search: '',
     }
   },
-  methods: {
-    // searchInput(){
-    //   // console.log($router);
-    //   // this.$router.push({path: '/catalog/search/1', query: {q:this.search}});
-    //   // this.$route.path = '/catalog/search/';
-    //   // this.$route.query = this.search;
-    //     // .push({ path: '/catalog/search/', query: {q: this.search}});
-    // }
-}
 }
 </script>
 

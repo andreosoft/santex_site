@@ -1,19 +1,22 @@
 <template>
-  <div>
+  <div class="parent">
+    <!-- <p>filter {{ value }}</p> -->
     <div>
-      <v-btn @click="onUpdateData()">Показать</v-btn>
+      <v-btn @click="onUpdateData(), updateDataFilters()">Показать</v-btn>
     </div>
     <div class="space-check">
       <catalog-price title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
       <v-divider class="my-4" />
     </div>
     <div v-for="(el, i) in filters.filters" :key="i">
-      <div v-if="el.type == 2" class="space-check">
-        <catalog-ranges :title="el.name" v-model="dataF[i]" :params="el.numFilters" :min="el.min" :max="el.max" />
-      </div>
-      <div v-else class="space-check">
-        <catalog-check1 :title="el.name" v-model="dataF[i]" :params="el.filters" />
-        <v-divider class="my-4" />
+      <div>
+        <div v-if="el.type == 2" class="space-check">
+          <catalog-ranges :title="el.name" v-model="dataF[i]" :params="el.numFilters" :min="el.min" :max="el.max" />
+        </div>
+        <div v-else class="space-check">
+          <catalog-check1 :title="el.name" v-model="dataF[i]" :params="el.filters" />
+          <v-divider class="my-4" />
+        </div>
       </div>
     </div>
   </div>
@@ -22,6 +25,7 @@
 <script>
 export default {
   props: {
+    updateDataFilters: Function,
     value: Object,
     filters: Object
   },

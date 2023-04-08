@@ -3,22 +3,24 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
+    <!-- <p>catalog {{valueFilters}}</p> -->
+    <!-- <p>{{valueFilters}}</p> -->
     <!--    <p> {{ dataFilters.filters }} </p>-->
     <!--     <catalog-top-select />-->
-<!--    <base-catalog :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort"/>-->
-    <v-row class="s-row">
-      <v-col cols="3">
-        <catalog-filter :filters="dataFilters" v-model="valueFilters" />
-      </v-col>
-      <v-col cols="9">
-        <catalog-top-bar :count="pager.count" :sort="sort" />
-        <v-row class="s-row">
-          <v-col cols="4" v-for="(el, i) in data" :key="i">
-            <catalog-item-list :el="el" />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
+    <base-catalog :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="updateValueFilters"/>
+<!--    <v-row class="s-row">-->
+<!--      <v-col cols="3">-->
+<!--        <catalog-filter :filters="dataFilters" v-model="valueFilters" />-->
+<!--      </v-col>-->
+<!--      <v-col cols="9">-->
+<!--        <catalog-top-bar :count="pager.count" :sort="sort" />-->
+<!--        <v-row class="s-row">-->
+<!--          <v-col cols="4" v-for="(el, i) in data" :key="i">-->
+<!--            <catalog-item-list :el="el" />-->
+<!--          </v-col>-->
+<!--        </v-row>-->
+<!--      </v-col>-->
+<!--    </v-row>-->
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -99,7 +101,7 @@ import BaseCatalog from "@/components/catalog/base-catalog.vue";
 export default {
   components: {BaseCatalog},
   data() {
-    return {
+    return { 
       carouselModel: 0,
       page: 1,
       filter: {
@@ -112,6 +114,11 @@ export default {
       sort: { key: "name", order: "ASC" },
 
     };
+  },
+  methods: {
+    updateValueFilters(value){
+        this.valueFilters = value;
+    }
   },
   watch: {
     valueFilters(v) {
@@ -126,7 +133,7 @@ export default {
         let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
         this.data = p.data;
         this.pager = p.pager;
-        console.log(this.$route);
+        // console.log(this.$route);
       },
 
     },
