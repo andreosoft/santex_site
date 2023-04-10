@@ -4,26 +4,26 @@
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>Поиск</h1>
     <div class="mb-10">
-        <p><b>Вы искали: </b><span class="underlined">{{searchInput}}</span>, найдено {{ data.length }} шт.</p>
+      <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ data.length }} шт.</p>
     </div>
-    <v-divider class="mb-10"/>
-   <base-catalog :value="searchInput" :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="updateValueFilters"/>
+    <v-divider class="mb-10" />
+    <base-catalog :value="searchInput" :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager"
+      :sort="sort" @update-data="updateValueFilters" />
     <div class="text-center mt-10 ">
-      <v-pagination v-model="page" :length="4" circle></v-pagination>
+      <common-pagination :value="pager" />
     </div>
   </v-container>
 </template>
 
 <script>
-import {getData} from "@/pages/catalog/getData";
+import { getData } from "@/pages/catalog/getData";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
 
 export default {
-  components: {BaseCatalog},
+  components: { BaseCatalog },
   data() {
     return {
       carouselModel: 0,
-      page: 1,
       filter: {
         price: {},
       },
@@ -36,8 +36,8 @@ export default {
     };
   },
   methods: {
-    updateValueFilters(value){
-        this.valueFilters = value;
+    updateValueFilters(value) {
+      this.valueFilters = value;
     }
   },
   watch: {
@@ -56,9 +56,9 @@ export default {
         this.searchInput = p.searchInput;
       },
     },
-    },
-    async asyncData({ route, $axios, $config }) {
-      return await getData({ route, $axios, $config });
-    },
+  },
+  async asyncData({ route, $axios, $config }) {
+    return await getData({ route, $axios, $config });
+  },
 }
 </script>

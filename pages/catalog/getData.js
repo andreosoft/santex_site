@@ -1,5 +1,5 @@
-export async function getData({route, $axios, $config}) {
-  let pager = {page: 0, count: 0, limit: 30};
+export async function getData({ route, $axios, $config }) {
+  let pager = { page: 0, count: 0, limit: 30 };
   pager.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
   const category_id = route.params.id;
@@ -9,7 +9,7 @@ export async function getData({route, $axios, $config}) {
   console.log(searchInput)
   let filters = addFilters;
   if (category_id) Object.assign(filters, { category_id: category_id });
-  if (searchInput) Object.assign(filters, { name: {condition: "LIKE", value: "%" + searchInput + "%"} });
+  if (searchInput) Object.assign(filters, { name: { condition: "LIKE", value: "%" + searchInput + "%" } });
   const res = await $axios.get($config.baseURL + '/api/site/catalog', {
     params: {
       f: f,
@@ -65,12 +65,12 @@ export async function getData({route, $axios, $config}) {
   pager = res.data.pager;
 
 
-  function breadcrumbs(category_id, title, value){
+  function breadcrumbs(category_id, title, value) {
     let breadcrumbsData;
-    if(category_id !== undefined){
+    if (category_id !== undefined) {
       breadcrumbsData = [
-      {
-        url: "",
+        {
+          url: "",
           title: "Каталог",
         },
         {
@@ -78,7 +78,7 @@ export async function getData({route, $axios, $config}) {
           title: title,
         },
       ];
-    } else if(value !== undefined) {
+    } else if (value !== undefined) {
       breadcrumbsData = [
         {
           url: "",
@@ -94,7 +94,7 @@ export async function getData({route, $axios, $config}) {
   }
   const breadcrumbsData = breadcrumbs(category_id, title, searchInput);
 
-  return {title, data, breadcrumbsData, sort, pager, dataFilters, filters, searchInput};
+  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, searchInput };
 }
 
 

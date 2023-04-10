@@ -17,5 +17,5 @@ ssh andrey@92.63.192.228 pm2 restart 1
 
 git add .
 git commit -m 'commit'
-git push origin master
+# git push origin master
 git push github master
