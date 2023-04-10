@@ -38,13 +38,15 @@
             <nuxt-link to="/consulting">Запись на консультацию</nuxt-link>
             <nuxt-link to="/"><img src="/icon-discont.png" class="pr-1" />Распродажа</nuxt-link>
           </div>
-          <div class="s-header-menu-search">
-            <v-text-field v-model="search" single-line outlined dense label="Я хочу найти">
-              <template v-slot:append>
-                <img @click="$router.push({ path: '/catalog/search' , query: {q: search}})" src="/icons/Search.svg" />
-              </template>
-            </v-text-field>
-          </div>
+          <form @submit.prevent="submitSearch()">
+            <div class="s-header-menu-search">
+              <v-text-field v-model="search" single-line outlined dense label="Я хочу найти">
+                <template v-slot:append>
+                  <img @click="submitSearch()" src="/icons/Search.svg" />
+                </template>
+              </v-text-field>
+            </div>
+          </form>
         </div>
       </div>
     </v-container>
@@ -63,6 +65,11 @@ export default {
       search: '',
     }
   },
+  methods: {
+    submitSearch() {
+      this.$router.push({ path: '/catalog/search', query: { q: this.search } })
+    }
+  }
 }
 </script>
 

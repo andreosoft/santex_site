@@ -7,8 +7,8 @@
       <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ data.length }} шт.</p>
     </div>
     <v-divider class="mb-10" />
-    <base-catalog :value="searchInput" :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager"
-      :sort="sort" @update-data="updateValueFilters" />
+    <base-catalog :value="searchInput" :loading="loading" :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager"
+      :sort="sort" @update-filters="dataFilters = $event" @update-data="updateValueFilters" />
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -23,16 +23,7 @@ export default {
   components: { BaseCatalog },
   data() {
     return {
-      carouselModel: 0,
-      filter: {
-        price: {},
-      },
-      valueFilters: {
-        f: {}
-      },
-      filters: { parent_id: 0 },
-      sort: { key: "name", order: "ASC" },
-
+      loading: true
     };
   },
   methods: {
@@ -50,7 +41,9 @@ export default {
     },
     "$route": {
       async handler() {
+        this.loading = true;
         let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
+        this.loading = false;
         this.data = p.data;
         this.pager = p.pager;
         this.searchInput = p.searchInput;

@@ -3,7 +3,7 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
-    <base-catalog :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="updateValueFilters"/>
+    <base-catalog :data="data" :loading="loading" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event"/>
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -18,22 +18,7 @@ export default {
   components: {BaseCatalog},
   data() {
     return { 
-      carouselModel: 0,
-      page: 1,
-      filter: {
-        price: {},
-      },
-      valueFilters: {
-        f: {}
-      },
-      filters: { parent_id: 0 },
-      sort: { key: "name", order: "ASC" },
-
-    };
-  },
-  methods: {
-    updateValueFilters(value){
-        this.valueFilters = value;
+      loading: true
     }
   },
   watch: {
@@ -46,7 +31,9 @@ export default {
     },
     "$route": {
       async handler() {
+        this.loading = true;
         let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
+        this.loading = false;
         this.data = p.data;
         this.pager = p.pager;
       },

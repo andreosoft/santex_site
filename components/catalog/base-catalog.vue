@@ -1,15 +1,19 @@
 <template>
   <div>
-    <!-- <p> base {{valueFilters}}</p> -->
     <v-row class="s-row">
       <v-col cols="3">
         <div>
-          <catalog-filter :updateDataFilters="updateValueFilters" :value="value" :filters="dataFilters" v-model="valueFilters" />
+          <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
         </div>
       </v-col>
       <v-col cols="9">
         <catalog-top-bar :count="pager.count" :sort="sort" />
-        <v-row class="s-row">
+        <v-row v-if="loading" class="s-row">
+          <v-col cols="4" v-for="(el, i) in pager.limit" :key="i">
+            <v-skeleton-loader class="mx-auto" max-width="300" type="card"></v-skeleton-loader>
+          </v-col>
+        </v-row>
+        <v-row v-else class="s-row">
           <v-col cols="4" v-for="(el, i) in data" :key="i">
             <catalog-item-list :el="el" />
           </v-col>
@@ -22,19 +26,15 @@
 <script>
 export default {
   props: {
-    updateDataFilters: Function,
-    value: String,
     data: Array,
     dataFilters: Object,
     valueFilters: Object,
     pager: Object,
     sort: Object,
-  },
-  methods: {
-    updateValueFilters(){
-        let value  = this.valueFilters;
-        this.$emit('update-data', value);
+    loading: {
+      type: Boolean,
+      default: false
     }
-  }
+  },
 }
 </script>
