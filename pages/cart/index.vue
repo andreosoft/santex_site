@@ -2,6 +2,7 @@
     <v-container class="mb-10">
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
+        {{ mass }}
         <h1>{{ title }}</h1>
         <v-divider class="mb-8" />
         <div>
@@ -27,7 +28,7 @@
                 <v-row>
                     <v-col cols="5">
                         <div class="d-flex">
-                            <div class="mr-4">
+                            <div class="mr-4 pa-2" style="border: 0.5px solid black">
                                 <v-img :src="el.image[0]" />
                             </div>
                             <div>
@@ -46,11 +47,11 @@
                     <v-col cols="2">
                         <div>
                             <div style="font-size: 22px">
-                                <number :value="el.count * el.price" /> ₽
+                                <b><number :value="el.count * el.price" /> ₽</b>
                             </div>
                             <div v-if="el.old_price" style="font-size: 16px; text-decoration: line-through;"
                                 class="grey--text">
-                                <number :value="el.count * el.old_price" /> ₽
+                                <b><number :value="el.count * el.old_price" /> ₽</b>
                             </div>
                         </div>
                     </v-col>
@@ -70,12 +71,12 @@
                     </v-col>
                     <v-col cols="2">
                         <div style="font-size: 22px">
-                            <number :value="el.price" /> ₽
+                            <b><number :value="el.price" /> ₽</b>
                         </div>
                     </v-col>
                     <v-col cols="1">
                         <div>
-                            <v-btn icon><img src="/icons/trash.png" /></v-btn>
+                            <v-btn icon><img src="/icons/trash.png" alt="removeitem-icon"/></v-btn>
                         </div>
                     </v-col>
                 </v-row>
@@ -93,10 +94,10 @@
                 </v-col>
                 <v-col cols="6">
                     <div class="d-flex justify-end">
-                        <div class="mt-2 mr-4"><b>Общая стоимость:</b></div>
+                        <div class="mt-2 mr-5"><b>Общая стоимость:</b></div>
                         <div>
                             <div style="font-size: 28px">
-                                <number :value="totalPrice" /> ₽
+                                <b><number :value="totalPrice" /> ₽</b>
                             </div>
                             <div style="font-size: 14px" class="red--text">Экономя:
                                 <number :value="totalDiscont" /> ₽
@@ -129,6 +130,7 @@ export default {
     components: { number },
     data() {
         return {
+            mass: []
         }
     },
     async asyncData(params) {
@@ -183,13 +185,24 @@ export default {
             }
             return r - this.totalPrice;
         }
+    },
+    mounted() {
+        for (let key in localStorage) {
+                this.mass.push(JSON.parse(localStorage.getItem(key)));
+            }
     }
 }
+
 </script>
 
 
 <style lang="scss">
-.s-input-text-center input {
-    text-align: center;
+.v-btn--icon{
+    color: black !important;
 }
+.s-input-text-center{
+    input {
+        text-align: center;
+    }
+} 
 </style>
