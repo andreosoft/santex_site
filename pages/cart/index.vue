@@ -2,7 +2,7 @@
     <v-container class="mb-10">
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-        {{ mass }}
+        <!-- {{ mass }} -->
         <h1>{{ title }}</h1>
         <v-divider class="mb-8" />
         <div>
@@ -24,22 +24,22 @@
                 </v-col>
             </v-row>
 
-            <div v-for="(el, i) in data" :key="i" class="align-center">
+            <div v-for="(el, i) in mass" :key="i" class="align-center">
                 <v-row>
                     <v-col cols="5">
                         <div class="d-flex">
                             <div class="mr-4 pa-2" style="border: 0.5px solid black">
-                                <v-img :src="el.image[0]" />
+                                <v-img style="width: 100px; height: 100px;" :src="$config.baseImageURL+el.img+'?width=270&height=270'" />
                             </div>
                             <div>
                                 <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
                                 <div style="font-size: 16px" class="mb-2">{{ el.name }}</div>
                                 <div style="font-size: 13px"><span class="grey--text mr-2">Габариты
                                         (Д.Ш.В):</span><span>{{
-                                                el.size
+                                                `${el.depth} x ${el.width} x ${el.height}` 
                                         }}</span></div>
                                 <div style="font-size: 13px"><span class="grey--text mr-2">Бренд:</span><span>{{
-                                        el.brend_name
+                                        el.brand
                                 }}</span></div>
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                     </v-col>
                     <v-col cols="1">
                         <div>
-                            <v-btn icon><img src="/icons/trash.png" alt="removeitem-icon"/></v-btn>
+                            <v-btn icon><img @click="''" src="/icons/trash.png" alt="removeitem-icon"/></v-btn>
                         </div>
                     </v-col>
                 </v-row>
@@ -99,7 +99,7 @@
                             <div style="font-size: 28px">
                                 <b><number :value="totalPrice" /> ₽</b>
                             </div>
-                            <div style="font-size: 14px" class="red--text">Экономя:
+                            <div style="font-size: 14px" class="red--text">Экономия:
                                 <number :value="totalDiscont" /> ₽
                             </div>
                         </div>
@@ -173,23 +173,32 @@ export default {
     computed: {
         totalPrice() {
             let r = 0;
-            for (const el of this.data) {
+            for (const el of this.mass) {
                 r = r + (el.price * el.count);
             }
             return r;
         },
         totalDiscont() {
             let r = 0;
-            for (const el of this.data) {
+            for (const el of this.mass) {
                 r = r + (el.old_price * el.count);
             }
-            return r - this.totalPrice;
+            if(r-this.totalPrice < 0){
+                return 0
+            } else {
+                return r - this.totalPrice;
+            }
         }
     },
     mounted() {
-        for (let key in localStorage) {
-                this.mass.push(JSON.parse(localStorage.getItem(key)));
+        let storageLength = localStorage.length;
+        for (let i = 0; i < storageLength; i++) {
+            let key = localStorage.key(i);
+            let value = localStorage.getItem(key);
+            this.mass.push(JSON.parse(value));
             }
+
+        // this.mass.forEach(item => console.log(item));
     }
 }
 

@@ -2,6 +2,7 @@
   <v-container class="mb-14">
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
+    <!-- {{ data.filters }} -->
     <h1>{{ data.name }}</h1>
     <v-row class="mt-4">
       <v-col cols="6">
@@ -62,7 +63,7 @@
           <div class="d-flex justify-space-between align-center">
             <div>
               <span>
-                <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" dark>Купить</v-btn>
+                <v-btn @click="toCart" style="width: 200px;" class="s-btn-cart s-btn-text" dark>Купить</v-btn>
               </span><span class="ml-4">
                 <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" @click="showBuyeoneclick = true">Купить в 1
                   клик</v-btn>
@@ -219,8 +220,65 @@ export default {
       showBuyeoneclick: false,
       tabModel: 0,
       galleryModel: 0,
-      activeEl_with_buy_groups: 0
+      activeEl_with_buy_groups: 0,
+      // item: {
+      //   code: this.obj.id,
+      //   name: this.obj.name,
+      //   // img: this.obj.images[0],
+      //   price: this.obj.price,
+      //   old_price: this.obj.price_old,
+      //   brand: this.obj.brand,
+      //   count: 1,
+      //   type: this.obj.type,
+      // }
     };
+  },
+  methods: {
+    toCart(){
+      let height = '';
+      let width = '';
+      let depth = '';
+      this.data.filters.forEach(item => {
+        if(item.name === 'Высота'){
+          height = item.value
+        } else if(item.name === 'Ширина') {
+          width = item.value
+        } else if(item.name === 'Глубина' || item.name === 'Длина'){
+          depth = item.value
+        }
+      });
+      console.log('Высота ' + height)
+      console.log('Ширина ' + width)
+      console.log('Глубина ' + depth)
+      let item = {
+        code: this.data.id,
+        name: this.data.name,
+        img: this.data.images[0],
+        price: this.data.price,
+        old_price: this.data.price_old,
+        brand: this.data.brand,
+        count: 1,
+        type: this.data.type,
+        width: width,
+        height: height,
+        depth: depth,
+      }
+      if(localStorage.length !== 0){
+        for (let i = 0; i < localStorage.length; i++) {
+          let key = localStorage.key(i);
+          let value = localStorage.getItem(key);
+
+          if(JSON.parse(value).code !== item.code){
+            localStorage.setItem(item.code, JSON.stringify(item));
+          } else {
+            console.log('Такой товар уже есть');
+          }
+        }
+      } else {
+        localStorage.setItem(item.code, JSON.stringify(item));
+      }
+
+    }
   },
   async asyncData({ route, $axios, $config }) {
     return await getData({ route, $axios, $config });

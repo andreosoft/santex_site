@@ -1,7 +1,7 @@
 <template>
   <v-card class="s-card-good pa-4">
     <div>
-      {{ el }}
+      <!-- {{ el }} -->
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
           <v-img v-if="el.images && el.images[0]" :src="$config.baseImageURL+el.images[0]+'?width=270&height=270'" />
@@ -16,9 +16,9 @@
         </div>
         <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
-          <!-- <div>
+          <div>
             <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.size }}</span>
-          </div> -->
+          </div>
           <div>
             <span style="color: #949494">Бренд: </span><span>{{ el.brand }}</span>
           </div>
@@ -34,7 +34,7 @@
       </nuxt-link>
     </div>
     <div class="d-flex justify-space-between">
-      <div><v-btn @click="toCart" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
+      <div><v-btn dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
       <div>
         <v-btn icon><img src="/icon-like.png" alt="" /></v-btn>
         <v-btn icon><img src="/icon-similar.png" alt="" /></v-btn>
@@ -50,20 +50,17 @@ export default {
   },
   data(){
     return {
-      item: {
-        name: this.el.name,
-        // img: this.el.img,
-        price: this.el.price,
-        brand: this.el.brand,
-      }
-    }
-  },
-  methods: {
-    toCart(){
-         localStorage.setItem(this.el.id, JSON.stringify(this.item));
-      // if(localStorage.getItem("item") !== JSON.stringify(this.item)){
+      // item: {
+      //   code: this.el.id,
+      //   name: this.el.name,
+      //   img: this.el.images[0] !== null ? this.el.images[0] : '',
+      //   price: this.el.price,
+      //   old_price: this.el.price_old,
+      //   brand: this.el.brand,
+      //   count: 1,
+      //   type: this.el.type,
       // }
     }
-  }
+  },
 };
 </script>
