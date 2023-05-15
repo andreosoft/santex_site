@@ -238,18 +238,22 @@ export default {
       let height = '';
       let width = '';
       let depth = '';
+      let lengthItem = '';
       this.data.filters.forEach(item => {
         if(item.name === 'Высота'){
           height = item.value
         } else if(item.name === 'Ширина') {
           width = item.value
-        } else if(item.name === 'Глубина' || item.name === 'Длина'){
+        } else if(item.name === 'Глубина'){
           depth = item.value
+        } else if(item.name === 'Длина'){
+          lengthItem = item.value;
         }
       });
       console.log('Высота ' + height)
       console.log('Ширина ' + width)
       console.log('Глубина ' + depth)
+      console.log('Длина ' + lengthItem)
       let item = {
         code: this.data.id,
         name: this.data.name,
@@ -262,6 +266,7 @@ export default {
         width: width,
         height: height,
         depth: depth,
+        lengthItem: lengthItem,
       }
       if(localStorage.length !== 0){
         for (let i = 0; i < localStorage.length; i++) {

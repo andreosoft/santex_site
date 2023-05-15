@@ -34,10 +34,10 @@
                             <div>
                                 <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
                                 <div style="font-size: 16px" class="mb-2">{{ el.name }}</div>
-                                <div style="font-size: 13px"><span class="grey--text mr-2">Габариты
-                                        (Д.Ш.В):</span><span>{{
-                                                `${el.depth} x ${el.width} x ${el.height}` 
-                                        }}</span></div>
+                                <div v-if="el.depth !== '' " style="font-size: 13px"><span class="grey--text mr-2">Габариты
+                                        (Г.Ш.В):</span><span>{{`${el.depth} x ${el.width} x ${el.height}` }}</span></div>
+                                <div v-else style="font-size: 13px"><span class="grey--text mr-2">Габариты
+                                        (Д.Ш.В):</span><span>{{`${el.lengthItem} x ${el.width} x ${el.height}` }}</span></div>
                                 <div style="font-size: 13px"><span class="grey--text mr-2">Бренд:</span><span>{{
                                         el.brand
                                 }}</span></div>
@@ -76,7 +76,7 @@
                     </v-col>
                     <v-col cols="1">
                         <div>
-                            <v-btn icon><img @click="''" src="/icons/trash.png" alt="removeitem-icon"/></v-btn>
+                            <v-btn icon><img @click="deleteItem(el)" src="/icons/trash.png" alt="removeitem-icon"/></v-btn>
                         </div>
                     </v-col>
                 </v-row>
@@ -141,34 +141,34 @@ export default {
                 title: title,
             }
         ];
-        const data = [
-            {
-                id: 100,
-                name: "Название товара",
-                image: ["/img/cart/1.png"],
-                code: "4554545",
-                price: 1540,
-                old_price: 8220,
-                brend_name: "Название бренда",
-                size: "44 x 75 x 20",
-                available: 1,
-                count: 1,
-            },
-            {
-                id: 100,
-                type: 2,
-                name: "Название товара",
-                image: ["/img/cart/2.png"],
-                code: "4554545",
-                price: 1540,
-                old_price: 8220,
-                brend_name: "Название бренда",
-                size: "44 x 75 x 20",
-                available: 1,
-                count: 1.2,
-            },
-        ]
-        return { title, data, breadcrumbsData }
+        // const data = [
+        //     {
+        //         id: 100,
+        //         name: "Название товара",
+        //         image: ["/img/cart/1.png"],
+        //         code: "4554545",
+        //         price: 1540,
+        //         old_price: 8220,
+        //         brend_name: "Название бренда",
+        //         size: "44 x 75 x 20",
+        //         available: 1,
+        //         count: 1,
+        //     },
+        //     {
+        //         id: 100,
+        //         type: 2,
+        //         name: "Название товара",
+        //         image: ["/img/cart/2.png"],
+        //         code: "4554545",
+        //         price: 1540,
+        //         old_price: 8220,
+        //         brend_name: "Название бренда",
+        //         size: "44 x 75 x 20",
+        //         available: 1,
+        //         count: 1.2,
+        //     },
+        // ]
+        return { title, breadcrumbsData }
     },
     computed: {
         totalPrice() {
@@ -197,8 +197,13 @@ export default {
             let value = localStorage.getItem(key);
             this.mass.push(JSON.parse(value));
             }
-
-        // this.mass.forEach(item => console.log(item));
+    },
+    methods: {
+        deleteItem(el){
+            localStorage.removeItem(`${el.code}`);
+            let ind = this.mass.find((item, index) => {if(item.code === el.code){return index;}});
+            this.mass.splice(ind, 1);
+        }
     }
 }
 
