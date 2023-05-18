@@ -17,7 +17,7 @@
         <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
           <div>
-            <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.size }}</span>
+            <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.width }}</span>
           </div>
           <div>
             <span style="color: #949494">Бренд: </span><span>{{ el.brand }}</span>
@@ -34,7 +34,7 @@
       </nuxt-link>
     </div>
     <div class="d-flex justify-space-between">
-      <div><v-btn dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
+      <div><v-btn @click="toCart" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
       <div>
         <v-btn icon><img src="/icon-like.png" alt="" /></v-btn>
         <v-btn icon><img src="/icon-similar.png" alt="" /></v-btn>
@@ -62,5 +62,46 @@ export default {
       // }
     }
   },
+  methods: {
+    toCart(){
+    // console.log('Высота ' + height)
+    // console.log('Ширина ' + width)
+    // console.log('Глубина ' + depth)
+    // console.log('Длина ' + lengthItem)
+    let item = {
+      code: this.el.id,
+      name: this.el.name,
+      img: this.el.images[0],
+      price: this.el.price,
+      old_price: this.el.price_old,
+      brand: this.el.brand,
+      count: 1,
+      type: this.el.type,
+      width: this.el.width,
+      height: this.el.height,
+      depth: this.el.depth,
+      lengthItem: '',
+    };
+    let arrItems = [];
+      if(localStorage.cart){
+        let product = JSON.parse(localStorage.getItem('cart'));
+        console.log(product);
+        let simillar = product.find((element) => {if(element.code === item.code){return element}});
+        if(simillar){
+          // console.log('Такой объект уже есть');
+          simillar.count++;
+          localStorage.setItem('cart', JSON.stringify(product));
+        } else {
+          // console.log('Новый объект');
+          product.push(item);
+          localStorage.setItem('cart', JSON.stringify(product));
+        }
+            } else {
+              // console.log('Первый объект');
+              arrItems.push(item);
+              localStorage.setItem('cart', JSON.stringify(arrItems));
+      }
+  }
+  }
 };
 </script>

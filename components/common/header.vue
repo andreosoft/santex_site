@@ -15,6 +15,7 @@
             <nuxt-link class="ml-6" to="/compare"><img src="/icons/compare.svg" alt="" /></nuxt-link>
             <div style="width: 70px;" class="ml-6 d-inline-block">
               <nuxt-link to="/cart"><img src="/icons/basket.svg" alt="" /></nuxt-link>
+              <div class="cartIcon d-inline-block"><number :value="countItems" /></div>
             </div>
           </div>
         </div>
@@ -68,6 +69,14 @@ export default {
   methods: {
     submitSearch() {
       this.$router.push({ path: '/catalog/search', query: { q: this.search } })
+    },
+  },
+  computed: {
+    countItems(){
+      // let arr = localStorage.cart ? JSON.parse(localStorage.getItem('cart')) : [];
+      // let quantity = 0;
+      // arr.forEach(item => item.count + quantity);
+      // return 3;
     }
   }
 }
@@ -131,5 +140,13 @@ export default {
 
 .s-header-menu-search {
   min-width: 260px;
+}
+.cartIcon{
+  background-color: black;
+  border-radius: 50px;
+  color: white;
+  width: 20px;
+  height: 20px;
+  text-align: center;
 }
 </style>

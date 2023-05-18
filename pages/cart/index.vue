@@ -2,8 +2,10 @@
     <v-container class="mb-10">
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-        <!-- {{ mass }} -->
-        <h1>{{ title }}</h1>
+        <div class="d-flex flex-row justify-space-between align-center">
+            <h1>{{ title }}</h1>
+            <v-btn @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину</v-btn>
+        </div>
         <v-divider class="mb-8" />
         <div>
             <v-row>
@@ -33,7 +35,7 @@
                             </div>
                             <div>
                                 <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
-                                <div style="font-size: 16px" class="mb-2">{{ el.name }}</div>
+                                <div @click="toItem(el)" style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
                                 <div v-if="el.depth !== '' " style="font-size: 13px"><span class="grey--text mr-2">Габариты
                                         (Г.Ш.В):</span><span>{{`${el.depth} x ${el.width} x ${el.height}` }}</span></div>
                                 <div v-else style="font-size: 13px"><span class="grey--text mr-2">Габариты
@@ -126,6 +128,7 @@
 
 <script>
 import number from '../../components/number.vue';
+// import {cart} from 'vuex'
 export default {
     components: { number },
     data() {
@@ -191,18 +194,25 @@ export default {
         }
     },
     mounted() {
-        let storageLength = localStorage.length;
-        for (let i = 0; i < storageLength; i++) {
-            let key = localStorage.key(i);
-            let value = localStorage.getItem(key);
-            this.mass.push(JSON.parse(value));
-            }
+        this.mass = localStorage.cart ? JSON.parse(localStorage.getItem('cart')) : [];
     },
     methods: {
         deleteItem(el){
-            localStorage.removeItem(`${el.code}`);
-            let ind = this.mass.find((item, index) => {if(item.code === el.code){return index;}});
-            this.mass.splice(ind, 1);
+            let cart = JSON.parse(localStorage.getItem('cart'));
+            let indexStorage = cart.find((item, index) => {if(item.code === el.code){return index;}});
+            cart.splice(indexStorage, 1);
+            localStorage.setItem('cart', JSON.stringify(cart));
+            let indexMass = this.mass.find((item, index) => {if(item.code === el.code){return index;}});
+            this.mass.splice(indexMass, 1);
+        },
+        toItem(el){
+            this.$router.push({path: '/catalog/view/' + el.code})
+        },
+        removeAll(){
+            let cart = JSON.parse(localStorage.getItem('cart'));
+            cart.length = 0;
+            localStorage.setItem('cart', JSON.stringify(cart));
+            this.mass.splice(0);
         }
     }
 }
@@ -219,4 +229,16 @@ export default {
         text-align: center;
     }
 } 
+.toItemblock:hover{
+        cursor: pointer;
+}
+.clearBtn{
+    background-color: rgb(243, 243, 243);
+    border: unset;
+    height: 43px;
+    .v-btn__content{
+        text-transform: none;
+        letter-spacing: 0px;
+    }
+}
 </style>

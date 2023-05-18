@@ -2,7 +2,7 @@
   <v-container class="mb-14">
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-    <!-- {{ data.filters }} -->
+    {{ data.filters }}
     <h1>{{ data.name }}</h1>
     <v-row class="mt-4">
       <v-col cols="6">
@@ -65,10 +65,10 @@
               <span>
                 <v-btn @click="toCart" style="width: 200px;" class="s-btn-cart s-btn-text" dark>Купить</v-btn>
               </span><span class="ml-4">
-                <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" @click="showBuyeoneclick = true">Купить в 1
+                <v-btn style="width: 200px;" class="s-btn-cart s-btn-text" @click="Buyoneclick">Купить в 1
                   клик</v-btn>
               </span>
-              <s-popup-buyoneclick v-model="showBuyeoneclick" />
+              <!-- <s-popup-buyoneclick v-model="showBuyoneclick" /> -->
             </div>
             <div>
               <v-btn plain small><img src="/icon-similar.png" alt="" /></v-btn>
@@ -217,7 +217,7 @@ async function getData({ route, $axios, $config }) {
 export default {
   data() {
     return {
-      showBuyeoneclick: false,
+      // showBuyoneclick: false,
       tabModel: 0,
       galleryModel: 0,
       activeEl_with_buy_groups: 0,
@@ -235,6 +235,61 @@ export default {
   },
   methods: {
     toCart(){
+      // let height = '';
+      // let width = '';
+      // let depth = '';
+      // let lengthItem = '';
+      // this.data.filters.forEach(item => {
+      //   if(item.name === 'Высота'){
+      //     height = item.value
+      //   } else if(item.name === 'Ширина') {
+      //     width = item.value
+      //   } else if(item.name === 'Глубина'){
+      //     depth = item.value
+      //   } else if(item.name === 'Длина'){
+      //     lengthItem = item.value;
+      //   }
+      // });
+      // // console.log('Высота ' + height)
+      // // console.log('Ширина ' + width)
+      // // console.log('Глубина ' + depth)
+      // // console.log('Длина ' + lengthItem)
+      // let item = {
+      //   code: this.data.id,
+      //   name: this.data.name,
+      //   img: this.data.images[0],
+      //   price: this.data.price,
+      //   old_price: this.data.price_old,
+      //   brand: this.data.brand,
+      //   count: 1,
+      //   type: this.data.type,
+      //   width: width,
+      //   height: height,
+      //   depth: depth,
+      //   lengthItem: lengthItem,
+      // }
+      // let arrItems = [];
+      // if(localStorage.cart){
+      //   let product = JSON.parse(localStorage.getItem('cart'));
+      //   // console.log(product);
+      //   let simillar = product.find((element) => {if(element.code === item.code){return element}});
+      //   if(simillar){
+      //     // console.log('Такой объект уже есть');
+      //     simillar.count++;
+      //     localStorage.setItem('cart', JSON.stringify(product));
+      //   } else {
+      //     // console.log('Новый объект');
+      //     product.push(item);
+      //     localStorage.setItem('cart', JSON.stringify(product));
+      //   }
+      //       } else {
+      //         // console.log('Первый объект');
+      //         arrItems.push(item);
+      //         localStorage.setItem('cart', JSON.stringify(arrItems));
+      // }
+
+    },
+    Buyoneclick(){
       let height = '';
       let width = '';
       let depth = '';
@@ -250,10 +305,10 @@ export default {
           lengthItem = item.value;
         }
       });
-      console.log('Высота ' + height)
-      console.log('Ширина ' + width)
-      console.log('Глубина ' + depth)
-      console.log('Длина ' + lengthItem)
+      // console.log('Высота ' + height)
+      // console.log('Ширина ' + width)
+      // console.log('Глубина ' + depth)
+      // console.log('Длина ' + lengthItem)
       let item = {
         code: this.data.id,
         name: this.data.name,
@@ -268,21 +323,26 @@ export default {
         depth: depth,
         lengthItem: lengthItem,
       }
-      if(localStorage.length !== 0){
-        for (let i = 0; i < localStorage.length; i++) {
-          let key = localStorage.key(i);
-          let value = localStorage.getItem(key);
-
-          if(JSON.parse(value).code !== item.code){
-            localStorage.setItem(item.code, JSON.stringify(item));
-          } else {
-            console.log('Такой товар уже есть');
-          }
+      let arrItems = [];
+      if(localStorage.cart){
+        let product = JSON.parse(localStorage.getItem('cart'));
+        // console.log(product);
+        let simillar = product.find((element) => {if(element.code === item.code){return element}});
+        if(simillar){
+          // console.log('Такой объект уже есть');
+          simillar.count++;
+          localStorage.setItem('cart', JSON.stringify(product));
+        } else {
+          // console.log('Новый объект');
+          product.push(item);
+          localStorage.setItem('cart', JSON.stringify(product));
         }
-      } else {
-        localStorage.setItem(item.code, JSON.stringify(item));
+            } else {
+              // console.log('Первый объект');
+              arrItems.push(item);
+              localStorage.setItem('cart', JSON.stringify(arrItems));
       }
-
+      this.$router.push({ path: '/cart'});
     }
   },
   async asyncData({ route, $axios, $config }) {
