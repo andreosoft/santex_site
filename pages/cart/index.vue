@@ -3,6 +3,7 @@
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex flex-row justify-space-between align-center">
+            <!-- {{ cart }} -->
             <h1>{{ title }}</h1>
             <v-btn @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину</v-btn>
         </div>
@@ -26,7 +27,7 @@
                 </v-col>
             </v-row>
 
-            <div v-for="(el, i) in mass" :key="i" class="align-center">
+            <div v-for="(el, i) in cart" :key="i" class="align-center">
                 <v-row>
                     <v-col cols="5">
                         <div class="d-flex">
@@ -102,7 +103,7 @@
                                 <b><number :value="totalPrice" /> ₽</b>
                             </div>
                             <div style="font-size: 14px" class="red--text">Экономия:
-                                <number :value="totalDiscont" /> ₽
+                                <number :value="totalDiscount" /> ₽
                             </div>
                         </div>
                     </div>
@@ -128,7 +129,7 @@
 
 <script>
 import number from '../../components/number.vue';
-// import {cart} from 'vuex'
+import { mapGetters } from 'vuex'
 export default {
     components: { number },
     data() {
@@ -174,45 +175,21 @@ export default {
         return { title, breadcrumbsData }
     },
     computed: {
-        totalPrice() {
-            let r = 0;
-            for (const el of this.mass) {
-                r = r + (el.price * el.count);
-            }
-            return r;
-        },
-        totalDiscont() {
-            let r = 0;
-            for (const el of this.mass) {
-                r = r + (el.old_price * el.count);
-            }
-            if(r-this.totalPrice < 0){
-                return 0
-            } else {
-                return r - this.totalPrice;
-            }
-        }
-    },
-    mounted() {
-        this.mass = localStorage.cart ? JSON.parse(localStorage.getItem('cart')) : [];
+        ...mapGetters ({
+      totalPrice: 'cart/totalPrice',
+      totalDiscount: 'cart/totalDiscount',
+      cart: 'cart/cart'
+    })
     },
     methods: {
         deleteItem(el){
-            let cart = JSON.parse(localStorage.getItem('cart'));
-            let indexStorage = cart.find((item, index) => {if(item.code === el.code){return index;}});
-            cart.splice(indexStorage, 1);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            let indexMass = this.mass.find((item, index) => {if(item.code === el.code){return index;}});
-            this.mass.splice(indexMass, 1);
+            this.$store.commit('cart/remove', el)
         },
         toItem(el){
             this.$router.push({path: '/catalog/view/' + el.code})
         },
         removeAll(){
-            let cart = JSON.parse(localStorage.getItem('cart'));
-            cart.length = 0;
-            localStorage.setItem('cart', JSON.stringify(cart));
-            this.mass.splice(0);
+            this.$store.commit('cart/removeAll');
         }
     }
 }

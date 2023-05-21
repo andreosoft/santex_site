@@ -235,59 +235,40 @@ export default {
   },
   methods: {
     toCart(){
-      // let height = '';
-      // let width = '';
-      // let depth = '';
-      // let lengthItem = '';
-      // this.data.filters.forEach(item => {
-      //   if(item.name === 'Высота'){
-      //     height = item.value
-      //   } else if(item.name === 'Ширина') {
-      //     width = item.value
-      //   } else if(item.name === 'Глубина'){
-      //     depth = item.value
-      //   } else if(item.name === 'Длина'){
-      //     lengthItem = item.value;
-      //   }
-      // });
-      // // console.log('Высота ' + height)
-      // // console.log('Ширина ' + width)
-      // // console.log('Глубина ' + depth)
-      // // console.log('Длина ' + lengthItem)
-      // let item = {
-      //   code: this.data.id,
-      //   name: this.data.name,
-      //   img: this.data.images[0],
-      //   price: this.data.price,
-      //   old_price: this.data.price_old,
-      //   brand: this.data.brand,
-      //   count: 1,
-      //   type: this.data.type,
-      //   width: width,
-      //   height: height,
-      //   depth: depth,
-      //   lengthItem: lengthItem,
-      // }
-      // let arrItems = [];
-      // if(localStorage.cart){
-      //   let product = JSON.parse(localStorage.getItem('cart'));
-      //   // console.log(product);
-      //   let simillar = product.find((element) => {if(element.code === item.code){return element}});
-      //   if(simillar){
-      //     // console.log('Такой объект уже есть');
-      //     simillar.count++;
-      //     localStorage.setItem('cart', JSON.stringify(product));
-      //   } else {
-      //     // console.log('Новый объект');
-      //     product.push(item);
-      //     localStorage.setItem('cart', JSON.stringify(product));
-      //   }
-      //       } else {
-      //         // console.log('Первый объект');
-      //         arrItems.push(item);
-      //         localStorage.setItem('cart', JSON.stringify(arrItems));
-      // }
-
+      let height = '';
+      let width = '';
+      let depth = '';
+      let lengthItem = '';
+      this.data.filters.forEach(item => {
+        if(item.name === 'Высота'){
+          height = item.value
+        } else if(item.name === 'Ширина') {
+          width = item.value
+        } else if(item.name === 'Глубина'){
+          depth = item.value
+        } else if(item.name === 'Длина'){
+          lengthItem = item.value;
+        }
+      });
+      // console.log('Высота ' + height)
+      // console.log('Ширина ' + width)
+      // console.log('Глубина ' + depth)
+      // console.log('Длина ' + lengthItem)
+      let item = {
+        code: this.data.id,
+        name: this.data.name,
+        img: this.data.images[0],
+        price: this.data.price,
+        old_price: this.data.price_old,
+        brand: this.data.brand,
+        count: 1,
+        type: this.data.type,
+        width: width,
+        height: height,
+        depth: depth,
+        lengthItem: lengthItem,
+      }
+      this.$store.commit('cart/add', item);
     },
     Buyoneclick(){
       let height = '';
@@ -323,25 +304,7 @@ export default {
         depth: depth,
         lengthItem: lengthItem,
       }
-      let arrItems = [];
-      if(localStorage.cart){
-        let product = JSON.parse(localStorage.getItem('cart'));
-        // console.log(product);
-        let simillar = product.find((element) => {if(element.code === item.code){return element}});
-        if(simillar){
-          // console.log('Такой объект уже есть');
-          simillar.count++;
-          localStorage.setItem('cart', JSON.stringify(product));
-        } else {
-          // console.log('Новый объект');
-          product.push(item);
-          localStorage.setItem('cart', JSON.stringify(product));
-        }
-            } else {
-              // console.log('Первый объект');
-              arrItems.push(item);
-              localStorage.setItem('cart', JSON.stringify(arrItems));
-      }
+      this.$store.commit('cart/add', item);
       this.$router.push({ path: '/cart'});
     }
   },

@@ -15,7 +15,7 @@
             <nuxt-link class="ml-6" to="/compare"><img src="/icons/compare.svg" alt="" /></nuxt-link>
             <div style="width: 70px;" class="ml-6 d-inline-block">
               <nuxt-link to="/cart"><img src="/icons/basket.svg" alt="" /></nuxt-link>
-              <div class="cartIcon d-inline-block"><number :value="countItems" /></div>
+              <div class="cartIcon d-inline-block">{{ countItems }}</div>
             </div>
           </div>
         </div>
@@ -56,6 +56,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   props: {
     catalogMenuItems: Array
@@ -64,6 +65,7 @@ export default {
     return {
       showCatalogMenu: false,
       search: '',
+      mass: []
     }
   },
   methods: {
@@ -72,12 +74,9 @@ export default {
     },
   },
   computed: {
-    countItems(){
-      // let arr = localStorage.cart ? JSON.parse(localStorage.getItem('cart')) : [];
-      // let quantity = 0;
-      // arr.forEach(item => item.count + quantity);
-      // return 3;
-    }
+    ...mapGetters ({
+      countItems: 'cart/countItems',
+    })
   }
 }
 </script>

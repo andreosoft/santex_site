@@ -82,25 +82,26 @@ export default {
       depth: this.el.depth,
       lengthItem: '',
     };
-    let arrItems = [];
-      if(localStorage.cart){
-        let product = JSON.parse(localStorage.getItem('cart'));
-        console.log(product);
-        let simillar = product.find((element) => {if(element.code === item.code){return element}});
-        if(simillar){
-          // console.log('Такой объект уже есть');
-          simillar.count++;
-          localStorage.setItem('cart', JSON.stringify(product));
-        } else {
-          // console.log('Новый объект');
-          product.push(item);
-          localStorage.setItem('cart', JSON.stringify(product));
-        }
-            } else {
-              // console.log('Первый объект');
-              arrItems.push(item);
-              localStorage.setItem('cart', JSON.stringify(arrItems));
-      }
+    this.$store.commit('cart/add', item);
+    // let arrItems = [];
+    //   if(localStorage.usercart){
+    //     let product = JSON.parse(localStorage.getItem('usercart'));
+    //     console.log(product);
+    //     let simillar = product.find((element) => {if(element.code === item.code){return element}});
+    //     if(simillar){
+    //       // console.log('Такой объект уже есть');
+    //       simillar.count++;
+    //       localStorage.setItem('usercart', JSON.stringify(product));
+    //     } else {
+    //       // console.log('Новый объект');
+    //       product.push(item);
+    //       localStorage.setItem('usercart', JSON.stringify(product));
+    //     }
+    //         } else {
+    //           // console.log('Первый объект');
+    //           arrItems.push(item);
+    //           localStorage.setItem('usercart', JSON.stringify(arrItems));
+    //   }
   }
   }
 };
