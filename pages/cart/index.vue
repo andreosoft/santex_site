@@ -3,9 +3,8 @@
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex flex-row justify-space-between align-center">
-            <!-- {{ cart }} -->
             <h1>{{ title }}</h1>
-            <v-btn @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину</v-btn>
+            <v-btn @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
         </div>
         <v-divider class="mb-8" />
         <div>
@@ -65,9 +64,9 @@
                                 <v-btn class="s-btn-text">упак</v-btn>
                             </div>
                             <v-text-field hide-details class="s-input-text-center" outlined dense v-model="el.count">
-                                <v-btn @click="el.count = el.count + 1" style="margin-top: -6px;" slot="append" icon><i
+                                <v-btn @click="countPlus(el)" style="margin-top: -6px;" slot="append" icon><i
                                         class="fa-solid fa-plus"></i></v-btn>
-                                <v-btn @click="el.count >= 1 ? el.count = el.count - 1 : 0" style="margin-top: -6px;"
+                                <v-btn @click="countMinus(el)" style="margin-top: -6px;"
                                     slot="prepend-inner" icon><i class="fa-solid fa-minus"></i></v-btn>
                             </v-text-field>
                         </div>
@@ -102,7 +101,7 @@
                             <div style="font-size: 28px">
                                 <b><number :value="totalPrice" /> ₽</b>
                             </div>
-                            <div style="font-size: 14px" class="red--text">Экономия:
+                            <div v-if="totalDiscount !== 0" style="font-size: 14px" class="red--text">Экономия:
                                 <number :value="totalDiscount" /> ₽
                             </div>
                         </div>
@@ -179,7 +178,15 @@ export default {
       totalPrice: 'cart/totalPrice',
       totalDiscount: 'cart/totalDiscount',
       cart: 'cart/cart'
-    })
+    }),
+    // count: {
+    //     get(){
+    //         return this.$store.state.cart.data
+    //     },
+    //     set(){
+    //         this.$store.commit('cart/')
+    //     }
+    // }
     },
     methods: {
         deleteItem(el){
@@ -190,6 +197,12 @@ export default {
         },
         removeAll(){
             this.$store.commit('cart/removeAll');
+        },
+        countPlus(el){
+            this.$store.commit('cart/countPlus', el.code)
+        },
+        countMinus(el){
+            this.$store.commit('cart/countMinus', el.code)
         }
     }
 }
@@ -212,10 +225,13 @@ export default {
 .clearBtn{
     background-color: rgb(243, 243, 243);
     border: unset;
-    height: 43px;
     .v-btn__content{
         text-transform: none;
         letter-spacing: 0px;
     }
+}
+.del_card{
+    width: 16px;
+    height: 16px;
 }
 </style>
