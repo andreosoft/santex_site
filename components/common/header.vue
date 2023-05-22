@@ -5,6 +5,7 @@
       <div class="py-4 mb-6">
         <div class="d-flex justify-space-between">
           <div>
+            {{ $store.getters.getD }}
             <a class="s-header-phones pr-3" href="tel://88007759985">8 800 775 99 85</a>
             <a class="s-header-phones pr-3" href="tel://84952256285">8 495 225 62 85</a>
             <span><img src="/icons/whats_small.svg" alt="" /></span>
@@ -80,11 +81,6 @@ export default {
   }
 }
 </script>
-
-
-
-
-
 
 
 
