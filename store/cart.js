@@ -1,22 +1,38 @@
 const state = {
     cart: {
-        data: []
-    }
+        data: [],
+        dataClient: {
+            fullName: '',
+            email: '',
+            phone: '',
+            delivery: {
+                type: ''
+            },
+            address: {
+                city: '',
+                street: '',
+                indexHouse: '',
+                house: '',
+                flat: '',
+                entrance: '',
+                floor: '',
+                intercom: ''
+            },
+            payment: {
+                type: ''
+            }
+        }
+    },
+    
 }
 
 const getters = {
     cart(state) {
         return state.cart.data
     },
-    // cartData() {
-    //     if (process.client) {
-    //         try {
-    //             return JSON.stringify(localStorage.getItem('cart-data'))
-    //         } catch (error) {
-    //             return {}
-    //         }
-    //     }
-    // },
+    dataClient(state){
+        return state.cart.dataClient
+    },
     countItems(state){
         let cart = state.cart.data;
         let quantity = cart.length;
@@ -58,7 +74,7 @@ const mutations = {
     },
     countPlus(state, id){
         let cart = state.cart.data;
-        let sim = cart.find((element) => {if (element.code == id){ return element }})
+        let sim = cart.find((element) => {if (element.code == id){ return element }});
         sim.count++;
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
@@ -83,6 +99,13 @@ const mutations = {
         let emptyArr = [];
         state.cart.data = emptyArr;
         localStorage.setItem('usercart', JSON.stringify(emptyArr));
+    },
+    updateDataClient(state, {name1, value, name2}){
+        if(name2){
+            state.cart.dataClient[name1][name2] = value;
+        } else {
+            state.cart.dataClient[name1] = value;
+        }
     }
 }
 const actions = {
