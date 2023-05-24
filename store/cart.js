@@ -6,7 +6,7 @@ const state = {
             email: '',
             phone: '',
             delivery: {
-                type: ''
+                type: 'courier'
             },
             address: {
                 city: '',
@@ -19,7 +19,7 @@ const state = {
                 intercom: ''
             },
             payment: {
-                type: ''
+                type: 'online'
             }
         }
     },

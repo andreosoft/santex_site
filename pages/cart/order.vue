@@ -39,8 +39,8 @@
                 <div>
                     <h3 class="mb-4">Способ доставки</h3>
                     <div class="mb-4">
-                        <v-btn-toggle>
-                            <v-btn @click="updateDataClient('delivery', delivery.type = 'courier', 'type')" class="s-btn-text" width="240px" dark>Курьер</v-btn>
+                        <v-btn-toggle class="orderToggle" v-model="toggleData">
+                            <v-btn @click="updateDataClient('delivery', delivery.type = 'courier', 'type')" class="s-btn-text" width="240px" >Курьер</v-btn>
                             <v-btn @click="updateDataClient('delivery', delivery.type = 'pickup', 'type')" width="240px">Самовывоз</v-btn>
                         </v-btn-toggle>
                     </div>
@@ -106,8 +106,8 @@
             <div class="mb-8">
                 <h3 class="mb-4">Подробнее о доставке</h3>
                 <div class="d-flex">
-                    <v-btn-toggle class="mr-8">
-                        <v-btn @click="updateDataClient('payment', payment.type = 'online', 'type')" class="s-btn-text" width="240px" dark>Онлайн</v-btn>
+                    <v-btn-toggle class="mr-8 orderToggle" v-model="toggleData2">
+                        <v-btn @click="updateDataClient('payment', payment.type = 'online', 'type')" class="s-btn-text" width="240px">Онлайн</v-btn>
                         <v-btn @click="updateDataClient('payment', payment.type = 'totheCourier', 'type')" class="s-btn-text" width="240px">Курьеру при доставке</v-btn>
                     </v-btn-toggle>
                     
@@ -162,11 +162,13 @@ export default {
 
     data() {
         return {
+            toggleData: 0,
+            toggleData2: 0,
             fullName: '',
             email: '',
             phone: '',
             delivery: {
-                type: ''
+                type: 'courier'
             },
             address: {
                 city: '',
@@ -228,3 +230,10 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+    .orderToggle .v-item--active {
+        background-color: rgb(39, 39, 39) !important;
+        color: white !important;
+    }
+</style>
