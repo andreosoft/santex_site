@@ -204,7 +204,7 @@ export default {
     },
     methods: {
         toCatalog(){
-            this.$router.push({path: '/catalog/156'})
+            this.$router.push({path: '/'})
         },
         updateDataClient(name1, value, name2){
             name2 ? this.$store.commit('cart/updateDataClient', {name1, value, name2}) : this.$store.commit('cart/updateDataClient', {name1, value});
