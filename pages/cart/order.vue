@@ -225,7 +225,7 @@ export default {
                     payment_data: {
                         type: this.payment.type
                     },
-                    cartData: this.$store.state.cart
+                    cartData: this.$store.getters['cart/cart']
                 });
                 let resData = resp.data;
                 console.log(resData);

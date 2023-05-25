@@ -23,17 +23,17 @@ const state = {
             }
         }
     },
-    
+
 }
 
 const getters = {
     cart(state) {
         return state.cart.data
     },
-    dataClient(state){
+    dataClient(state) {
         return state.cart.dataClient
     },
-    countItems(state){
+    countItems(state) {
         let cart = state.cart.data;
         let quantity = cart.length;
         return quantity;
@@ -52,7 +52,7 @@ const getters = {
         for (const el of cart) {
             r = r + (el.old_price * el.count);
         }
-        if(r-getters.totalPrice < 0){
+        if (r - getters.totalPrice < 0) {
             return 0
         } else {
             return r - getters.totalPrice;
@@ -60,48 +60,49 @@ const getters = {
     }
 }
 const mutations = {
-    add(state, item){
+    add(state, item) {
         let cart = state.cart.data;
-        let simillar = cart.find((element) => {if(element.code === item.code){return element}});
-        if(simillar){
-          simillar.count++;
-          localStorage.setItem('usercart', JSON.stringify(cart));
+        let simillar = cart.find((element) => { if (element.code === item.code) { return element } });
+        if (simillar) {
+            simillar.count++;
+            localStorage.setItem('usercart', JSON.stringify(cart));
         } else {
-          cart.push(item);
-          state.cart.data = cart;
-          localStorage.setItem('usercart', JSON.stringify(cart));
+            item.catalog_id = item.code;
+            cart.push(item);
+            state.cart.data = cart;
+            localStorage.setItem('usercart', JSON.stringify(cart));
         }
     },
-    countPlus(state, id){
+    countPlus(state, id) {
         let cart = state.cart.data;
-        let sim = cart.find((element) => {if (element.code == id){ return element }});
+        let sim = cart.find((element) => { if (element.code == id) { return element } });
         sim.count++;
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
-    countMinus(state, id){
+    countMinus(state, id) {
         let cart = state.cart.data;
-        let sim = cart.find((element) => {if (element.code == id){ return element }})
+        let sim = cart.find((element) => { if (element.code == id) { return element } })
         sim.count >= 1 ? sim.count-- : 0
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
-    update (state, item){
+    update(state, item) {
         state.cart.data = item;
         localStorage.setItem('usercart', JSON.stringify(state.cart.data));
-      },
-    remove(state, item){
+    },
+    remove(state, item) {
         let cart = state.cart.data;
-        let indexStorage = cart.find((element, index) => {if(element.code === item.code){return index;}});
+        let indexStorage = cart.find((element, index) => { if (element.code === item.code) { return index; } });
         cart.splice(indexStorage, 1);
         state.cart.data = cart;
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
-    removeAll(state){
+    removeAll(state) {
         let emptyArr = [];
         state.cart.data = emptyArr;
         localStorage.setItem('usercart', JSON.stringify(emptyArr));
     },
-    updateDataClient(state, {name1, value, name2}){
-        if(name2){
+    updateDataClient(state, { name1, value, name2 }) {
+        if (name2) {
             state.cart.dataClient[name1][name2] = value;
         } else {
             state.cart.dataClient[name1] = value;
@@ -109,10 +110,10 @@ const mutations = {
     }
 }
 const actions = {
-    
+
 }
 
-export default{
+export default {
     state,
     getters,
     mutations,
