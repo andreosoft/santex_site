@@ -214,7 +214,7 @@ export default {
         // },
         async toDataBase() {
             try {
-                const resp = await this.$axios.post(this.$config.baseURL + 'api/shop/cart', {
+                const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/cart', {
                     name: this.fullName,
                     email: this.email,
                     phone: this.phone,
