@@ -140,7 +140,7 @@
                 <div>
                     <v-row>
                         <v-col cols="3">
-                            <v-btn @click="toDataBase" class="s-btn-text" dark style="width:100%" large>Оплатить заказ</v-btn>
+                            <v-btn @click="toDataBase()" class="s-btn-text" dark style="width:100%" large>Оплатить заказ</v-btn>
                         </v-col>
                         <v-col cols="9">
                             <div class="grey--text">Нажимая «Оплатить онлайн» вы соглашаетесь с условиями предоставления
@@ -212,10 +212,27 @@ export default {
         // updateDataClientAddress(name, value){
         //     this.$store.commit('cart/updateDataClientAddress', {name, value});
         // },
-        toDataBase($axios, $config){
-            let cart = JSON.stringify(this.$store.state.cart)
-            console.log(cart);
-            // $axios.post($config.baseURL + 'api/shop/cart', params: {cartData: cart});
+        async toDataBase() {
+            try {
+                const resp = await this.$axios.post(this.$config.baseURL + 'api/shop/cart', {
+                    name: this.fullName,
+                    email: this.email,
+                    phone: this.phone,
+                    delivery_data: {
+                        address: this.address,
+                        type: this.delivery.type
+                    },
+                    payment_data: {
+                        type: this.payment.type
+                    },
+                    cartData: this.$store.state.cart
+                });
+                let resData = resp.data;
+                console.log(resData);
+            } catch (error) {
+                console.error(error);
+            }
+            
         }
     },
     computed: {
