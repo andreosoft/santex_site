@@ -23,13 +23,13 @@
                     <v-col cols="3">
                         <div class="mb-2"><b>Электронная почта</b></div>
                         <div>
-                            <v-text-field email outlined placeholder="Введите e-mail" v-model="email" @change="updateDataClient('email', email)"/>
+                            <v-text-field type="email" outlined placeholder="Введите e-mail" v-model="email" @change="updateDataClient('email', email)"/>
                         </div>
                     </v-col>
                     <v-col cols="3">
                         <div class="mb-2"><b>Контактный телефон</b></div>
                         <div>
-                            <v-text-field outlined placeholder="+7(" v-model="phone" @change="updateDataClient('phone', phone)"/>
+                            <v-text-field type="text" outlined placeholder="+7(" v-mask="phoneNumberMask.mask" v-model="phone" @change="updateDataClient('phone', phone)"/>
                         </div>
                     </v-col>
                 </v-row>
@@ -182,7 +182,10 @@ export default {
             },
             payment: {
                 type: ''
-            }
+            },
+            phoneNumberMask: {
+                mask: '+7 (###) ###-##-##',
+            },
         }
     },
     async asyncData(params) {
@@ -233,7 +236,11 @@ export default {
                 console.error(error);
             }
             
-        }
+        },
+        // isNumber(e){
+        //     let regex = '/[0-9]/';
+        //     if(!regex.test(e.key)){e.returnValue = false}
+        // }
     },
     computed: {
         ...mapGetters({
@@ -244,7 +251,7 @@ export default {
         totalCost(){
             return this.totalPrice + 1480
         }
-    }
+    },
 }
 </script>
 
