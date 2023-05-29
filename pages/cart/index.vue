@@ -4,10 +4,17 @@
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex flex-row justify-space-between align-center">
             <h1>{{ title }}</h1>
-            <v-btn @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
+            <v-btn v-if="cart.length !== 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
         </div>
         <v-divider class="mb-8" />
-        <div>
+        <div v-if="cart.length == 0" style="padding: 120px 0;" class="text-center">
+            <div style="font-weight: bold; font-size: 46px;">Ваша корзина пуста</div>
+            <div style="font-size: 20px; margin: 5px 0 30px 0;">Перейдите в каталог</div>
+            <div>
+              <v-btn dark to="/catalog/156">В каталог</v-btn>
+            </div>
+          </div>
+        <div v-else>
             <v-row>
                 <v-col cols="5">
                     <div class="grey--text">Товар</div>
@@ -86,7 +93,7 @@
             </div>
         </div>
         <div class="mb-8">
-            <v-row>
+            <v-row v-if="cart.length !== 0">
                 <v-col cols="3">
                     <v-text-field outlined hide-details placeholder="Введите промо-код">
                         <v-btn style="margin-top: -8px;" slot="append" fab dark small><i
@@ -179,14 +186,6 @@ export default {
       totalDiscount: 'cart/totalDiscount',
       cart: 'cart/cart'
     }),
-    // count: {
-    //     get(){
-    //         return this.$store.state.cart.data
-    //     },
-    //     set(){
-    //         this.$store.commit('cart/')
-    //     }
-    // }
     },
     methods: {
         deleteItem(el){

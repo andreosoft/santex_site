@@ -3,33 +3,218 @@
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
-            <!-- {{ dataClient }} -->
+            {{ errorMessages }}
+            <!-- name: this.fullName,
+                    email: this.email,
+                    phone: this.phone,
+                    delivery_data: {
+                        address: this.address,
+                        type: this.delivery.type
+                    },
+                    payment_data: {
+                        type: this.payment.type
+                    }, -->
             <h1>{{ title }}</h1>
+            <!-- {{ dataOrder }} -->
             <div>
                 <v-btn class="s-btn-text" @click="toCatalog">Вернуться к покупкам</v-btn>
             </div>
         </div>
         <v-divider class="mb-8" />
-        <div>
-            <div>
+        <div v-if="send == true">
+            <h3 class="mb-4">Ваш заказ отправлен</h3>
+            <div class="d-flex flex-row mb-4" style="font-size: 20px;">
+                    <div class="mb-2">Номер вашего заказа: </div>
+                    <div class="ms-2"><b> {{ dataOrder.id }}</b></div>
+            </div>
+            <v-row class="mb-4">
+                <v-col cols="3">
+                    <div class="mb-2"><b>Ваше ФИО</b></div>
+                    <div>
+                        {{ dataOrder.name }}
+                    </div>
+                </v-col>
+                <v-col cols="3">
+                    <div class="mb-2"><b>Электронная почта</b></div>
+                    <div>
+                        {{ dataOrder.email }}
+                    </div>
+                </v-col>
+                <v-col cols="3">
+                    <div class="mb-2"><b>Контактный телефон</b></div>
+                    <div>
+                        {{ dataOrder.phone }}
+                    </div>
+                </v-col>
+            </v-row>
+            <v-row class="mb-4">
+                <v-col cols="3">
+                    <div class="mb-2"><b>Способ доставки</b></div>
+                    <div v-if="dataOrder.delivery_data.type == 'courier'">
+                        Курьер
+                    </div>
+                    <div v-else-if="dataOrder.delivery_data.type == 'pickup'">
+                        Самовывоз
+                    </div>
+                </v-col>
+                <v-col cols="3">
+                    <div class="mb-2"><b>Адрес</b></div>
+                    <div class="d-flex flex-row">
+                        <div>Город:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.city }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div>Улица:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.street }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div>Индекс:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.indexHouse }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div>Дом:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.house }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div>Квартира:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.flat }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div>Подъезд:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.entrance }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div>Этаж:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.floor }}
+                        </div>
+                    </div>
+                    <div class="d-flex flex-row">
+                        <div>Домофон:</div>
+                        <div class="ms-2">
+                            {{ dataOrder.delivery_data.address.intercom }}
+                        </div>
+                    </div>
+                </v-col>
+                <v-col cols="3">
+                    <div class="mb-2"><b>Способ оплаты</b></div>
+                    <div v-if="dataOrder.payment_data.type == 'online'">
+                        Онлайн
+                    </div>
+                    <div v-else-if="dataOrder.payment_data.type == 'totheCourier'">
+                        Курьеру при доставке
+                    </div>
+                </v-col>
+            </v-row>
+            <div class="mb-4"><span>Общая сумма: </span><b>{{ dataTotalPrice }} ₽ </b></div>
+            <v-divider class="mb-8" />
+            <h3 class="mb-4">Данные о заказе</h3>
+            <v-row>
+                <v-col cols="5">
+                    <div class="grey--text">Товар</div>
+                </v-col>
+                <v-col cols="2">
+                    <div class="grey--text">Стоимость</div>
+                </v-col>
+                <v-col cols="2">
+                    <div class="grey--text">Количество</div>
+                </v-col>
+                <v-col cols="2">
+                    <div class="grey--text">Цена</div>
+                </v-col>
+                <v-col cols="1">
+                    <div class="grey--text"></div>
+                </v-col>
+            </v-row>
+
+            <div v-for="(el, i) in cartData" :key="i" class="align-center">
+                <v-row>
+                    <v-col cols="5">
+                        <div class="d-flex">
+                            <div class="mr-4 pa-2" style="border: 0.5px solid black">
+                                <v-img style="width: 100px; height: 100px;" :src="$config.baseImageURL+el.img+'?width=270&height=270'" />
+                            </div>
+                            <div>
+                                <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
+                                <div @click="toItem" style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
+                                <div v-if="el.depth !== '' " style="font-size: 13px"><span class="grey--text mr-2">Габариты
+                                        (Г.Ш.В):</span><span>{{`${el.depth} x ${el.width} x ${el.height}` }}</span></div>
+                                <div v-else style="font-size: 13px"><span class="grey--text mr-2">Габариты
+                                        (Д.Ш.В):</span><span>{{`${el.lengthItem} x ${el.width} x ${el.height}` }}</span></div>
+                                <div style="font-size: 13px"><span class="grey--text mr-2">Бренд:</span><span>{{
+                                        el.brand
+                                }}</span></div>
+                            </div>
+                        </div>
+                    </v-col>
+                    <v-col cols="2">
+                        <div>
+                            <div style="font-size: 22px">
+                                <b><number :value="el.count * el.price" /> ₽</b>
+                            </div>
+                            <div v-if="el.old_price" style="font-size: 16px; text-decoration: line-through;"
+                                class="grey--text">
+                                <b><number :value="el.count * el.old_price" /> ₽</b>
+                            </div>
+                        </div>
+                    </v-col>
+                    <v-col cols="2">
+                        <div style="max-width: 160px">
+                            <div class="mb-2 d-flex justify-space-between" v-if="el.type == 2">
+                                <v-btn class="s-btn-text" dark>м<sup>2</sup></v-btn>
+                                <v-btn class="s-btn-text">упак</v-btn>
+                            </div>
+                            <v-text-field disabled hide-details class="s-input-text-center" outlined dense v-model="el.count">
+                                <!-- <v-btn @click="countPlus(el)" style="margin-top: -6px;" slot="append" icon><i
+                                        class="fa-solid fa-plus"></i></v-btn>
+                                <v-btn @click="countMinus(el)" style="margin-top: -6px;"
+                                    slot="prepend-inner" icon><i class="fa-solid fa-minus"></i></v-btn> -->
+                            </v-text-field>
+                        </div>
+                    </v-col>
+                    <v-col cols="2">
+                        <div style="font-size: 22px">
+                            <b><number :value="el.price" /> ₽</b>
+                        </div>
+                    </v-col>
+                    <v-col cols="1">
+                    </v-col>
+                </v-row>
+                <v-divider class="my-8" />
+            </div>
+        </div>
+        <div v-else>
+            <div>                
                 <h3 class="mb-4">Персональные данные</h3>
                 <v-row>
                     <v-col cols="3">
                         <div class="mb-2"><b>Ваше ФИО</b></div>
                         <div>
-                            <v-text-field outlined placeholder="Введите ФИО" v-model="fullName" @change="updateDataClient('fullName', fullName)"/>
+                            <v-text-field required :error-messages="errorMessages" :rules="[rules.required]" outlined placeholder="Введите ФИО" v-model="fullName" @change="updateDataClient('fullName', fullName)"/>
                         </div>
                     </v-col>
                     <v-col cols="3">
                         <div class="mb-2"><b>Электронная почта</b></div>
                         <div>
-                            <v-text-field type="email" outlined placeholder="Введите e-mail" v-model="email" @change="updateDataClient('email', email)"/>
+                            <v-text-field required :error-messages="errorMessages" :rules="[rules.required, rules.email]" type="email" outlined placeholder="Введите e-mail" v-model="email" @change="updateDataClient('email', email)"/>
                         </div>
                     </v-col>
                     <v-col cols="3">
                         <div class="mb-2"><b>Контактный телефон</b></div>
                         <div>
-                            <v-text-field type="text" outlined placeholder="+7(" v-mask="phoneNumberMask.mask" v-model="phone" @change="updateDataClient('phone', phone)"/>
+                            <v-text-field required :error-messages="errorMessages" :rules="[rules.required, rules.counter]" type="text" outlined placeholder="+7(" v-mask="phoneNumberMask.mask" v-model="phone" @change="updateDataClient('phone', phone)"/>
                         </div>
                     </v-col>
                 </v-row>
@@ -147,21 +332,48 @@
                                 услуг и политикой хранения персональных данных.
                                 Далее вы будете перенаправлены в защищенную платежную систему, где сможете произвести
                                 оплату заказа.</div>
-                        </v-col>
-                    </v-row>
+                            </v-col>
+                        </v-row>
+                    </div>
                 </div>
             </div>
-        </div>
-    </v-container>
-</template>
-        
-        <script>
+        </v-container>
+    </template>
+    
+    <script>
 
 import { mapGetters } from 'vuex'
 export default {
-
+    computed: {
+        ...mapGetters({
+            totalPrice: 'cart/totalPrice',
+            totalDicount: 'cart/totalDiscount',
+            dataClient: 'cart/dataClient',
+            DataCart: 'cart/cart'
+        }),
+        totalCost(){
+            return this.totalPrice + 1480
+        },
+        dataTotalPrice(){
+            let price = 0;
+            this.dataOrder.cartData.forEach((item) => {price += item.value})
+            return price
+        }
+    },
     data() {
         return {
+            errorMessages: '',
+            errors: [],
+            rules: {
+                required: value => !!value || 'Обязательное поле.',
+                counter: value => value.length == 18 || 'Введите корректный номер',
+                email: value => {
+                    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                    return pattern.test(value) || 'Некорректный адрес электронной почты'
+                        }
+            },
+            cartData: [],
+            dataOrder: {},
             toggleData: 0,
             toggleData2: 0,
             fullName: '',
@@ -181,11 +393,12 @@ export default {
                 intercom: ''
             },
             payment: {
-                type: ''
+                type: 'online'
             },
             phoneNumberMask: {
                 mask: '+7 (###) ###-##-##',
             },
+            send: false
         }
     },
     async asyncData(params) {
@@ -206,6 +419,13 @@ export default {
         return { title, data, breadcrumbsData }
     },
     methods: {
+        // nameCheck(){
+        // this.errorMessages = this.fullName && !this.email && !this.phone
+        //     ? `Обязательное поле`
+        //   : ''
+
+        // return true
+        // },
         toCatalog(){
             this.$router.push({path: '/'})
         },
@@ -216,41 +436,42 @@ export default {
         //     this.$store.commit('cart/updateDataClientAddress', {name, value});
         // },
         async toDataBase() {
-            try {
-                const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/cart', {
-                    name: this.fullName,
-                    email: this.email,
-                    phone: this.phone,
-                    delivery_data: {
-                        address: this.address,
-                        type: this.delivery.type
-                    },
-                    payment_data: {
-                        type: this.payment.type
-                    },
-                    cartData: this.$store.getters['cart/cart']
-                });
-                let resData = resp.data;
-                console.log(resData);
-            } catch (error) {
-                console.error(error);
+    if(this.fullName.trim() && this.email.trim() && this.phone.trim()){
+                try {
+                        const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/cart', {
+                                name: this.fullName,
+                                email: this.email,
+                                phone: this.phone,
+                                delivery_data: {
+                                        address: this.address,
+                                        type: this.delivery.type
+                                    },
+                                    payment_data: {
+                                            type: this.payment.type
+                                        },
+                                        cartData: this.DataCart
+                                    });
+                                    let resData = resp.data;
+                                    console.log(resData);
+                                    this.dataOrder = resp.data.data;
+                                    this.send = true;
+                                    this.cartData = this.$store.getters['cart/cart']
+                                    // this.$store.commit('cart/removeAll');
+                                } catch (error) {
+                                        console.error(error);
+                                    }
+            } else {
+                this.errorMessages = 'Заполните обязательные поля'
             }
             
+        },
+        toItem(){
+            console.log(this.phone.length)
         },
         // isNumber(e){
         //     let regex = '/[0-9]/';
         //     if(!regex.test(e.key)){e.returnValue = false}
         // }
-    },
-    computed: {
-        ...mapGetters({
-            totalPrice: 'cart/totalPrice',
-            totalDicount: 'cart/totalDiscount',
-            dataClient: 'cart/dataClient'
-        }),
-        totalCost(){
-            return this.totalPrice + 1480
-        }
     },
 }
 </script>
@@ -259,5 +480,13 @@ export default {
     .orderToggle .v-item--active {
         background-color: rgb(39, 39, 39) !important;
         color: white !important;
+    }
+    .s-input-text-center{
+        input {
+            text-align: center;
+        }
+    } 
+    .toItemblock:hover{
+            cursor: pointer;
     }
 </style>
