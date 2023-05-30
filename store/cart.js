@@ -34,55 +34,56 @@ const getters = {
         return state.cart.dataClient
     },
     countItems(state) {
-        let cart = state.cart.data;
-        let quantity = cart.length;
+        const cart = state.cart.data;
+        let quantity = 0;
+        cart.forEach((element) => {
+            quantity += element.count;
+        })
         return quantity;
     },
     totalPrice(state) {
-        let cart = state.cart.data;
+        const cart = state.cart.data;
         let r = 0;
         for (const el of cart) {
-            r = r + (el.price * el.count);
+            r += el.price * el.count;
         }
         return r;
     },
     totalDiscount(state, getters) {
-        let cart = state.cart.data;
+        const cart = state.cart.data;
         let r = 0;
         for (const el of cart) {
-            r = r + (el.old_price * el.count);
+            r += el.old_price * el.count;
         }
-        if (r - getters.totalPrice < 0) {
-            return 0
-        } else {
-            return r - getters.totalPrice;
-        }
+        return r - getters.totalPrice < 0 ? 0 : r - getters.totalPrice;
     }
 }
 const mutations = {
     add(state, item) {
-        let cart = state.cart.data;
-        let simillar = cart.find((element) => { if (element.code === item.code) { return element } });
+        const cart = state.cart.data;
+        const simillar = cart.find((element) => { if (element.code === item.code) { return element } });
         if (simillar) {
             simillar.count++;
             localStorage.setItem('usercart', JSON.stringify(cart));
-        } else {
-            item.catalog_id = item.code;
-            cart.push(item);
-            state.cart.data = cart;
-            localStorage.setItem('usercart', JSON.stringify(cart));
+            return;
         }
+        item.catalog_id = item.code;
+        cart.push(item);
+        state.cart.data = cart;
+        localStorage.setItem('usercart', JSON.stringify(cart));
     },
     countPlus(state, id) {
-        let cart = state.cart.data;
-        let sim = cart.find((element) => { if (element.code == id) { return element } });
+        const cart = state.cart.data;
+        const sim = cart.find((element) => { if (element.code == id) { return element } });
         sim.count++;
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
     countMinus(state, id) {
-        let cart = state.cart.data;
-        let sim = cart.find((element) => { if (element.code == id) { return element } })
-        sim.count >= 1 ? sim.count-- : 0
+        const cart = state.cart.data;
+        const sim = cart.find((element) => { if (element.code == id) { return element } })
+        if (sim.count >= 2) {
+            sim.count--;
+        }
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
     update(state, item) {
@@ -90,14 +91,14 @@ const mutations = {
         localStorage.setItem('usercart', JSON.stringify(state.cart.data));
     },
     remove(state, item) {
-        let cart = state.cart.data;
-        let indexStorage = cart.find((element, index) => { if (element.code === item.code) { return index; } });
+        const cart = state.cart.data;
+        const indexStorage = cart.find((element, index) => { if (element.code === item.code) { return index; } });
         cart.splice(indexStorage, 1);
         state.cart.data = cart;
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
     removeAll(state) {
-        let emptyArr = [];
+        const emptyArr = [];
         state.cart.data = emptyArr;
         localStorage.setItem('usercart', JSON.stringify(emptyArr));
     },

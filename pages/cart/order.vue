@@ -3,17 +3,6 @@
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
-            {{ errorMessages }}
-            <!-- name: this.fullName,
-                    email: this.email,
-                    phone: this.phone,
-                    delivery_data: {
-                        address: this.address,
-                        type: this.delivery.type
-                    },
-                    payment_data: {
-                        type: this.payment.type
-                    }, -->
             <h1>{{ title }}</h1>
             <!-- {{ dataOrder }} -->
             <div>
@@ -196,25 +185,61 @@
             </div>
         </div>
         <div v-else>
+            <ValidationObserver ref="obs" v-slot="{ invalid, validated, handleSubmit, validate }">
+            <div ref="form">
             <div>                
                 <h3 class="mb-4">Персональные данные</h3>
                 <v-row>
                     <v-col cols="3">
                         <div class="mb-2"><b>Ваше ФИО</b></div>
                         <div>
-                            <v-text-field required :error-messages="errorMessages" :rules="[rules.required]" outlined placeholder="Введите ФИО" v-model="fullName" @change="updateDataClient('fullName', fullName)"/>
+                            <ValidationProvider name="fullName" rules="required|min:3" v-slot="{ errors, valid }">
+                            <v-text-field
+                            name="fullName"
+                            required
+                            :error-messages="errors"
+                            :success="valid"
+                            outlined
+                            placeholder="Введите ФИО"
+                            v-model="fullName"
+                            @change="updateDataClient('fullName', fullName)"
+                            />
+                            </ValidationProvider>
                         </div>
                     </v-col>
                     <v-col cols="3">
                         <div class="mb-2"><b>Электронная почта</b></div>
                         <div>
-                            <v-text-field required :error-messages="errorMessages" :rules="[rules.required, rules.email]" type="email" outlined placeholder="Введите e-mail" v-model="email" @change="updateDataClient('email', email)"/>
+                            <ValidationProvider name="email" rules="required|email" v-slot="{ errors, valid }">
+                            <v-text-field
+                            name="email"
+                            required 
+                            :error-messages="errors"
+                            :success="valid"
+                            type="email"
+                            outlined 
+                            placeholder="Введите e-mail"
+                            v-model="email"
+                            @change="updateDataClient('email', email)"/>
+                            </ValidationProvider>
                         </div>
                     </v-col>
                     <v-col cols="3">
                         <div class="mb-2"><b>Контактный телефон</b></div>
                         <div>
-                            <v-text-field required :error-messages="errorMessages" :rules="[rules.required, rules.counter]" type="text" outlined placeholder="+7(" v-mask="phoneNumberMask.mask" v-model="phone" @change="updateDataClient('phone', phone)"/>
+                            <ValidationProvider name="phone" rules="required|length:18" v-slot="{ errors, valid }">
+                            <v-text-field
+                            name="phone"
+                            required 
+                            :error-messages="errors"
+                            :success="valid"
+                            type="text"
+                            outlined 
+                            placeholder="+7("
+                            v-mask="phoneNumberMask.mask"
+                            v-model="phone"
+                            @change="updateDataClient('phone', phone)"/>
+                            </ValidationProvider>
                         </div>
                     </v-col>
                 </v-row>
@@ -250,13 +275,13 @@
                     <v-col cols="4">
                         <div class="mb-2"><b>Город</b></div>
                         <div>
-                            <v-text-field outlined placeholder="Ваш город" v-model="address.city" @change="updateDataClient('address', address.city, 'city')"/>
+                            <v-text-field name="city" outlined placeholder="Ваш город" v-model="address.city" @change="updateDataClient('address', address.city, 'city')"/>
                         </div>
                     </v-col>
                     <v-col cols="4">
                         <div class="mb-2"><b>Улица</b></div>
                         <div>
-                            <v-text-field outlined placeholder="Укажите улицу" v-model="address.street" @change="updateDataClient('address', address.street, 'street')"/>
+                            <v-text-field name="street" outlined placeholder="Укажите улицу" v-model="address.street" @change="updateDataClient('address', address.street, 'street')"/>
                         </div>
                     </v-col>
                 </v-row>
@@ -264,22 +289,22 @@
                     <v-col cols="8">
                         <v-row>
                             <v-col cols="2">
-                                <v-text-field outlined label="Индекс" v-model="address.indexHouse" @change="updateDataClient('address', address.indexHouse, 'indexHouse')"/>
+                                <v-text-field name="indexHouse" outlined label="Индекс" v-model="address.indexHouse" @change="updateDataClient('address', address.indexHouse, 'indexHouse')"/>
                             </v-col>
                             <v-col cols="2">
-                                <v-text-field outlined label="Дом" v-model="address.house" @change="updateDataClient('address', address.house, 'house')"/>
+                                <v-text-field name="house" outlined label="Дом" v-model="address.house" @change="updateDataClient('address', address.house, 'house')"/>
                             </v-col>
                             <v-col cols="2">
-                                <v-text-field outlined label="Квартира/офис" v-model="address.flat" @change="updateDataClient('address', address.flat, 'flat')"/>
+                                <v-text-field name="flat" outlined label="Квартира/офис" v-model="address.flat" @change="updateDataClient('address', address.flat, 'flat')"/>
                             </v-col>
                             <v-col cols="2">
-                                <v-text-field outlined label="Подъезд" v-model="address.entrance" @change="updateDataClient('address', address.entrance, 'entrance')"/>
+                                <v-text-field name="entrance" outlined label="Подъезд" v-model="address.entrance" @change="updateDataClient('address', address.entrance, 'entrance')"/>
                             </v-col>
                             <v-col cols="2">
-                                <v-text-field outlined label="Этаж" v-model="address.floor" @change="updateDataClient('address', address.floor, 'floor')"/>
+                                <v-text-field name="floor" outlined label="Этаж" v-model="address.floor" @change="updateDataClient('address', address.floor, 'floor')"/>
                             </v-col>
                             <v-col cols="2">
-                                <v-text-field outlined label="Домофон" v-model="address.intercom" @change="updateDataClient('address', address.intercom, 'intercom')"/>
+                                <v-text-field name="intercom" outlined label="Домофон" v-model="address.intercom" @change="updateDataClient('address', address.intercom, 'intercom')"/>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -325,7 +350,8 @@
                 <div>
                     <v-row>
                         <v-col cols="3">
-                            <v-btn @click="toDataBase()" class="s-btn-text" dark style="width:100%" large>Оплатить заказ</v-btn>
+                            <!-- <v-btn @click="validate()">Validate</v-btn> -->
+                            <v-btn @click="handleSubmit(toDataBase)" class="s-btn-text" dark style="width:100%" large>Оплатить заказ</v-btn>
                         </v-col>
                         <v-col cols="9">
                             <div class="grey--text">Нажимая «Оплатить онлайн» вы соглашаетесь с условиями предоставления
@@ -337,13 +363,19 @@
                     </div>
                 </div>
             </div>
+            </ValidationObserver>
+            </div>
         </v-container>
     </template>
     
     <script>
-
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 import { mapGetters } from 'vuex'
 export default {
+    components: {
+    ValidationProvider,
+    ValidationObserver
+    },
     computed: {
         ...mapGetters({
             totalPrice: 'cart/totalPrice',
@@ -362,16 +394,16 @@ export default {
     },
     data() {
         return {
-            errorMessages: '',
-            errors: [],
-            rules: {
-                required: value => !!value || 'Обязательное поле.',
-                counter: value => value.length == 18 || 'Введите корректный номер',
-                email: value => {
-                    const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                    return pattern.test(value) || 'Некорректный адрес электронной почты'
-                        }
-            },
+            // errorMessages: '',
+            // errors: [],
+            // rules: {
+            //     required: value => !!value || 'Обязательное поле.',
+            //     counter: value => value.length == 18 || 'Введите корректный номер',
+            //     email: value => {
+            //         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            //         return pattern.test(value) || 'Некорректный адрес электронной почты'
+            //             }
+            // },
             cartData: [],
             dataOrder: {},
             toggleData: 0,
@@ -437,7 +469,8 @@ export default {
         // },
         async toDataBase() {
     if(this.fullName.trim() && this.email.trim() && this.phone.trim()){
-                try {
+        try {
+            this.errorMessages = '';
                         const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/cart', {
                                 name: this.fullName,
                                 email: this.email,

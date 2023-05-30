@@ -2,6 +2,7 @@
   <v-container class="mb-14">
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
+    {{ data }}
     <h1>{{ data.name }}</h1>
     <v-row class="mt-4">
       <v-col cols="6">
@@ -253,7 +254,7 @@ export default {
       // console.log('Ширина ' + width)
       // console.log('Глубина ' + depth)
       // console.log('Длина ' + lengthItem)
-      let item = {
+      const item = {
         code: this.data.id,
         name: this.data.name,
         img: this.data.images[0],
@@ -262,10 +263,10 @@ export default {
         brand: this.data.brand,
         count: 1,
         type: this.data.type,
-        width: width,
-        height: height,
-        depth: depth,
-        lengthItem: lengthItem,
+        width,
+        height,
+        depth,
+        lengthItem,
       }
       this.$store.commit('cart/add', item);
     },
@@ -289,7 +290,7 @@ export default {
       // console.log('Ширина ' + width)
       // console.log('Глубина ' + depth)
       // console.log('Длина ' + lengthItem)
-      let item = {
+      const item = {
         code: this.data.id,
         name: this.data.name,
         img: this.data.images[0],
@@ -298,10 +299,10 @@ export default {
         brand: this.data.brand,
         count: 1,
         type: this.data.type,
-        width: width,
-        height: height,
-        depth: depth,
-        lengthItem: lengthItem,
+        width,
+        height,
+        depth,
+        lengthItem,
       }
       this.$store.commit('cart/add', item);
       this.$router.push({ path: '/cart'});
