@@ -148,14 +148,8 @@
                         </div>
                     </v-col>
                     <v-col cols="2">
-                        <div>
-                            <div style="font-size: 22px">
-                                <b><number :value="el.count * el.price" /> ₽</b>
-                            </div>
-                            <div v-if="el.old_price" style="font-size: 16px; text-decoration: line-through;"
-                                class="grey--text">
-                                <b><number :value="el.count * el.old_price" /> ₽</b>
-                            </div>
+                        <div style="font-size: 22px">
+                            <b><number :value="el.price" /> ₽</b>
                         </div>
                     </v-col>
                     <v-col cols="2">
@@ -173,8 +167,14 @@
                         </div>
                     </v-col>
                     <v-col cols="2">
-                        <div style="font-size: 22px">
-                            <b><number :value="el.price" /> ₽</b>
+                        <div>
+                            <div style="font-size: 22px">
+                                <b><number :value="el.count * el.price" /> ₽</b>
+                            </div>
+                            <div v-if="el.old_price" style="font-size: 16px; text-decoration: line-through;"
+                                class="grey--text">
+                                <b><number :value="el.count * el.old_price" /> ₽</b>
+                            </div>
                         </div>
                     </v-col>
                     <v-col cols="1">
