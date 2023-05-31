@@ -17,7 +17,7 @@
             <!-- <div style="width: 70px;" class="ml-6 d-inline-block"> -->
               <nuxt-link class="ml-6" to="/cart">
                   <img src="/icons/basket.svg" alt="cart" />
-                  <div class="cartIcon d-inline-block">{{ countItems }}</div>
+                  <div v-if="countItems>0" class="cartIcon d-inline-block">{{ countItems }}</div>
               </nuxt-link>
             <!-- </div> -->
           </div>
