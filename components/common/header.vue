@@ -16,7 +16,7 @@
             <nuxt-link class="ml-6" to="/compare"><img src="/icons/compare.svg" alt="" /></nuxt-link>
             <!-- <div style="width: 70px;" class="ml-6 d-inline-block"> -->
               <nuxt-link class="ml-6" to="/cart">
-                  <img src="/icons/basket.svg" alt="" />
+                  <img src="/icons/basket.svg" alt="cart" />
                   <div class="cartIcon d-inline-block">{{ countItems }}</div>
               </nuxt-link>
             <!-- </div> -->
@@ -142,9 +142,11 @@ export default {
   background-color: black;
   border-radius: 50px;
   color: white;
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   text-align: center;
   vertical-align: bottom;
+  font-size: 13px;
+  padding-top: 1px;
 }
 </style>
