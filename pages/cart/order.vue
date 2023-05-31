@@ -4,7 +4,6 @@
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
-            <!-- {{ dataOrder }} -->
             <div>
                 <v-btn class="s-btn-text" @click="toCatalog">Вернуться к покупкам</v-btn>
             </div>
@@ -451,13 +450,6 @@ export default {
         return { title, data, breadcrumbsData }
     },
     methods: {
-        // nameCheck(){
-        // this.errorMessages = this.fullName && !this.email && !this.phone
-        //     ? `Обязательное поле`
-        //   : ''
-
-        // return true
-        // },
         toCatalog(){
             this.$router.push({path: '/'})
         },
@@ -501,10 +493,6 @@ export default {
         toItem(){
             console.log(this.phone.length)
         },
-        // isNumber(e){
-        //     let regex = '/[0-9]/';
-        //     if(!regex.test(e.key)){e.returnValue = false}
-        // }
     },
 }
 </script>
