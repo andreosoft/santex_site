@@ -489,7 +489,7 @@ export default {
                                     this.dataOrder = resp.data.data;
                                     this.send = true;
                                     this.cartData = this.$store.getters['cart/cart']
-                                    // this.$store.commit('cart/removeAll');
+                                    this.$store.commit('cart/removeAll');
                                 } catch (error) {
                                         console.error(error);
                                     }
