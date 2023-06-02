@@ -48,12 +48,12 @@
       </v-row>
       <hr />
       <v-row class="s-bottom">
-        <v-col cols="6" lg="3"><a href="/">© SantehKomfort Elite, 2021</a> </v-col>
-        <v-col cols="6" lg="3"><nuxt-link to="/">Публичная оферта</nuxt-link> </v-col>
-        <v-col cols="6" lg="3"
-          ><nuxt-link to="/">Политика конфиденциальности</nuxt-link>
-        </v-col>
-        <v-col cols="6" xs="6" lg="3" class="text-right"><img src="/img/mench1.png" /> </v-col>
+        <v-col style="text-align: center !important;" cols="6" lg="2"><a href="/">© SantehKomfort Elite, 2021</a> </v-col>
+        <v-col style="text-align: center !important;" cols="6" lg="2"><nuxt-link to="/publicOffer">Публичная оферта</nuxt-link> </v-col>
+        <v-col style="text-align: center !important;" cols="6" lg="2"><nuxt-link to="/privacy">Политика конфиденциальности</nuxt-link></v-col>
+        <v-col style="text-align: center !important;" cols="6" lg="2"><nuxt-link to="/acceptRules">Правила приемки</nuxt-link> </v-col>
+        <v-col style="text-align: center !important;" cols="6" lg="2"><nuxt-link to="/userAgreement">Пользовательское соглашение</nuxt-link></v-col>
+        <v-col cols="6" xs="6" lg="2" class="text-right"><img src="/img/mench1.png" /></v-col>
       </v-row>
     </v-container>
   </div>
