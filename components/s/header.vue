@@ -11,7 +11,7 @@
 export default {
     props: {
         title: String,
-        breadcrumbsData: Object
+        breadcrumbsData: Array
     }
 }
 </script>

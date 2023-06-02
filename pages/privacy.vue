@@ -1,8 +1,7 @@
 <template>
     <div>
         <v-container>
-            <v-col cols="8">
-                <h1>Политика конфиденциальности</h1>
+            <s-header title="Политика конфиденциальности" :breadcrumbsData="breadcrumbsData" />
                 <div class="parentBlock">
                      <h3>1. Конфиденциальность и защита информации.</h3>
                      <p> 1.1. Персональные данные Пользователя/Покупателя обрабатываются на основании ФЗ №152 «О персональных
@@ -49,8 +48,23 @@
                        <p> 2.1. Администрация сайта (интернет-магазина) имеет право раскрывать информацию о Пользователе, если
                         действующее законодательство Российской Федерации требует или разрешает такое раскрытие.</p>
                 </div>
-            </v-col>
         </v-container>
     </div>
 </template>
 
+<script>
+    export default {
+        data(){
+            return
+    },
+    async asyncData({params}) {
+        const breadcrumbsData = [
+            {
+                url: '/privacy',
+                title: 'Политика конфиденциальности'
+            }
+        ]
+        return {breadcrumbsData}
+    },
+}
+</script>

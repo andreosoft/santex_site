@@ -1,8 +1,7 @@
 <template>
     <div>
-        <v-container>
-            <v-col cols="8">
-                <h1>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h1>
+        <v-container class="mb-10">
+            <s-header title="Пользовательское соглашение" :breadcrumbsData="breadcrumbsData" />
                 <div class="parentBlock">
                     <h3>1. Основные понятия.</h3>
                     <p>1.1. Интернет-магазин — интернет-сайт, это совокупность текстов, графических элементов, дизайна,
@@ -266,10 +265,26 @@
                                                                                                                                                                                                                                                         решить путем переговоров, при недостижении соглашения спор будет передан на рассмотрение в судебный
                                                                                                                                                                                                                                                         орган в соответствии с действующим законодательством РФ.</p>
                 </div>
-            </v-col>
         </v-container>
     </div>
 </template>
+
+<script>
+    export default {
+        data(){
+            return
+        },
+        async asyncData({params}) {
+            const breadcrumbsData = [
+            {
+                url: "/userAgreement",
+                title: "Пользовательское соглашение",
+            }
+        ];
+        return {breadcrumbsData}
+        }
+    }
+</script>
 
 <style>
     ul{

@@ -1,8 +1,7 @@
 <template>
     <div>
         <v-container>
-            <v-col cols="8">
-                <h1>Публичная оферта</h1>
+            <s-header title="Публичная оферта" :breadcrumbsData="breadcrumbsData" />
                 <div class="parentBlock">
                      <h3>ПОЛЬЗОВАТЕЛЬСКОЕ СОГЛАШЕНИЕ</h3>
                      <h3>1. Основные понятия.</h3>
@@ -210,7 +209,23 @@
                         решить путем переговоров, при недостижении соглашения спор будет передан на рассмотрение в судебный
                         орган в соответствии с действующим законодательством РФ.</p>
                 </div>
-            </v-col>
         </v-container>
     </div>
 </template>
+
+<script>
+    export default {
+        data(){
+            return
+        },
+        async asyncData({params}) {
+            const breadcrumbsData = [
+                {
+                    url: '/publicOffer',
+                    title: 'Публичная оферта'
+                }
+            ]
+            return {breadcrumbsData}
+        },
+    }
+</script>

@@ -1,8 +1,7 @@
 <template>
     <div>
         <v-container>
-            <v-col cols="8">
-                <h1>Правила приемки</h1>
+            <s-header title="Правила приемки" :breadcrumbsData="breadcrumbsData" />
                 <div class="parentBlock">
                      <p>До подписания договора купли-продажи обязательно проверьте комплектность заказа и отсутствии внешних
                         дефектов товара. Претензии к внешнему виду доставленного товара в соответствии со ст. 458 и 459 ГК РФ можно
@@ -52,7 +51,23 @@
                         пункте самовывоза товаров получателю необходимо знать номер счета, по которому оплачивался заказ, и
                         предъявить доверенность на получение заказа.</p>
                 </div>
-            </v-col>
         </v-container>
     </div>
 </template>
+
+<script>
+    export default {
+        data(){
+            return
+        },
+        async asyncData({params}) {
+            const breadcrumbsData = [
+                {
+                    url: '/acceptRules',
+                    title: 'Правила приемки'
+                }
+            ]
+            return {breadcrumbsData}
+        },
+    }
+</script>
