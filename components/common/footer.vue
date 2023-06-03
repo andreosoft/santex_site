@@ -48,7 +48,7 @@
       </v-row>
       <hr />
       <v-row class="s-bottom">
-        <v-col style="text-align: center !important;" cols="6" lg="2"><a href="/">© SantehKomfort Elite, {{ new Date().getFullYear }}</a> </v-col>
+        <v-col style="text-align: center !important;" cols="6" lg="2"><a href="/">© SantehKomfort Elite, {{ new Date().getFullYear() }}</a> </v-col>
         <v-col style="text-align: center !important;" cols="6" lg="2"><nuxt-link to="/publicOffer">Публичная оферта</nuxt-link> </v-col>
         <v-col style="text-align: center !important;" cols="6" lg="2"><nuxt-link to="/privacy">Политика конфиденциальности</nuxt-link></v-col>
         <v-col style="text-align: center !important;" cols="6" lg="2"><nuxt-link to="/acceptRules">Правила приемки</nuxt-link> </v-col>
