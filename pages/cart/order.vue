@@ -136,7 +136,7 @@
                             </div>
                             <div>
                                 <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
-                                <div @click="toItem" style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
+                                <div style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
                                 <div v-if="el.depth !== '' " style="font-size: 13px"><span class="grey--text mr-2">Габариты
                                         (Г.Ш.В):</span><span>{{`${el.depth} x ${el.width} x ${el.height}` }}</span></div>
                                 <div v-else style="font-size: 13px"><span class="grey--text mr-2">Габариты
@@ -460,9 +460,8 @@ export default {
         //     this.$store.commit('cart/updateDataClientAddress', {name, value});
         // },
         async toDataBase() {
-    if(this.fullName.trim() && this.email.trim() && this.phone.trim()){
+    // if(this.fullName.trim() && this.email.trim() && this.phone.trim()){
         try {
-            this.errorMessages = '';
                         const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/cart', {
                                 name: this.fullName,
                                 email: this.email,
@@ -485,14 +484,10 @@ export default {
                                 } catch (error) {
                                         console.error(error);
                                     }
-            } else {
-                this.errorMessages = 'Заполните обязательные поля'
-            }
-            
-        },
-        toItem(){
-            console.log(this.phone.length)
-        },
+            } 
+            // else {
+            //     this.errorMessages = 'Заполните обязательные поля'
+            // }
     },
 }
 </script>

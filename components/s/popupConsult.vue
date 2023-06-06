@@ -1,7 +1,9 @@
 <template>
     <div>
+        <!-- {{ dataOrderConsult }} -->
         <v-dialog v-model="value" persistent :overlay="false" max-width="810px" transition="dialog-transition">
             <div class="s-popup">
+                <!-- {{ data }} -->
                 <div>
                     <div class="text-right">
                         <v-btn icon @click="$emit('input')"><img src="/icons/close_menu.svg" /></v-btn>
@@ -11,17 +13,28 @@
                     <h2>Запись на консультацию онлайн</h2>
                     <v-divider class="mb-8" />
                     <div v-if="view == 1">
-                        <div>
+                        <ValidationObserver ref="obs" v-slot="{ invalid, validated, handleSubmit, validate }">
+                        <div ref="form">
                             <div>
                                 <div class="mb-2"><b>Менеджер</b></div>
                                 <div>
-                                    <v-select :items="dataManager" outlined placeholder="Введите менеджера" />
+                                    <v-select :items="dataManager" v-model="valueManager" outlined placeholder="Введите менеджера" />
                                 </div>
                             </div>
                             <div>
                                 <div class="mb-2"><b>Ваше ФИО</b></div>
                                 <div>
-                                    <v-text-field outlined placeholder="Введите ФИО" />
+                                    <ValidationProvider name="fullName" rules="required|min:3" v-slot="{ errors, valid }">
+                                        <v-text-field
+                                        name="fullName"
+                                        required
+                                        :error-messages="errors"
+                                        :success="valid"
+                                        outlined
+                                        placeholder="Введите ФИО"
+                                        v-model="fullName"
+                                        />
+                                        </ValidationProvider>
                                 </div>
                             </div>
                             <v-row>
@@ -29,7 +42,18 @@
                                     <div>
                                         <div class="mb-2"><b>Ваш e-mail</b></div>
                                         <div>
-                                            <v-text-field outlined placeholder="Введите e-mail" />
+                                            <ValidationProvider name="email" rules="required|email" v-slot="{ errors, valid }">
+                                            <v-text-field
+                                            name="email"
+                                            required 
+                                            :error-messages="errors"
+                                            :success="valid"
+                                            type="email"
+                                            outlined 
+                                            placeholder="Введите e-mail"
+                                            v-model="email"
+                                            />
+                                            </ValidationProvider>
                                         </div>
                                     </div>
                                     <div>
@@ -39,12 +63,19 @@
                                                 transition="scale-transition" offset-y max-width="290px"
                                                 min-width="auto">
                                                 <template v-slot:activator="{ on, attrs }">
-                                                    <v-text-field v-model="data.date_request" placeholder="Выбрать дату"
-                                                        outlined v-on="on">
+                                                    <v-text-field
+                                                    v-model="data.date_request"
+                                                    placeholder="Выбрать дату"
+                                                    outlined v-on="on"
+                                                    >
                                                     </v-text-field>
                                                 </template>
-                                                <v-date-picker locale="ru" v-model="data.date_request" no-title
-                                                    @input="menuDate = false">
+                                                <v-date-picker
+                                                locale="ru" 
+                                                v-model="data.date_request"
+                                                no-title
+                                                @input="menuDate = false"
+                                                >
                                                 </v-date-picker>
                                             </v-menu>
                                         </div>
@@ -61,7 +92,17 @@
                                     <div>
                                         <div class="mb-2"><b>Контактный телефон</b></div>
                                         <div>
-                                            <v-text-field outlined placeholder="Введите телефон" />
+                                            <ValidationProvider name="phone" rules="length:18" v-slot="{ errors }">
+                                            <v-text-field
+                                            name="phone" 
+                                            :error-messages="errors"
+                                            type="text"
+                                            outlined 
+                                            placeholder="+7("
+                                            v-mask="phoneNumberMask.mask"
+                                            v-model="phone"
+                                            />
+                                            </ValidationProvider>
                                         </div>
                                     </div>
                                     <div>
@@ -71,8 +112,12 @@
                                                 transition="scale-transition" offset-y max-width="360px"
                                                 min-width="auto">
                                                 <template v-slot:activator="{ on, attrs }">
-                                                    <v-text-field v-model="data.time_request"
-                                                        placeholder="Выбрать время" outlined v-on="on">
+                                                    <v-text-field 
+                                                    v-model="data.time_request"
+                                                    placeholder="Выбрать время" 
+                                                    outlined 
+                                                    v-on="on"
+                                                    >
                                                     </v-text-field>
                                                 </template>
                                                 <s-time-picker v-model="data.time_request" @input="menuTime = false">
@@ -81,7 +126,7 @@
                                         </div>
                                     </div>
                                     <div style="padding-top: 32px;">
-                                        <v-btn class="s-btn-text" dark style="width:100%; height: 56px;" large @click="view = 2">Заказать
+                                        <v-btn class="s-btn-text" dark style="width:100%; height: 56px;" large @click="handleSubmit(orderСonsult)">Заказать
                                             консультацию
                                         </v-btn>
                                     </div>
@@ -93,6 +138,7 @@
 
                             </div>
                         </div>
+                        </ValidationObserver>
                     </div>
                     <div v-else-if="view == 2">
                         <p>Благодарим за обращение, менеджер свяжется с вами в указанное время</p>
@@ -113,7 +159,12 @@
 </template>
 
 <script>
+import { ValidationObserver, ValidationProvider } from 'vee-validate'
 export default {
+    components: {
+    ValidationProvider,
+    ValidationObserver
+    },
     props: {
         value: Boolean,
         managerId: {
@@ -123,14 +174,19 @@ export default {
     },
     data() {
         return {
+            dataOrderConsult: {},
+            valueManager: '',
+            fullName: '',
+            email: '',
+            phone: '',
             view: 1,
             dialog: false,
             menuDate: false,
             menuTime: false,
             data: {
-                date_request: null,
-                time_request: null,
-                method: "Телефон"
+                date_request: '',
+                time_request: '',
+                method: "Телефон",
             },
             dataManager: [
                 "Смирнов Сергей Петрович",
@@ -140,7 +196,33 @@ export default {
             ],
             dataMethod: [
                 "Телефон",
-            ]
+            ],
+            phoneNumberMask: {
+                mask: '+7 (###) ###-##-##',
+            },
+            // dateMask: '####-##-##',
+        }
+    },
+    methods: {
+        async orderСonsult(){
+            try {
+                // console.log(new Date(this.data.date_request + ' ' + this.data.time_request).getTime());
+                        const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/consulting', {
+                                name: this.fullName,
+                                email: this.email,
+                                phone: this.phone,
+                                manager_name: this.valueManager,
+                                date_call: new Date(this.data.date_request + ' ' + this.data.time_request).getTime(),
+                                type: this.data.method == 'Телефон' ? 1 : 2
+                                });
+                                    let resData = resp.data;
+                                    console.log(resData);
+                                    this.dataOrderConsult = resp.data.data;
+                                    this.view = 2;
+                                    this.valueManager = '', this.fullName = '', this.email = '', this.phone = '', this.data.date_request = '', this.data.time_request = '', this.data.method = 'Телефон';
+                                } catch (error) {
+                                        console.error(error);
+                                    }            
         }
     }
 }
