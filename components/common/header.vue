@@ -17,7 +17,7 @@
             <!-- <div style="width: 70px;" class="ml-6 d-inline-block"> -->
               <nuxt-link class="ml-6" to="/cart">
                   <img src="/icons/basket.svg" alt="cart" />
-                  <div v-show="countItems>0" class="cartIcon d-inline-block">{{ countItems }}</div>
+                  <div v-show="countItems !== 0" class="cartIcon">{{ countItems }}</div>
               </nuxt-link>
             <!-- </div> -->
           </div>
@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     ...mapGetters ({
-      countItems: 'cart/countItems',
+      countItems: 'cart/countItems'
     })
   }
 }
@@ -148,5 +148,6 @@ export default {
   vertical-align: bottom;
   font-size: 13px;
   padding-top: 1px;
+  display: inline-block;
 }
 </style>
