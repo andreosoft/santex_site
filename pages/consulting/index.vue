@@ -46,7 +46,7 @@
                                             <v-btn class="s-btn-text" style="background-color: transparent;" :to="''">Консультация в салоне</v-btn>
                                             <v-btn class="s-btn-text pa-4" style="background-color: transparent;" @click="showPopupConsult = true">Консультация онлайн</v-btn>
                                         </div>
-                                                    <s-popup-consult v-model="showPopupConsult"></s-popup-consult>
+                                                    <s-popup-consult v-model="showPopupConsult" @closePopUp="showPopupConsult = false"></s-popup-consult>
                                     </div>
                                 </v-col>
                                 <v-col cols="6">

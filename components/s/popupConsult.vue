@@ -1,12 +1,10 @@
 <template>
     <div>
-        <!-- {{ dataOrderConsult }} -->
         <v-dialog v-model="value" persistent :overlay="false" max-width="810px" transition="dialog-transition">
             <div class="s-popup">
-                <!-- {{ data }} -->
                 <div>
                     <div class="text-right">
-                        <v-btn icon @click="$emit('input')"><img src="/icons/close_menu.svg" /></v-btn>
+                        <v-btn icon @click="$emit('closePopUp')"><img src="/icons/close_menu.svg" /></v-btn>
                     </div>
                 </div>
                 <div style="margin: 10px 64px 10px 64px;">
@@ -14,7 +12,7 @@
                     <v-divider class="mb-8" />
                     <div v-if="view == 1">
                         <ValidationObserver ref="obs" v-slot="{ invalid, validated, handleSubmit, validate }">
-                        <div ref="form">
+                        <div ref="formConsult">
                             <div>
                                 <div class="mb-2"><b>Менеджер</b></div>
                                 <div>
@@ -59,22 +57,32 @@
                                     <div>
                                         <div class="mb-2"><b>Желаемая дата звонка</b></div>
                                         <div>
-                                            <v-menu ref="menu1" v-model="menuDate" :close-on-content-click="false"
-                                                transition="scale-transition" offset-y max-width="290px"
-                                                min-width="auto">
+                                            <v-menu
+                                            ref="menuDate" 
+                                            v-model="menuDate" 
+                                            :close-on-content-click="false"
+                                            :return-value.sync="data.date_request"
+                                            transition="scale-transition" 
+                                            offset-y 
+                                            max-width="290px"
+                                            min-width="auto"
+                                            >
                                                 <template v-slot:activator="{ on, attrs }">
-                                                    <v-text-field
+                                                    <v-text-field  
+                                                    readonly                                                  
                                                     v-model="data.date_request"
                                                     placeholder="Выбрать дату"
-                                                    outlined v-on="on"
+                                                    outlined 
+                                                    v-on="on"
+                                                    v-bind="attrs"
                                                     >
                                                     </v-text-field>
                                                 </template>
                                                 <v-date-picker
-                                                locale="ru" 
                                                 v-model="data.date_request"
+                                                locale="ru"
                                                 no-title
-                                                @input="menuDate = false"
+                                                @input="datePicker"
                                                 >
                                                 </v-date-picker>
                                             </v-menu>
@@ -108,11 +116,18 @@
                                     <div>
                                         <div class="mb-2"><b>Желаемое время звонка</b></div>
                                         <div>
-                                            <v-menu ref="menu1" v-model="menuTime" :close-on-content-click="false"
-                                                transition="scale-transition" offset-y max-width="360px"
-                                                min-width="auto">
+                                            <v-menu 
+                                            ref="menuTime" 
+                                            v-model="menuTime" 
+                                            :close-on-content-click="false"
+                                            transition="scale-transition" 
+                                            offset-y 
+                                            max-width="360px"
+                                            min-width="auto"
+                                            >
                                                 <template v-slot:activator="{ on, attrs }">
                                                     <v-text-field 
+                                                    readonly
                                                     v-model="data.time_request"
                                                     placeholder="Выбрать время" 
                                                     outlined 
@@ -145,7 +160,7 @@
                         <p>Приготовьте ваши вопросы и проект.</p>
                         <div class="mt-8 mb-8">
                             <div class="d-flex justify-space-between">
-                                <v-btn class="s-btn-text" dark style="padding: 0 40px; height: 56px;" large @click="$emit('input'); view = 1">Закрыть окно</v-btn>
+                                <v-btn class="s-btn-text" dark style="padding: 0 40px; height: 56px;" large @click="$emit('closePopUp'); view = 1">Закрыть окно</v-btn>
                                 <div>
                                     <img src="/logo2.png" />
                                 </div>
@@ -184,8 +199,8 @@ export default {
             menuDate: false,
             menuTime: false,
             data: {
-                date_request: '',
-                time_request: '',
+                date_request: (new Date(Date.now() - (new Date()).getTimezoneOffset() * 60000)).toISOString().substr(0, 10),
+                time_request: null,
                 method: "Телефон",
             },
             dataManager: [
@@ -199,14 +214,19 @@ export default {
             ],
             phoneNumberMask: {
                 mask: '+7 (###) ###-##-##',
-            },
-            // dateMask: '####-##-##',
+            }
         }
     },
     methods: {
+        closePopUp(){
+            return false
+        },
+        datePicker() {
+            this.$refs.menuDate.save(this.data.date_request);
+            this.menuDate = false;
+        },
         async orderСonsult(){
             try {
-                // console.log(new Date(this.data.date_request + ' ' + this.data.time_request).getTime());
                         const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/consulting', {
                                 name: this.fullName,
                                 email: this.email,
@@ -219,7 +239,11 @@ export default {
                                     console.log(resData);
                                     this.dataOrderConsult = resp.data.data;
                                     this.view = 2;
-                                    this.valueManager = '', this.fullName = '', this.email = '', this.phone = '', this.data.date_request = '', this.data.time_request = '', this.data.method = 'Телефон';
+                                    this.valueManager = ''; 
+                                    this.fullName = '';
+                                    this.email = '';
+                                    this.phone = '';
+                                    this.data.method = 'Телефон';
                                 } catch (error) {
                                         console.error(error);
                                     }            
