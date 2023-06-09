@@ -1,7 +1,6 @@
 <template>
   <v-card class="s-card-good pa-4">
     <div>
-      <!-- {{ el }} -->
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
           <v-img v-if="el.images && el.images[0]" :src="$config.baseImageURL+el.images[0]+'?width=270&height=270'" />
@@ -36,7 +35,7 @@
     <div class="d-flex justify-space-between">
       <div><v-btn @click="toCart" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
       <div>
-        <v-btn icon><img src="/icon-like.png" alt="" /></v-btn>
+        <v-btn @click="toFavorite" icon><img src="/icon-like.png" alt="" /></v-btn>
         <v-btn icon><img src="/icon-similar.png" alt="" /></v-btn>
       </div>
     </div>
@@ -63,6 +62,27 @@ export default {
     }
   },
   methods: {
+    toFavorite(){
+    // console.log('Высота ' + item.height)
+    // console.log('Ширина ' + item.width)
+    // console.log('Глубина ' + item.depth)
+    // console.log('Длина ' + item.lengthItem)
+      let item = {
+      id: this.el.id,
+      name: this.el.name,
+      images: this.el.images[0],
+      price: this.el.price,
+      old_price: this.el.price_old,
+      brand: this.el.brand,
+      count: 1,
+      width: this.el.width,
+      height: this.el.height,
+      depth: this.el.depth,
+      lengthItem: '',
+    };
+      this.$store.commit('favorite/addItem', item);
+      // this.$router.push('/favorite');
+    },
     toCart(){
     // console.log('Высота ' + height)
     // console.log('Ширина ' + width)
@@ -83,25 +103,6 @@ export default {
       lengthItem: '',
     };
     this.$store.commit('cart/add', item);
-    // let arrItems = [];
-    //   if(localStorage.usercart){
-    //     let product = JSON.parse(localStorage.getItem('usercart'));
-    //     console.log(product);
-    //     let simillar = product.find((element) => {if(element.code === item.code){return element}});
-    //     if(simillar){
-    //       // console.log('Такой объект уже есть');
-    //       simillar.count++;
-    //       localStorage.setItem('usercart', JSON.stringify(product));
-    //     } else {
-    //       // console.log('Новый объект');
-    //       product.push(item);
-    //       localStorage.setItem('usercart', JSON.stringify(product));
-    //     }
-    //         } else {
-    //           // console.log('Первый объект');
-    //           arrItems.push(item);
-    //           localStorage.setItem('usercart', JSON.stringify(arrItems));
-    //   }
   }
   }
 };

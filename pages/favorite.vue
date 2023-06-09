@@ -5,13 +5,20 @@
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
             <div>
-                <v-btn class="s-btn-text">Очистить список <i style="font-size: 20px; margin-top: -6px;" class="ml-2 grey--text fas fa-times-circle"></i></v-btn>
+                <v-btn v-show="dataFav.length !== 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить список <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
             </div>
         </div>
         <v-divider class="mb-10" />
-        <div>
+        <div v-if="dataFav.length == 0" style="padding: 120px 0;" class="text-center">
+            <div style="font-weight: bold; font-size: 46px;">В избранном пусто</div>
+            <div style="font-size: 20px; margin: 5px 0 30px 0;">Перейдите в каталог</div>
+            <div>
+              <v-btn dark to="/catalog/156">В каталог</v-btn>
+            </div>
+          </div>
+        <div v-show="dataFav.length !== 0">
             <v-row class="s-row">
-                <v-col cols="3" v-for="(el, i) in data" :key="i">
+                <v-col cols="3" v-for="(el, i) in dataFav" :key="i">
                     <favorite-item-list :el="el" />
                 </v-col>
             </v-row>
@@ -20,9 +27,20 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
+        }
+    },
+    computed: {
+        ...mapGetters({
+            dataFav: 'favorite/favItems'
+        })
+    },
+    methods: {
+        removeAll(){
+            this.$store.commit('favorite/removeAll');
         }
     },
     async asyncData(params) {
