@@ -1,6 +1,7 @@
 <template>
   <v-card class="s-card-good pa-4">
     <div>
+      <!-- {{ el }} -->
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
           <v-img v-if="el.images && el.images[0]" :src="$config.baseImageURL+el.images[0]+'?width=270&height=270'" />
@@ -62,6 +63,9 @@ export default {
     }
   },
   methods: {
+    toCompare(){
+
+    },
     toFavorite(){
     // console.log('Высота ' + item.height)
     // console.log('Ширина ' + item.width)

@@ -3,6 +3,7 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ data.name }}</h1>
+    <!-- {{ data }} -->
     <v-row class="mt-4">
       <v-col cols="6">
         <common-image-gallery :value="data.images" />
@@ -70,7 +71,7 @@
               <!-- <s-popup-buyoneclick v-model="showBuyoneclick" /> -->
             </div>
             <div>
-              <v-btn plain small><img src="/icon-similar.png" alt="compare" /></v-btn>
+              <v-btn @click="toCompare" plain small><img src="/icon-similar.png" alt="compare" /></v-btn>
               <v-btn @click="toFavorite" plain small><img src="/icon-like.png" alt="favorite" /></v-btn>
             </div>
           </div>
@@ -233,6 +234,63 @@ export default {
     };
   },
   methods: {
+    toCompare(){
+      let height = this.data.filters.find(element => element.name == 'Высота');
+      let width = this.data.filters.find(element => element.name == 'Ширина');
+      let depth = this.data.filters.find(element => element.name == 'Глубина');
+      let shape = this.data.filters.find(element => element.name == 'Форма');
+      let garanty = this.data.filters.find(element => element.name == 'Гарантия');
+      let countryMade = this.data.filters.find(element => element.name == 'Страна производства');
+      let lineShape = this.data.filters.find(element => element.name == 'Линии форм');
+      let sinkCountertop = this.data.filters.find(element => element.name == 'Раковина-столешница');
+      let hidedrain = this.data.filters.find(element => element.name == 'Со скрытым сливом');
+      let widthWashing = this.data.filters.find(element => element.name == 'Ширина стиральной машины');
+      let depthWashing = this.data.filters.find(element => element.name == 'Глубина стиральной машины');
+      let distanceDrain = this.data.filters.find(element => element.name == 'Расстояние от смесителя до слива');
+      let minLengthPour = this.data.filters.find(element => element.name == 'Рекомендованная мин. длина излива');
+      let typeOfShell = this.data.filters.find(element => element.name == 'Вид раковины');
+
+      // this.data.filters.forEach(item => {
+      //   if(item.name === 'Высота'){
+      //     height = item.value
+      //   } else if(item.name === 'Ширина') {
+      //     width = item.value
+      //   } else if(item.name === 'Глубина'){
+      //     depth = item.value
+      //   }
+      //   // else if(item.name === 'Длина'){
+      //   //   lengthItem = item.value;
+      //   // }
+      // });
+      let item = {
+        id: this.data.id,
+        name: this.data.name,
+        image: this.data.images[0],
+        price: this.data.price,
+        old_price: this.data.price_old,
+        brand: this.data.brand,
+        available: 1,
+        dataParams: {
+              "Ширина": width ? width.value : 'Не указано',
+              "Глубина": depth ? depth.value : 'Не указано',
+              "Высота": height ? height.value : 'Не указано',
+              "Габариты": width&&depth ? `${width.value}x${depth.value}` : 'Не указано',
+              "Ширина стиральной машины": widthWashing ? widthWashing.value : 'Не указано',
+              "Глубина стиральной машины": depthWashing ? depthWashing.value : 'Не указано',
+              "Вид раковины": typeOfShell ? typeOfShell.value : 'Не указано',
+              "Форма": shape ? shape.value : 'Не указано',
+              "Расстояние от смесителя до слива": distanceDrain ? distanceDrain.value : 'Не указано',
+              "Рекомендованная мин. длина излива": minLengthPour ? minLengthPour.value : 'Не указано',
+              "Гарантия": garanty ?  garanty.value : 'Не указано',
+              "Страна": countryMade ? countryMade.value : 'Не указано',
+              "Линии форм": lineShape ? lineShape.value : 'Не указано',
+              "Раковина-столешница": sinkCountertop ? sinkCountertop.value : 'Не указано',
+              "Со скрытым сливом": hidedrain ? hidedrain.value : 'Не указано',
+          }
+       };
+       this.$store.commit('compare/addItem', item);
+
+    },
     toFavorite(){
       let height = '';
       let width = '';
