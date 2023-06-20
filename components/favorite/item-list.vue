@@ -2,7 +2,7 @@
   <v-card class="s-card-good pa-4">
     <div>
       <div style="position: relative;" class="mb-2">
-        <v-img :src="$config.baseImageURL+el.image+'?width=270&height=270'" />
+        <v-img :src="$config.baseImageURL+el.images+'?width=270&height=270'" />
         <div style="position: absolute; right: 0px; top: -10px">
           <v-btn @click="removeItem(el)" icon style="padding-bottom: 4px;"><i style="font-size: 20px;" class="grey--text fas fa-times-circle"></i></v-btn>
         </div>

@@ -4,8 +4,8 @@
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
-            <!-- {{ dataCom }}  -->
-            <!-- {{ visibleItems }} -->
+            <!-- differenceInput {{ differenceInput }} 
+            allParamInput {{ allParamInput }} -->
             <div>
                 <v-btn @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить список <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
             </div>
@@ -26,7 +26,7 @@
                             </div>
                         </div>
                         <div style="margin-bottom: 120px;">
-                            <div class="grey--text mb-4">
+                            <div :class="{'grey--text': !hasDistinction, 'mb-4': true}">
                                     <!-- <v-checkbox @click="allParamInput = false; differenceInput = true"
                                     class="checkboxCompare"
                                     v-model="differenceInput"
@@ -36,10 +36,10 @@
                                     class="checkboxCompare"
                                     v-model="allParamInput"
                                     /> -->
-                                <i @click="isActiveDifference($event)" class="fa-regular fa-circle" :class="{active: differenceInput}"></i> Только отличия
+                                <p @click="activeDifference"><i class="fa-regular" :class="{'fa-circle-check': differenceInput, 'fa-circle': !differenceInput}"></i> Только отличия</p>
                             </div>
                             <div>
-                                <i @click="isActiveParams($event)" class="fa-regular fa-circle-check" :class="{active: allParamInput}"></i> Все параметры
+                                <p @click="activeAllParams"><i class="fa-regular" :class="{'fa-circle-check': allParamInput, 'fa-circle': !allParamInput}"></i> Все параметры</p>
                             </div>
                         </div>
                         <div>
@@ -89,7 +89,6 @@
 </template>
 
 <script>
-
 // console.log(dataCom);
 
 
@@ -97,6 +96,7 @@ import { mapGetters } from 'vuex';
 export default {
     data() {
         return {
+            hasDistinction: false,
             differenceInput: false,
             allParamInput: true,
             valueList: "Все товары",
@@ -120,25 +120,37 @@ export default {
             // let arr = [val];
             return this.visibleArrItems;
         },
-        activeClass(){
+        activeClassDifference: function(){
             return {
-                active: this.isActive && !this.error,
-                'fa-circle-check': this.active
+                'fa-circle-check': this.differenceInput,
+                'fa-circle': !this.allParamInput
+            }
+        },
+        activeClassAllParam: function(){
+            return {
+                'fa-circle-check': this.allParamInput,
+                'fa-circle': !this.differenceInput
             }
         }
     },
     methods: {
-        isActiveDifference(e){
-            this.differenceInput = true;
-            this.allParamInput = false;
-            e.target.classList.remove('fa-circle');
-            e.target.classList.add('fa-circle-check');
+        activeAllParams(){
+            if(this.allParamInput) {
+                this.allParamInput = false;
+                this.differenceInput = true;
+            } else{
+                this.allParamInput = true;
+                this.differenceInput = false;
+            }
         },
-        isActiveParams(e){
-            this.allParamInput = true;
-            this.differenceInput = false;
-            e.target.classList.remove('fa-circle');
-            e.target.classList.add('fa-circle-check');
+        activeDifference(){
+            if(this.differenceInput) {
+                this.differenceInput = false;
+                this.allParamInput = true;
+            } else{
+                this.differenceInput = true;
+                this.allParamInput = false;
+            }
         },
         removeAll(){
             this.$store.commit('compare/removeAll');
