@@ -39,8 +39,8 @@
       </nuxt-link>
     </div>
     <div class="d-flex justify-space-between align-center">
-      <div><v-btn @click="toCart" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
-      <div><v-btn @click="toFavorite" plain small><img src="/icon-like.png" alt="" /></v-btn></div>
+      <div><v-btn @click="toCart(el)" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
+      <div><v-btn @click="toFavorite(el)" plain small><img src="/icon-like.png" alt="" /></v-btn></div>
     </div>
   </v-card>
 </template>
@@ -56,41 +56,98 @@ export default {
     }
   },
   methods: {
-    toCart(){
-      let item = {
-      code: this.el.id,
-      name: this.el.name,
-      img: this.el.images[0],
-      price: this.el.price,
-      old_price: this.el.price_old,
-      brand: this.el.brand,
-      count: 1,
-      type: this.el.type,
-      width: this.el.width,
-      height: this.el.height,
-      depth: this.el.depth,
-      lengthItem: '',
-    };
-    this.$store.commit('cart/add', item);
+    async toCart(el){
+      try{
+        let respCom = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + el.id);
+        const dataCom = respCom.data.data.filters;
+        // console.log(dataCom);
+        let height = '';
+        let width = '';
+        let depth = '';
+        let lengthItem = '';
+        dataCom.forEach(item => {
+          if(item.name === 'Высота'){
+            height = item.value
+          } else if(item.name === 'Ширина') {
+            width = item.value
+          } else if(item.name === 'Глубина'){
+            depth = item.value
+          } else if(item.name === 'Длина'){
+            lengthItem = item.value;
+          }
+        });
+        // console.log('Высота ' + height)
+        // console.log('Ширина ' + width)
+        // console.log('Глубина ' + depth)
+        // console.log('Длина ' + lengthItem)
+        const item = {
+          code: el.id,
+          name: el.name,
+          img: el.image[0],
+          price: el.price,
+          old_price: el.price_old,
+          brand: el.brand,
+          count: 1,
+          type: el.type,
+          width,
+          height,
+          depth,
+          lengthItem,
+        }
+        this.$store.commit('cart/add', item);
+      } catch (e){
+        console.error(e);
+      }
     },
     removeItem(el){
       this.$store.commit('compare/remove', el);
     },
-    toFavorite(){
-      let item = {
-      id: this.el.id,
-      name: this.el.name,
-      images: this.el.images[0],
-      price: this.el.price,
-      old_price: this.el.price_old,
-      brand: this.el.brand,
-      count: 1,
-      width: this.el.width,
-      height: this.el.height,
-      depth: this.el.depth,
-      lengthItem: '',
-    };
-      this.$store.commit('favorite/addItem', item);
+    async toFavorite(el){
+      try{
+        let respCom = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + el.id);
+        const dataCom = respCom.data.data.filters;
+        // console.log(dataCom);
+        let height = '';
+        let width = '';
+        let depth = '';
+        let lengthItem = '';
+        dataCom.forEach(item => {
+          if(item.name === 'Высота'){
+            height = item.value
+          } else if(item.name === 'Ширина') {
+            width = item.value
+          } else if(item.name === 'Глубина'){
+            depth = item.value
+          } else if(item.name === 'Длина'){
+            lengthItem = item.value;
+          }
+        });
+          const item = {
+            id: el.id,
+            name: el.name,
+            images: el.image[0],
+            price: el.price,
+            old_price: el.price_old,
+            brand: el.brand,
+            count: 1,
+            type: el.type,
+            store: el.store,
+            width,
+            height,
+            depth,
+            lengthItem,
+          }
+          // console.log('Высота ' + itemFav.height)
+          // console.log('Ширина ' + itemFav.width)
+          // console.log('Глубина ' + itemFav.depth)
+          // console.log('Длина ' + itemFav.lengthItem)
+          // console.log(itemFav);
+            // this.$router.push('/favorite');
+          this.$store.commit('favorite/addItem', item);
+      }
+        catch (e){
+          console.error(e);
+        }
     }
   }
 };

@@ -4,14 +4,23 @@
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
-            <!-- differenceInput {{ differenceInput }} 
-            allParamInput {{ allParamInput }} -->
+            <!-- {{ visibleArrItems }}
+            ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+            {{ dataParameters }} -->
+            <!-- {{ itemParameters }} -->
             <div>
-                <v-btn @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить список <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
+                <v-btn v-show="dataCom.length !== 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить список <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
             </div>
         </div>
         <v-divider class="mb-10" />
-        <div>
+        <div v-show="dataCom.length == 0" style="padding: 120px 0;" class="text-center">
+            <div style="font-weight: bold; font-size: 46px;">В сравнении товаров пусто</div>
+            <div style="font-size: 20px; margin: 5px 0 30px 0;">Перейдите в каталог</div>
+            <div>
+              <v-btn dark to="/catalog/156">В каталог</v-btn>
+            </div>
+        </div>
+        <div v-show="dataCom.length !== 0">
             <div class="d-flex">
                 <div style="width: 500px">
                     <div class="mb-10" style="height: 500px; border: 1px solid #DBDBDB; padding: 60px 20px 30px 20px;">
@@ -48,34 +57,25 @@
                     </div>
                     <div>
                         <div class="s-comapre-table">
-                            <div v-for="(el, i) in dataCom?.[0]?.dataParams" class="s-comapre-table-row grey--text">
-                                {{ i }}
+                            <div v-for="(el, i) in dataParameters" class="s-comapre-table-row grey--text">
+                                {{ el }}
                             </div>
                         </div>
                     </div>
                 </div>
                 <div style="overflow: auto">
                     <div>
-                        <div v-if="!visibleArrItems[0]" class="d-flex">
-                            <div style="width: 300px" v-for="(el, i) in dataCom" :key="i">
-                                <div class="mb-10">
-                                <catalog-item-list-compare style="height: 500px;" :el="el" />
-                                </div>
-                                <div class="s-comapre-table">
-                                    <div v-for="(param, i) in el.dataParams" class="s-comapre-table-row">
-                                        {{ param }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div v-else class="d-flex">
-                            <div style="width: 300px" v-for="(item, ind) in visibleArrItems" :key="ind">
+                        <div class="d-flex">
+                            <div style="width: 300px" v-for="(item, ind) in visibleItems" :key="ind">
                                 <div class="mb-10">
                                 <catalog-item-list-compare style="height: 500px;" :el="item" />
                                 </div>
+                                <!-- {{ item.dataParams }} -->
                                 <div class="s-comapre-table">
-                                    <div v-for="(param, index) in item.dataParams" class="s-comapre-table-row">
-                                        {{ param }}
+                                    <div v-for="(param, index, i) in dataParameters" class="s-comapre-table-row">
+                                        {{ item.dataParams[param] ? item.dataParams[param] : '–' }}
+                                        <!-- {{ param }}
+                                        {{ index }} -->
                                     </div>
                                 </div>
                             </div>
@@ -89,9 +89,6 @@
 </template>
 
 <script>
-// console.log(dataCom);
-
-
 import { mapGetters } from 'vuex';
 export default {
     data() {
@@ -101,6 +98,8 @@ export default {
             allParamInput: true,
             valueList: "Все товары",
             visibleArrItems: [],
+            dataFilters: [],
+            // itemFilters: []
         }
     },
     computed: {
@@ -116,22 +115,63 @@ export default {
         },
         visibleItems(){
             this.visibleArrItems = [];
-            if(this.valueList !== "Все товары") this.visibleArrItems.push(this.dataCom.find(el => el.name == this.valueList));
+            this.valueList !== "Все товары" ? this.visibleArrItems.push(this.dataCom.find(el => el.name == this.valueList)) : this.visibleArrItems = this.dataCom;
             // let arr = [val];
             return this.visibleArrItems;
         },
-        activeClassDifference: function(){
-            return {
-                'fa-circle-check': this.differenceInput,
-                'fa-circle': !this.allParamInput
-            }
+        dataParameters(){
+          this.dataFilters = [];
+          this.visibleArrItems.forEach(el => {
+            Object.keys(el.dataParams).forEach(key => {
+                if(!this.dataFilters.includes(key)){
+                  this.dataFilters.push(key);
+                }
+            })
+          })
+          this.dataFilters = this.dataFilters.flat();
+          this.dataFilters.sort();         
+          return this.dataFilters;
         },
-        activeClassAllParam: function(){
-            return {
-                'fa-circle-check': this.allParamInput,
-                'fa-circle': !this.differenceInput
-            }
-        }
+        // itemParameters(){
+        // //     // // this.itemFilters = [];
+        // //     // item.dataParams.sort(function (a, b) {
+        // //     //     if (a.name > b.name) {
+        // //     //         return 1;
+        // //     //     }
+        // //     //     if (a.name < b.name) {
+        // //     //         return -1;
+        // //     //     }
+        // //     //     // a должно быть равным b
+        // //     //     return 0;
+        // //     // })
+        // return w
+        // }
+        // differenceItems(){
+        //     if(this.differenceInput == true && this.visibleArrItems.length !== 0) {
+        //         this.visibleArrItems.forEach(element => {
+        //             let arrDifference = Object.values(element.dataParams);
+        //             for (let i = 0; i < arrDifference.length; i++) {
+        //                 if (arrDifference[i] !== arr2[i]) {
+        //                     return false;
+        //                 }
+        //             }
+        //         });;
+        //     }
+  // Check if arrays have same length
+//   if (arr1.length !== arr2.length) {
+//     return false;
+//   }
+
+//   // Compare each element of the arrays
+//   for (let i = 0; i < arr1.length; i++) {
+//     if (arr1[i] !== arr2[i]) {
+//       return false;
+//     }
+//   }
+
+//   // If all elements are equal, return true
+//   return true;
+        // }
     },
     methods: {
         activeAllParams(){
@@ -305,7 +345,7 @@ export default {
         //             "Со скрытым сливом": "Да",
         //         }
         //     }];
-                return { title, breadcrumbsData }
+        return { title, breadcrumbsData }
     }
 }
 </script>
@@ -313,6 +353,8 @@ export default {
 <style lang="scss">
 .s-comapre-table {
     .s-comapre-table-row {
+        display: flex;
+        align-items: center;
         height: 51px;
         padding: 16px 24px;
         &:nth-of-type(odd){
@@ -321,12 +363,11 @@ export default {
     }
  }
  .checkboxCompare input[type="checkbox"]{
-width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  -webkit-appearance: none;
-  background-color: #fff;
-  border: 1px solid #ccc;
-
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    -webkit-appearance: none;
+    background-color: #fff;
+    border: 1px solid #ccc;
  }
 </style>

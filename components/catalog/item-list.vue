@@ -1,7 +1,6 @@
 <template>
   <v-card class="s-card-good pa-4">
     <div>
-      <!-- {{ el }} -->
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
           <v-img v-if="el.images && el.images[0]" :src="$config.baseImageURL+el.images[0]+'?width=270&height=270'" />
@@ -81,22 +80,7 @@ export default {
       try{
         let respCom = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + el.id);
         const dataCom = respCom.data.data.filters;
-        console.log(dataCom);
-        let height = dataCom.find(element => element.name == 'Высота');
-        let width = dataCom.find(element => element.name == 'Ширина');
-        let depth = dataCom.find(element => element.name == 'Глубина');
-        let shape = dataCom.find(element => element.name == 'Форма');
-        let garanty = dataCom.find(element => element.name == 'Гарантия');
-        let countryMade = dataCom.find(element => element.name == 'Страна производства');
-        let lineShape = dataCom.find(element => element.name == 'Линии форм');
-        let sinkCountertop = dataCom.find(element => element.name == 'Раковина-столешница');
-        let hidedrain = dataCom.find(element => element.name == 'Со скрытым сливом');
-        let widthWashing = dataCom.find(element => element.name == 'Ширина стиральной машины');
-        let depthWashing = dataCom.find(element => element.name == 'Глубина стиральной машины');
-        let distanceDrain = dataCom.find(element => element.name == 'Расстояние от смесителя до слива');
-        let minLengthPour = dataCom.find(element => element.name == 'Рекомендованная мин. длина излива');
-        let typeOfShell = dataCom.find(element => element.name == 'Вид раковины');
-
+        // console.log(dataCom);
         let item = {
           id: el.id,
           name: el.name,
@@ -105,24 +89,17 @@ export default {
           old_price: el.price_old,
           brand: el.brand,
           available: el.store,
-          dataParams: {
-                "Ширина": width ? width.value : 'Не указано',
-                "Глубина": depth ? depth.value : 'Не указано',
-                "Высота": height ? height.value : 'Не указано',
-                "Габариты": width&&depth ? `${width.value}x${depth.value}` : 'Не указано',
-                "Ширина стиральной машины": widthWashing ? widthWashing.value : 'Не указано',
-                "Глубина стиральной машины": depthWashing ? depthWashing.value : 'Не указано',
-                "Вид раковины": typeOfShell ? typeOfShell.value : 'Не указано',
-                "Форма": shape ? shape.value : 'Не указано',
-                "Расстояние от смесителя до слива": distanceDrain ? distanceDrain.value : 'Не указано',
-                "Рекомендованная мин. длина излива": minLengthPour ? minLengthPour.value : 'Не указано',
-                "Гарантия": garanty ?  garanty.value : 'Не указано',
-                "Страна": countryMade ? countryMade.value : 'Не указано',
-                "Линии форм": lineShape ? lineShape.value : 'Не указано',
-                "Раковина-столешница": sinkCountertop ? sinkCountertop.value : 'Не указано',
-                "Со скрытым сливом": hidedrain ? hidedrain.value : 'Не указано',
-            }
+          dataParams: {}
         };
+        dataCom.forEach((element, index) => {
+                  if(index!==0){
+                    if(element.name === 'Прозводитель'){
+                      element.name = 'Бренд';
+                    }
+                    item.dataParams[element.name] = element.value
+            }
+        });
+
         this.$store.commit('compare/addItem', item);
       } catch(e){
         console.error(e);
