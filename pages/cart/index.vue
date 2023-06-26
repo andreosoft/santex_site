@@ -108,7 +108,7 @@
                             <div style="font-size: 28px">
                                 <b><number :value="totalPrice" /> ₽</b>
                             </div>
-                            <div v-if="totalDiscount !== 0" style="font-size: 14px" class="red--text">Экономия:
+                            <div v-if="totalDiscount && totalDiscount !== 0" style="font-size: 14px" class="red--text">Экономия:
                                 <number :value="totalDiscount" /> ₽
                             </div>
                         </div>

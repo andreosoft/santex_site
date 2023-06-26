@@ -4,10 +4,6 @@
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
-            <!-- {{ visibleArrItems }}
-            ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-            {{ dataParameters }} -->
-            <!-- {{ itemParameters }} -->
             <div>
                 <v-btn v-show="dataCom.length !== 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить список <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
             </div>
@@ -36,15 +32,6 @@
                         </div>
                         <div style="margin-bottom: 120px;">
                             <div :class="{'grey--text': !hasDistinction, 'mb-4': true}">
-                                    <!-- <v-checkbox @click="allParamInput = false; differenceInput = true"
-                                    class="checkboxCompare"
-                                    v-model="differenceInput"
-                                    />
-                                    <v-checkbox 
-                                    @click="allParamInput = true; differenceInput = false"
-                                    class="checkboxCompare"
-                                    v-model="allParamInput"
-                                    /> -->
                                 <p @click="activeDifference"><i class="fa-regular" :class="{'fa-circle-check': differenceInput, 'fa-circle': !differenceInput}"></i> Только отличия</p>
                             </div>
                             <div>
@@ -56,9 +43,18 @@
                         </div>
                     </div>
                     <div>
-                        <div class="s-comapre-table">
-                            <div v-for="(el, i) in dataParameters" class="s-comapre-table-row grey--text">
-                                {{ el }}
+                        <div v-if="differenceItems" class="s-comapre-table">
+                            <div v-for="(parametr, i) in dataDifFilters" class="s-comapre-table-row grey--text">
+                                <div>
+                                    {{ parametr }}
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else class="s-comapre-table">
+                            <div v-for="(parametr, i) in dataParameters" class="s-comapre-table-row grey--text">
+                                <div>
+                                    {{ parametr }}
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -70,12 +66,18 @@
                                 <div class="mb-10">
                                 <catalog-item-list-compare style="height: 500px;" :el="item" />
                                 </div>
-                                <!-- {{ item.dataParams }} -->
-                                <div class="s-comapre-table">
-                                    <div v-for="(param, index, i) in dataParameters" class="s-comapre-table-row">
+                                <div v-if="differenceItems" class="s-comapre-table">
+                                    <div v-for="(param, index, i) in dataDifFilters" class="s-comapre-table-row">
+                                    <div>
                                         {{ item.dataParams[param] ? item.dataParams[param] : '–' }}
-                                        <!-- {{ param }}
-                                        {{ index }} -->
+                                    </div>
+                                    </div>
+                                </div>
+                                <div v-else class="s-comapre-table">
+                                    <div v-for="(param, index, i) in dataParameters" class="s-comapre-table-row">
+                                    <div>
+                                        {{ item.dataParams[param] ? item.dataParams[param] : '–' }}
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -99,7 +101,8 @@ export default {
             valueList: "Все товары",
             visibleArrItems: [],
             dataFilters: [],
-            // itemFilters: []
+            differenceParams: {},
+            dataDifFilters: []
         }
     },
     computed: {
@@ -120,58 +123,38 @@ export default {
             return this.visibleArrItems;
         },
         dataParameters(){
-          this.dataFilters = [];
-          this.visibleArrItems.forEach(el => {
-            Object.keys(el.dataParams).forEach(key => {
-                if(!this.dataFilters.includes(key)){
-                  this.dataFilters.push(key);
-                }
-            })
-          })
-          this.dataFilters = this.dataFilters.flat();
-          this.dataFilters.sort();         
-          return this.dataFilters;
+            if(this.differenceInput == false && this.visibleArrItems.length !== 0) {
+                this.dataFilters = [];
+                this.visibleArrItems.forEach(el => {
+                    Object.keys(el.dataParams).forEach(key => {
+                        if(!this.dataFilters.includes(key)){
+                            this.dataFilters.push(key);
+                        }
+                    })
+                })
+                this.dataFilters = this.dataFilters.flat();
+                this.dataFilters.sort();         
+                return this.dataFilters;
+            }
         },
-        // itemParameters(){
-        // //     // // this.itemFilters = [];
-        // //     // item.dataParams.sort(function (a, b) {
-        // //     //     if (a.name > b.name) {
-        // //     //         return 1;
-        // //     //     }
-        // //     //     if (a.name < b.name) {
-        // //     //         return -1;
-        // //     //     }
-        // //     //     // a должно быть равным b
-        // //     //     return 0;
-        // //     // })
-        // return w
-        // }
-        // differenceItems(){
-        //     if(this.differenceInput == true && this.visibleArrItems.length !== 0) {
-        //         this.visibleArrItems.forEach(element => {
-        //             let arrDifference = Object.values(element.dataParams);
-        //             for (let i = 0; i < arrDifference.length; i++) {
-        //                 if (arrDifference[i] !== arr2[i]) {
-        //                     return false;
-        //                 }
-        //             }
-        //         });;
-        //     }
-  // Check if arrays have same length
-//   if (arr1.length !== arr2.length) {
-//     return false;
-//   }
-
-//   // Compare each element of the arrays
-//   for (let i = 0; i < arr1.length; i++) {
-//     if (arr1[i] !== arr2[i]) {
-//       return false;
-//     }
-//   }
-
-//   // If all elements are equal, return true
-//   return true;
-        // }
+        differenceItems(){
+            if(this.differenceInput == true && this.visibleArrItems.length !== 0) {
+                this.dataDifFilters = [];
+                 this.dataFilters.forEach(param => {
+                    for(let i = 0; i < this.visibleArrItems.length; i++){
+                        for(let j = i + 1; j < this.visibleArrItems.length; j++){
+                            if(this.visibleArrItems[i].dataParams[param] !== this.visibleArrItems[j].dataParams[param]){
+                                if(!this.dataDifFilters.includes(param)){
+                                this.dataDifFilters.push(param);
+                            }
+                                this.dataDifFilters.sort();
+                            }
+                        }
+                    }
+                    });
+                    return this.dataDifFilters;
+                };
+            }
     },
     methods: {
         activeAllParams(){
