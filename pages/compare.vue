@@ -185,9 +185,9 @@ export default {
             }
         },
         activeDifference(){
-            if((this.differenceInput) && (this.dataDifFilters.length !== 0) && (this.valueList == "Все товары")) {
-                this.differenceInput = false;
-                this.allParamInput = true;
+            if((!this.differenceInput) && (this.dataDifFilters.length !== 0) && (this.valueList == "Все товары")) {
+                this.differenceInput = true;
+                this.allParamInput = false;
             } else {
                 this.differenceInput = false;
                 this.allParamInput = true;
