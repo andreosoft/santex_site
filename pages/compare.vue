@@ -4,6 +4,10 @@
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
+            <!-- {{ dataDifFilters }} -->
+            {{ differenceItems }}
+            {{ differenceInput }}
+            {{ valueList }}
             <div>
                 <v-btn v-show="dataCom.length !== 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить список <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
             </div>
@@ -31,10 +35,10 @@
                             </div>
                         </div>
                         <div style="margin-bottom: 120px;">
-                            <div :class="{'grey--text': !hasDistinction, 'mb-4': true}">
-                                <p @click="activeDifference"><i class="fa-regular" :class="{'fa-circle-check': differenceInput, 'fa-circle': !differenceInput}"></i> Только отличия</p>
+                            <div :class="noDifference">
+                                <p @click="activeDifference"><i class="fa-regular" :class="hasDistinction"></i> Только отличия</p>
                             </div>
-                            <div>
+                            <div class="triggerInput">
                                 <p @click="activeAllParams"><i class="fa-regular" :class="{'fa-circle-check': allParamInput, 'fa-circle': !allParamInput}"></i> Все параметры</p>
                             </div>
                         </div>
@@ -43,7 +47,7 @@
                         </div>
                     </div>
                     <div>
-                        <div v-if="differenceItems" class="s-comapre-table">
+                        <div v-if="differenceInput" class="s-comapre-table">
                             <div v-for="(parametr, i) in dataDifFilters" class="s-comapre-table-row grey--text">
                                 <div>
                                     {{ parametr }}
@@ -66,7 +70,7 @@
                                 <div class="mb-10">
                                 <catalog-item-list-compare style="height: 500px;" :el="item" />
                                 </div>
-                                <div v-if="differenceItems" class="s-comapre-table">
+                                <div v-if="differenceInput" class="s-comapre-table">
                                     <div v-for="(param, index, i) in dataDifFilters" class="s-comapre-table-row">
                                     <div>
                                         {{ item.dataParams[param] ? item.dataParams[param] : '–' }}
@@ -95,14 +99,13 @@ import { mapGetters } from 'vuex';
 export default {
     data() {
         return {
-            hasDistinction: false,
             differenceInput: false,
             allParamInput: true,
             valueList: "Все товары",
             visibleArrItems: [],
             dataFilters: [],
             differenceParams: {},
-            dataDifFilters: []
+            dataDifFilters: [],
         }
     },
     computed: {
@@ -110,6 +113,12 @@ export default {
             dataCom: 'compare/compareData',
             countCom: 'compare/countItems'
         }),
+        hasDistinction: function(){
+            return {
+                'fa-circle-check': (this.differenceInput) && (this.dataDifFilters.length !== 0) && (this.valueList == "Все товары"),
+                'fa-circle': (!this.differenceInput) || (this.dataDifFilters.length == 0) || (this.valueList !== "Все товары")
+            }
+        },
         paramsCom(){
             let arr = [];
             arr[0] = "Все товары";
@@ -138,7 +147,7 @@ export default {
             }
         },
         differenceItems(){
-            if(this.differenceInput == true && this.visibleArrItems.length !== 0) {
+            if(this.visibleArrItems.length !== 0) {
                 this.dataDifFilters = [];
                  this.dataFilters.forEach(param => {
                     for(let i = 0; i < this.visibleArrItems.length; i++){
@@ -154,6 +163,15 @@ export default {
                     });
                     return this.dataDifFilters;
                 };
+            },
+            noDifference: function () {
+                return{
+                    // true: this.dataDifFilters?.length !== 0 && this.valueList == "Все товары",
+                    // false: this.dataDifFilters?.length === 0 && this.valueList !== "Все товары",
+                    'grey--text': (this.dataDifFilters.length == 0) || (this.valueList !== "Все товары"),
+                    'mb-4': true,
+                    'triggerInput': true
+                }
             }
     },
     methods: {
@@ -167,12 +185,12 @@ export default {
             }
         },
         activeDifference(){
-            if(this.differenceInput) {
+            if((this.differenceInput) && (this.dataDifFilters.length !== 0) && (this.valueList == "Все товары")) {
                 this.differenceInput = false;
                 this.allParamInput = true;
-            } else{
-                this.differenceInput = true;
-                this.allParamInput = false;
+            } else {
+                this.differenceInput = false;
+                this.allParamInput = true;
             }
         },
         removeAll(){
@@ -353,4 +371,7 @@ export default {
     background-color: #fff;
     border: 1px solid #ccc;
  }
+ .triggerInput:hover{
+    cursor: pointer;
+}
 </style>
