@@ -5,9 +5,9 @@
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
             <!-- {{ dataDifFilters }} -->
-            {{ differenceItems }}
+            <!-- {{ differenceItems }}
             {{ differenceInput }}
-            {{ valueList }}
+            {{ valueList }} -->
             <div>
                 <v-btn v-show="dataCom.length !== 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить список <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
             </div>
