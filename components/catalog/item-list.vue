@@ -84,7 +84,7 @@ export default {
         let item = {
           id: el.id,
           name: el.name,
-          image: el.images[0],
+          image: el.images ? el.images[0] : '',
           price: el.price,
           old_price: el.price_old,
           brand: el.brand,

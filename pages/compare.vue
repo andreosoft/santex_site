@@ -18,8 +18,8 @@
         </div>
         <div v-show="dataCom.length !== 0">
             <div class="d-flex">
-                <div style="width: 547.5px">
-                    <div class="mb-10" style="width: 400px;height: 547.5px; border: 1px solid #DBDBDB; padding: 60px 20px 30px 20px;">
+                <div>
+                    <div class="mb-10" style="height: 547.5px; border: 1px solid #DBDBDB; padding: 60px 20px 30px 20px;">
                         <div class="mb-8" style="font-size: 20px; font-weight: bold;">
                             Добавлено: {{ countCom }} шт.
                         </div>

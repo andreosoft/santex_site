@@ -238,7 +238,7 @@ export default {
                 let item = {
                   id: this.data.id,
                   name: this.data.name,
-                  image: this.data.images[0],
+                  image: this.data.images ? this.data.images[0] : '',
                   price: this.data.price,
                   old_price: this.data.price_old,
                   brand: this.data.brand,

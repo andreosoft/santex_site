@@ -3,24 +3,24 @@
     <div class="mb-10">
       <div style="position: relative;">
         <nuxt-link :to="'/catalog/view/' + el.id">
-        <v-img style="width: 400px; height: 250px" :src="$config.baseImageURL+el.image+'?width=270&height=270'" />
-      </nuxt-link>
+          <v-img style="width: 400px; height: 250px" :src="$config.baseImageURL+el.image+'?width=270&height=270'" />
+        </nuxt-link>
         <div style="position: absolute; right: 0px; top: -10px">
           <v-btn @click="removeItem(el)" icon style="padding-bottom: 4px;"><i style="font-size: 20px;" class="grey--text fas fa-times-circle"></i></v-btn>
         </div>
       </div>
-        <div class="d-flex justify-space-between mb-4">
-          <div style="margin: 3px 0; font-size: 13px">
-            <catalog-available :value="el.store" />
-          </div>
-          <div style="margin: 3px 0; font-size: 13px; color: #949494">
+      <div class="d-flex justify-space-between mb-4">
+        <div style="margin: 3px 0; font-size: 13px">
+          <catalog-available :value="el.store" />
+        </div>
+        <div style="margin: 3px 0; font-size: 13px; color: #949494">
             Код товара: {{ el.id }}
           </div>
         </div>
         <!-- <div> -->
           
-          <div @click="fullname ? fullname = false : fullname = true" :class="{'mb-4': true, 'noneVisible': fullname, 'titleItem': true}">{{ el.name }} </div>
-          <div @click="fullname ? fullname = false : fullname = true" :class="{'mb-4': true, 'overflowToggle': true, 'noneVisible': !fullname}">{{ el.name }} </div>
+          <div :class="{'mb-4': true, 'titleItem': true}">{{ el.name }} </div>
+          <!-- <div @click="fullname ? fullname = false : fullname = true" :class="{'mb-4': true, 'overflowToggle': true, 'noneVisible': !fullname}">{{ el.name }} </div> -->
           <!-- <p v-if="!fullname" class="grey--text" style="font-size: 11px; position: relative; left: 200px; top: -36px">Подробнее</p> -->
         <!-- </div> -->
         <!-- <div class="my-1" style="font-size: 11px">
@@ -38,10 +38,10 @@
           <span style="font-size: 20px; font-weight: bold;">
             <number :value="el.price" /> ₽
           </span><span class="ml-2" v-if="el.old_price"
-            style="font-size: 13px; text-decoration: line-through; color: #949494">
-            <number :value="el.old_price" /> ₽
-          </span>
-        </div>
+          style="font-size: 13px; text-decoration: line-through; color: #949494">
+          <number :value="el.old_price" /> ₽
+        </span>
+      </div>
     </div>
     <div class="d-flex justify-space-between align-center">
       <div><v-btn @click="toCart(el)" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
@@ -57,7 +57,7 @@ export default {
   },
   data(){
     return {
-      fullname: false
+      fullname: false,
     }
   },
   methods: {
@@ -130,7 +130,7 @@ export default {
           const item = {
             id: el.id,
             name: el.name,
-            images: el.image[0],
+            images: el.image,
             price: el.price,
             old_price: el.price_old,
             brand: el.brand,
@@ -154,8 +154,9 @@ export default {
           console.error(e);
         }
     }
-  }
-};
+  },
+}
+
 </script>
 
 <style lang="scss">
@@ -174,20 +175,15 @@ export default {
   margin: 3px 0;
   font-size: 16px;
   font-weight: bold;
-  cursor: pointer;
-}
-.noneVisible{
-  display: none !important;
 }
 .titleItem{
   margin: 3px 0;
   font-size: 16px;
   font-weight: bold;
   height: 48px;
-  overflow: hidden !important;
-  cursor: pointer;
   position: relative;
   hyphens: auto;
+  overflow: hidden !important;
 }
 .titleItem:after{
 	content: "";
