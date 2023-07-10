@@ -1,7 +1,8 @@
 <template>
   <div v-if="range[0] != null && range[1] != null">
     <b>{{ title }}</b>
-    <v-row class="my-1">
+    <!-- {{ range }} -->
+    <!-- <v-row class="my-1">
       <v-col cols="6">
         <v-text-field outlined hide-details dense :placeholder="'от ' + min" :value="range[0]"
           @change="$set(range, 0, $event)" />
@@ -10,7 +11,8 @@
         <v-text-field outlined hide-details dense :placeholder="'до ' + max" :value="range[1]"
           @change="$set(range, 1, $event)" />
       </v-col>
-    </v-row>
+    </v-row> -->
+    <catalog-numberRange :range="range" :max="max" :min="min" />
     <!--    {{range}}-->
     <v-range-slider v-model="range" :max="max" :min="min" hide-details
       class="align-center" />

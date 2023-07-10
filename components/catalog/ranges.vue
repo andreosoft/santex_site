@@ -9,7 +9,12 @@
         <v-text-field outlined hide-details dense v-model="max"/>
       </v-col>
     </v-row> -->
-    <v-range-slider v-model="v" hide-details class="align-center" :min="min" :max="max" />
+    <catalog-numberRange :range="v" :max="max" :min="min" />
+    <v-range-slider v-model="v" hide-details class="align-center" :min="min" :max="max">
+      <template>
+          {{ v }}
+      </template>
+    </v-range-slider>
   </div>
 </template>
 

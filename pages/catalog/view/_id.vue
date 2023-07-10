@@ -123,7 +123,7 @@
       <v-tabs class=" mb-14" style="border-bottom: 1px solid #ddd" v-model="tabModel">
         <v-tab>Описание и характеристики</v-tab>
         <v-tab>Комплектующие</v-tab>
-        <v-tab>С этим товаром покупают</v-tab>
+        <!-- <v-tab>С этим товаром покупают</v-tab> -->
       </v-tabs>
       <v-tabs-items v-model="tabModel">
         <v-tab-item>

@@ -2,12 +2,13 @@
   <v-card class="s-card-campare pa-4">
     <div class="mb-10">
       <div style="position: relative;">
+        <nuxt-link :to="'/catalog/view/' + el.id">
         <v-img style="width: 400px; height: 250px" :src="$config.baseImageURL+el.image+'?width=270&height=270'" />
+      </nuxt-link>
         <div style="position: absolute; right: 0px; top: -10px">
           <v-btn @click="removeItem(el)" icon style="padding-bottom: 4px;"><i style="font-size: 20px;" class="grey--text fas fa-times-circle"></i></v-btn>
         </div>
       </div>
-      <nuxt-link :to="'/catalog/view/' + el.id">
         <div class="d-flex justify-space-between mb-4">
           <div style="margin: 3px 0; font-size: 13px">
             <catalog-available :value="el.store" />
@@ -16,7 +17,12 @@
             Код товара: {{ el.id }}
           </div>
         </div>
-        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
+        <!-- <div> -->
+          
+          <div @click="fullname ? fullname = false : fullname = true" :class="{'mb-4': true, 'noneVisible': fullname, 'titleItem': true}">{{ el.name }} </div>
+          <div @click="fullname ? fullname = false : fullname = true" :class="{'mb-4': true, 'overflowToggle': true, 'noneVisible': !fullname}">{{ el.name }} </div>
+          <!-- <p v-if="!fullname" class="grey--text" style="font-size: 11px; position: relative; left: 200px; top: -36px">Подробнее</p> -->
+        <!-- </div> -->
         <!-- <div class="my-1" style="font-size: 11px">
           <div>
             <div v-if="el.depth !== '' "><span style="color: #949494">Габариты
@@ -36,7 +42,6 @@
             <number :value="el.old_price" /> ₽
           </span>
         </div>
-      </nuxt-link>
     </div>
     <div class="d-flex justify-space-between align-center">
       <div><v-btn @click="toCart(el)" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
@@ -52,7 +57,7 @@ export default {
   },
   data(){
     return {
-
+      fullname: false
     }
   },
   methods: {
@@ -155,8 +160,44 @@ export default {
 
 <style lang="scss">
 .s-card-campare {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  height: 547.5px;
   border-top: 1px solid #DBDBDB!important;
   border-bottom: 1px solid #DBDBDB!important;
   border-right: 1px solid #DBDBDB!important;
+}
+.overflowToggle{
+  overflow: visible !important;
+  height: auto !important;
+  margin: 3px 0;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.noneVisible{
+  display: none !important;
+}
+.titleItem{
+  margin: 3px 0;
+  font-size: 16px;
+  font-weight: bold;
+  height: 48px;
+  overflow: hidden !important;
+  cursor: pointer;
+  position: relative;
+  hyphens: auto;
+}
+.titleItem:after{
+	content: "";
+	text-align: right;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	width: 70%;
+	height: 1.2em;
+	background: linear-gradient(to right, rgba(255, 255, 255, 0), white 100%);
+	pointer-events: none;
 }
 </style>
