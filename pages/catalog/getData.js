@@ -8,15 +8,27 @@ export async function getData({ route, $axios, $config }) {
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
   if (category_id) Object.assign(filters, { category_id: category_id });
-  if (searchInput) Object.assign(filters, { name: { condition: "LIKE", value: "%" + searchInput + "%" } });
-  const res = await $axios.get($config.baseURL + '/api/site/catalog', {
-    params: {
-      f: f,
-      filters: filters,
-      sort: sort,
-      pager: pager
-    }
-  });
+  let res;
+  if (searchInput) {
+    res = await $axios.get($config.baseURL + '/api/site/catalog/search', {
+      params: {
+        q: searchInput,
+        f: f,
+        filters: filters,
+        sort: sort,
+        pager: pager
+      }
+    });
+  } else {
+    res = await $axios.get($config.baseURL + '/api/site/catalog', {
+      params: {
+        f: f,
+        filters: filters,
+        sort: sort,
+        pager: pager
+      }
+    });
+  }
   const data = res.data.data;
   let resCat;
   if (category_id) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id,);

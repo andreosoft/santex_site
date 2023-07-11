@@ -4,6 +4,7 @@
     <div class="d-none d-xl-block">
       <v-row>
         <v-col class="pa-0" xl="2"  v-for="(el, i) in items.slice(0,12)" :key="i">
+          {{ el.name }}
           <index-catalog-items-el :el="el" />
         </v-col>
       </v-row>

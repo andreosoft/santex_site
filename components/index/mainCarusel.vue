@@ -5,7 +5,7 @@
         <div class="splide__track">
           <ul class="splide__list">
             <li v-for="(el, i) in items" :key="i" class="splide__slide">
-              <img :src="el.img" alt="">
+              <img :src="$config.baseImageURL + el.images[0]" alt="">
             </li>
           </ul>
         </div>
