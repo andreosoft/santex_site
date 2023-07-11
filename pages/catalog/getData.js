@@ -7,28 +7,20 @@ export async function getData({ route, $axios, $config }) {
   const addFilters = route.query.filters ? JSON.parse(route.query.filters) : {};
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
+  Object.assign(filters, { status: 1 });
   if (category_id) Object.assign(filters, { category_id: category_id });
-  let res;
-  if (searchInput) {
-    res = await $axios.get($config.baseURL + '/api/site/catalog/search', {
-      params: {
-        q: searchInput,
-        f: f,
-        filters: filters,
-        sort: sort,
-        pager: pager
-      }
-    });
-  } else {
-    res = await $axios.get($config.baseURL + '/api/site/catalog', {
-      params: {
-        f: f,
-        filters: filters,
-        sort: sort,
-        pager: pager
-      }
-    });
-  }
+  if (searchInput) Object.assign(filters, { "OR": [
+    {name: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
+  const res = await $axios.get($config.baseURL + '/api/site/catalog', {
+    params: {
+      f: f,
+      filters: filters,
+      sort: sort,
+      pager: pager
+    }
+  });
   const data = res.data.data;
   let resCat;
   if (category_id) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id,);
