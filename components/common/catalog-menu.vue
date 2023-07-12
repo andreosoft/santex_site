@@ -11,9 +11,12 @@
                   class="s-catalog-links-el"
                   :class="{ active: i == activeEl }"
                   @mouseover="activeEl = i"
+                  @click="$emit('input')"
                   :key="i"
                 >
+                <nuxt-link :to="'/catalog/sections/' + el.id">
                   <span class="s-catalog-links-el-icon"><img :src="el.icon"/></span>{{ el.name }}
+                </nuxt-link>
                 </div>
               </div>
             </div>
