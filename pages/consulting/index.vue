@@ -43,10 +43,11 @@
                                                 менеджера или запишитесь на консультацию он-лайн.</p>
                                         </div>
                                         <div class="mt-4 d-flex justify-space-around">
-                                            <v-btn class="s-btn-text" style="background-color: transparent;" :to="''">Консультация в салоне</v-btn>
+                                            <v-btn class="s-btn-text" style="background-color: transparent;" @click="showPopupConsultShowroom = true">Консультация в салоне</v-btn>
                                             <v-btn class="s-btn-text pa-4" style="background-color: transparent;" @click="showPopupConsult = true">Консультация онлайн</v-btn>
                                         </div>
                                                     <s-popup-consult v-model="showPopupConsult" @closePopUp="showPopupConsult = false"></s-popup-consult>
+                                                    <s-popup-consult-showroom v-model="showPopupConsultShowroom" @closePopUp="showPopupConsultShowroom = false"></s-popup-consult-showroom>
                                     </div>
                                 </v-col>
                                 <v-col cols="6">
@@ -65,7 +66,8 @@
 export default {
     data() {
         return {
-            showPopupConsult: false
+            showPopupConsult: false,
+            showPopupConsultShowroom: false,
         }
     },
     async asyncData(params) {

@@ -74,37 +74,37 @@ export default {
           title: "Распродажа",
         },
         {
-          to: "/",
+          to: "/brends",
           title: "Бренды",
         },
         {
-          to: "/",
+          to: "/blog",
           title: "Блог",
         },
         {
-          to: "/",
+          to: "/designers",
           title: "Дизайнеры",
         },
       ],
       rightLinks: [
         {
-          to: "/",
+          to: "/pages/about",
           title: "О компании",
         },
         {
-          to: "/",
+          to: "/pages/contacts",
           title: "Контакты",
         },
         {
-          to: "/",
+          to: "/pages/payment",
           title: "Оплата",
         },
         {
-          to: "/",
+          to: "/pages/delivery",
           title: "Доставка",
         },
         {
-          to: "/",
+          to: "/pages/garanty",
           title: "Гарантия и возвраты",
         },
       ],

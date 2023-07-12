@@ -8,7 +8,7 @@
                     </div>
                 </div>
                 <div style="margin: 10px 64px 10px 64px;">
-                    <h2>Запись на консультацию онлайн</h2>
+                    <h2>Запись на консультацию в салоне</h2>
                     <v-divider class="mb-8" />
                     <div v-if="view == 1">
                         <ValidationObserver ref="obs" v-slot="{ invalid, validated, handleSubmit, validate }">
@@ -55,7 +55,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="mb-2"><b>Желаемая дата звонка</b></div>
+                                        <div class="mb-2"><b>Дата посещения</b></div>
                                         <div>
                                             <v-menu
                                             ref="menuDate" 
@@ -88,13 +88,6 @@
                                             </v-menu>
                                         </div>
                                     </div>
-                                    <div>
-                                        <div class="mb-2"><b>Метод общения</b></div>
-                                        <div>
-                                            <v-select v-model="data.method" :items="dataMethod" outlined
-                                                placeholder="Введите менеджера" />
-                                        </div>
-                                    </div>
                                 </v-col>
                                 <v-col cols="6">
                                     <div>
@@ -114,7 +107,7 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="mb-2"><b>Желаемое время звонка</b></div>
+                                        <div class="mb-2"><b>Время посещения</b></div>
                                         <div>
                                             <v-menu 
                                             ref="menuTime" 
@@ -156,7 +149,7 @@
                         </ValidationObserver>
                     </div>
                     <div v-else-if="view == 2">
-                        <p>Благодарим за обращение, менеджер свяжется с вами в указанное время</p>
+                        <p>Благодарим за обращение, ждем Вас.</p>
                         <p>Приготовьте ваши вопросы и проект.</p>
                         <div class="mt-8 mb-8">
                             <div class="d-flex justify-space-between">
@@ -229,7 +222,7 @@ export default {
             try {
                         const resp = await this.$axios.post(this.$config.baseURL + '/api/shop/consulting', {
                                 data: {
-                                    type_order: 2,
+                                    type_order: 1
                                 },
                                 name: this.fullName,
                                 email: this.email,

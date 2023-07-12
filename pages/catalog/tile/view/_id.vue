@@ -66,7 +66,6 @@
                         <div class="ml-14 mt-2">1.58 м2 = 9 шт = 1 упак</div>
                     </div>
                 </div>
-                </div>
                 <div class="my-4">
                     <table>
                         <tr>
