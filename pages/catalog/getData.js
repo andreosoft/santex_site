@@ -7,8 +7,13 @@ export async function getData({ route, $axios, $config }) {
   const addFilters = route.query.filters ? JSON.parse(route.query.filters) : {};
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
+  Object.assign(filters, { status: 1 });
   if (category_id) Object.assign(filters, { category_id: category_id });
-  if (searchInput) Object.assign(filters, { name: { condition: "LIKE", value: "%" + searchInput + "%" } });
+  if (searchInput) Object.assign(filters, { "OR": [
+    {id: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {name: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
   const res = await $axios.get($config.baseURL + '/api/site/catalog', {
     params: {
       f: f,
