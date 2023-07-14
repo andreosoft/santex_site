@@ -17,10 +17,15 @@
         <div class="my-1" style="font-size: 11px">
           <div>
             <!-- <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.width }}</span> -->
-            <div v-if="itemList.depth !== '' "><span style="color: #949494">Габариты
-              (Г.Ш.В):</span><span>{{`${itemList.depth} x ${itemList.width} x ${itemList.height}` }}</span></div>
-            <div v-else><span style="color: #949494">Габариты
-              (Д.Ш.В):</span><span>{{`${itemList.lengthItem} x ${itemList.width} x ${itemList.height}` }}</span></div>
+            <div v-if="itemList.depth && itemList.height"><span style="color: #949494">Габариты (Г.Ш.В): </span>
+              <span>{{`${itemList.depth + ' x '} ${itemList.width} ${' x ' + itemList.height}` }}</span>
+            </div>
+            <div v-else-if="!itemList.height"><span style="color: #949494">Габариты (Г.Ш): </span>
+              <span>{{`${itemList.depth + ' x '} ${itemList.width}`}}</span>
+            </div>
+              <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
+                <span>{{`${itemList.lengthItem} x ${itemList.width} ${' x ' + itemList.height}` }}</span>
+              </div>
           </div>
           <div>
             <span style="color: #949494">Бренд: </span><span>{{ el.brand }}</span>
@@ -56,7 +61,8 @@ export default {
       itemList: {
         depth: '',
         width: '',
-        height: ''
+        height: '',
+        lengthItem: '',
       }
       // item: {
       //   code: this.el.id,
@@ -70,11 +76,21 @@ export default {
       // }
     }
   },
-//   async fetch (){
-//   let respSize = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + this.el.id);
-//   // const dataSize = respSize.data.data;
-//   console.log(respSize);
-// },
+  async fetch (){
+  let respSize = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + this.el.id);
+  const dataSize = respSize.data.data.filters;
+  dataSize.forEach(item => {
+          if(item.name === 'Высота'){
+            this.itemList.height = item.value
+          } else if(item.name === 'Ширина') {
+            this.itemList.width = item.value
+          } else if(item.name === 'Глубина'){
+            this.itemList.depth = item.value
+          } else if(item.name === 'Длина'){
+            this.itemList.lengthItem = item.value;
+          }
+        });
+},
   methods: {
     async toCompare(el){
       try{
