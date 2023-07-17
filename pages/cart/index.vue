@@ -1,6 +1,15 @@
 <template>
     <v-container class="mb-10">
         <v-divider class="mb-8" />
+
+        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+              Закрыть
+            </v-btn>
+          </template>
+          </v-snackbar>
+
+
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex flex-row justify-space-between align-center">
             <h1>{{ title }}</h1>
@@ -140,7 +149,8 @@ export default {
     components: { number },
     data() {
         return {
-            mass: []
+            mass: [],
+            snackbarCart: false
         }
     },
     async asyncData(params) {
@@ -184,18 +194,21 @@ export default {
         ...mapGetters ({
       totalPrice: 'cart/totalPrice',
       totalDiscount: 'cart/totalDiscount',
-      cart: 'cart/cart'
+      cart: 'cart/cart',
+      dataResultCart: 'cart/dataResult',
     }),
     },
     methods: {
         deleteItem(el){
             this.$store.commit('cart/remove', el)
+            this.snackbarCart = true
         },
         toItem(el){
             this.$router.push({path: '/catalog/view/' + el.code})
         },
         removeAll(){
             this.$store.commit('cart/removeAll');
+            this.snackbarCart = true
         },
         countPlus(el){
             this.$store.commit('cart/countPlus', el.code)
