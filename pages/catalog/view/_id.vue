@@ -3,7 +3,6 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ data.name }}</h1>
-    <!-- {{ data }} -->
     <v-row class="mt-4">
       <v-col cols="6">
         <common-image-gallery :value="data.images" />
@@ -71,8 +70,38 @@
               <!-- <s-popup-buyoneclick v-model="showBuyoneclick" /> -->
             </div>
             <div>
+
+
+              <!-- Избранное -->
+<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Сравнение -->
+        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Корзина -->
+        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+
+
+
               <v-btn @click="toCompare" plain small><img src="/icon-similar.png" alt="compare" /></v-btn>
-              <v-btn @click="toFavorite" plain small><img src="/icon-like.png" alt="favorite" /></v-btn>
+              <v-btn @click="toFavorite" plain small>
+                <svg :class="{'favorite': toFav}" xmlns="http://www.w3.org/2000/svg" width="22" height="20" id="Like" viewBox="0 0 22 20">
+                  <path id="Path_75" data-name="Path 75" d="M11,20a.865.865,0,0,1-.411-.1,29.224,29.224,0,0,1-5.24-3.748A19.51,19.51,0,0,1,1.707,11.9,10.612,10.612,0,0,1,0,6.33,6.414,6.414,0,0,1,6.492,0,6.547,6.547,0,0,1,11,1.779,6.566,6.566,0,0,1,21.29,3.453,6.216,6.216,0,0,1,22,6.33,10.612,10.612,0,0,1,20.293,11.9a19.571,19.571,0,0,1-3.641,4.248,29.224,29.224,0,0,1-5.24,3.748A.87.87,0,0,1,11,20ZM6.488,1.674A4.72,4.72,0,0,0,1.718,6.33c0,3.522,2.592,6.6,4.767,8.556A28.824,28.824,0,0,0,11,18.187a28.824,28.824,0,0,0,4.514-3.3c2.174-1.959,4.765-5.034,4.765-8.556a4.711,4.711,0,0,0-4.755-4.666,4.807,4.807,0,0,0-3.836,1.874.874.874,0,0,1-1.2.169.851.851,0,0,1-.173-.169A4.771,4.771,0,0,0,6.488,1.674Z" transform="translate(0 0.004)"/>
+                </svg>
+              </v-btn>
             </div>
           </div>
         </div>
@@ -190,7 +219,7 @@
 
 <script>
 import Number from "../../../components/number.vue";
-
+import { mapGetters } from 'vuex';
 async function getData({ route, $axios, $config }) {
   let id = route.params.id;
   const res = await $axios.get($config.baseURL + '/api/site/catalog/' + id);
@@ -217,10 +246,14 @@ async function getData({ route, $axios, $config }) {
 export default {
   data() {
     return {
+      snackbarFav: false,
+      snackbarCom: false,
+      snackbarCart: false,
       // showBuyoneclick: false,
       tabModel: 0,
       galleryModel: 0,
       activeEl_with_buy_groups: 0,
+      toFav: false,
       // item: {
       //   code: this.obj.id,
       //   name: this.obj.name,
@@ -232,6 +265,13 @@ export default {
       //   type: this.obj.type,
       // }
     };
+  },
+  computed: {
+    ...mapGetters ({
+      dataResultFav: 'favorite/dataResult',
+      dataResultCom: 'compare/dataResult',
+      dataResultCart: 'cart/dataResult',
+    })
   },
   methods: {
     toCompare(){
@@ -255,9 +295,12 @@ export default {
                 });
                 // console.log(item)
                 this.$store.commit('compare/addItem', item);
-                
+                this.snackbarFav = false;
+                this.snackbarCart = false;
+                this.snackbarCom = true;
               },
-              toFavorite(){
+    toFavorite(){
+                this.toFav ? this.toFav = false : this.toFav = true;
                 let height = '';
                 let width = '';
                 let depth = '';
@@ -293,6 +336,9 @@ export default {
         lengthItem,
       }
       this.$store.commit('favorite/addItem', item);
+      this.snackbarCom = false;
+      this.snackbarCart = false;
+      this.snackbarFav = true;
       // this.$router.push('/favorite');
     },
     toCart(){
@@ -330,6 +376,9 @@ export default {
         lengthItem,
       }
       this.$store.commit('cart/add', item);
+      this.snackbarCom = false;
+      this.snackbarFav = false;
+      this.snackbarCart = true;
     },
     Buyoneclick(){
       let height = '';
@@ -577,3 +626,13 @@ export default {
   },
 };
 </script>
+
+<style lang="scss">
+.favorite {
+  path{
+    fill: red;
+  }
+}
+
+
+</style>

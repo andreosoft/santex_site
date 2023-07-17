@@ -1,5 +1,23 @@
 <template>
   <v-card class="s-card-campare pa-4">
+
+
+<!-- Избранное -->
+<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Корзина -->
+        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+
+
     <div class="mb-10">
       <div style="position: relative;">
         <nuxt-link :to="'/catalog/view/' + el.id">
@@ -45,12 +63,13 @@
     </div>
     <div class="d-flex justify-space-between align-center">
       <div><v-btn @click="toCart(el)" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
-      <div><v-btn @click="toFavorite(el)" plain small><img src="/icon-like.png" alt="" /></v-btn></div>
+      <div><v-btn @click="toFavorite(el)" plain small><img src="/icons/like.svg" alt="" /></v-btn></div>
     </div>
   </v-card>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   props: {
     el: Object,
@@ -58,7 +77,17 @@ export default {
   data(){
     return {
       fullname: false,
+      snackbarFav: false,
+      snackbarCom: false,
+      snackbarCart: false,
     }
+  },
+  computed: {
+    ...mapGetters ({
+      dataResultFav: 'favorite/dataResult',
+      dataResultCom: 'compare/dataResult',
+      dataResultCart: 'cart/dataResult',
+    })
   },
   methods: {
     async toCart(el){
@@ -100,12 +129,19 @@ export default {
           lengthItem,
         }
         this.$store.commit('cart/add', item);
+        this.snackbarCom = false;
+        this.snackbarFav = false;
+        this.snackbarCart = true;
       } catch (e){
         console.error(e);
       }
     },
     removeItem(el){
       this.$store.commit('compare/remove', el);
+      this.snackbarCart = false;
+      this.snackbarFav = false;
+      this.snackbarCom = true;
+      this.$emit('removeItemCom', this.snackbarCom);
     },
     async toFavorite(el){
       try{
@@ -149,6 +185,9 @@ export default {
           // console.log(itemFav);
             // this.$router.push('/favorite');
           this.$store.commit('favorite/addItem', item);
+          this.snackbarCart = false;
+          this.snackbarCom = false;
+          this.snackbarFav = true;
       }
         catch (e){
           console.error(e);

@@ -12,11 +12,17 @@
           </div>
           <div class="s-header-actions-block">
             <nuxt-link to="/"><img src="/icons/profile.svg" alt="" /></nuxt-link>
-            <nuxt-link class="ml-6" to="/favorite"><img src="/icons/like.svg" alt="" /></nuxt-link>
-            <nuxt-link class="ml-6" to="/compare"><img src="/icons/compare.svg" alt="" /></nuxt-link>
+            <nuxt-link class="ml-6" to="/favorite">
+              <img src="/icons/like.svg" alt="" />
+              <div v-show="countItemsFav !== 0" class="cartIcon">{{ countItemsFav }}</div>
+            </nuxt-link>
+            <nuxt-link class="ml-6" to="/compare">
+              <img src="/icons/compare.svg" alt="" />
+              <div v-show="countItemsCom !== 0" class="cartIcon">{{ countItemsCom }}</div>
+            </nuxt-link>
             <!-- <div style="width: 70px;" class="ml-6 d-inline-block"> -->
               <nuxt-link class="ml-6" to="/cart">
-                  <img src="/icons/basket.svg" alt="cart" />
+                  <img src="/icons/basket.svg" alt="compare" />
                   <div v-show="countItems !== 0" class="cartIcon">{{ countItems }}</div>
               </nuxt-link>
             <!-- </div> -->
@@ -78,7 +84,9 @@ export default {
   },
   computed: {
     ...mapGetters ({
-      countItems: 'cart/countItems'
+      countItems: 'cart/countItems',
+      countItemsFav: 'favorite/countItems',
+      countItemsCom: 'compare/countItems'
     })
   }
 }

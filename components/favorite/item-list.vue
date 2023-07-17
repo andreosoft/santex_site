@@ -1,5 +1,21 @@
 <template>
   <v-card class="s-card-good pa-4">
+
+        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Корзина -->
+        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+
+
     <div>
       <div style="position: relative;" class="mb-2">
         <v-img style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images+'?width=270&height=270'" />
@@ -19,10 +35,15 @@
         <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
           <div>
-            <div v-if="el.depth !== '' "><span style="color: #949494">Габариты
-              (Г.Ш.В):</span><span>{{`${el.depth} x ${el.width} x ${el.height}` }}</span></div>
-      <div v-else><span style="color: #949494">Габариты
-              (Д.Ш.В):</span><span>{{`${el.lengthItem} x ${el.width} x ${el.height}` }}</span></div>
+            <div v-if="el.depth && el.height"><span style="color: #949494">Габариты (Г.Ш.В): </span>
+              <span>{{`${el.depth + ' x '} ${el.width} ${' x ' + el.height}` }}</span>
+            </div>
+            <div v-else-if="!el.height"><span style="color: #949494">Габариты (Г.Ш): </span>
+              <span>{{`${el.depth + ' x '} ${el.width}`}}</span>
+            </div>
+            <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
+              <span>{{`${el.lengthItem} x ${el.width} ${' x ' + el.height}` }}</span>
+            </div>
           </div>
           <div>
             <span style="color: #949494">Бренд: </span><span>{{ el.brand }}</span>
@@ -48,13 +69,35 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   props: {
     el: Object,
   },
+  data()  {
+    return {
+      snackbarFav: false,
+      snackbarCom: false,
+      snackbarCart: false,
+    }
+  },
+  computed: {
+    ...mapGetters ({
+      dataResultFav: 'favorite/dataResult',
+      dataResultCom: 'compare/dataResult',
+      dataResultCart: 'cart/dataResult',
+    })
+  },
   methods: {
+    getDataReceive() {
+      return true
+    },
     removeItem(el){
       this.$store.commit('favorite/remove', el);
+      this.snackbarCart = false;
+      this.snackbarCom = false;
+      this.snackbarFav = true;
+      this.$emit('removeItemFav', this.snackbarFav);
     },
     async toCompare(el){
       try{
@@ -81,7 +124,9 @@ export default {
                 });
                 // console.log(item)
                 this.$store.commit('compare/addItem', item);
-                
+                this.snackbarFav = false;
+                this.snackbarCart = false;
+                this.snackbarCom = true;
     } catch(e){
       console.log(e);
     }},
@@ -124,6 +169,9 @@ export default {
           lengthItem,
         }
         this.$store.commit('cart/add', item);
+        this.snackbarFav = false;
+        this.snackbarCom = false;
+        this.snackbarCart = true;
       } catch (e){
         console.error(e);
       }

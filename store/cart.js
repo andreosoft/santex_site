@@ -21,7 +21,8 @@ const state = {
             payment: {
                 type: 'online'
             }
-        }
+        },
+        data_result: '',
     },
 
 }
@@ -56,6 +57,9 @@ const getters = {
             r += el.old_price * el.count;
         }
         return r - getters.totalPrice < 0 ? 0 : r - getters.totalPrice;
+    },
+    dataResult(state){
+        return state.cart.data_result;
     }
 }
 const mutations = {
@@ -69,6 +73,7 @@ const mutations = {
         }
         item.catalog_id = item.code;
         cart.push(item);
+        state.cart.data_result = 'Товар добавлен в корзину';
         state.cart.data = cart;
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
@@ -95,11 +100,13 @@ const mutations = {
         const indexStorage = cart.find((element, index) => { if (element.code === item.code) { return index; } });
         cart.splice(indexStorage, 1);
         state.cart.data = cart;
+        state.cart.data_result = 'Товар удален из корзины';
         localStorage.setItem('usercart', JSON.stringify(cart));
     },
     removeAll(state) {
         const emptyArr = [];
         state.cart.data = emptyArr;
+        state.cart.data_result = 'Корзина очищена';
         localStorage.setItem('usercart', JSON.stringify(emptyArr));
     },
     updateDataClient(state, { name1, value, name2 }) {

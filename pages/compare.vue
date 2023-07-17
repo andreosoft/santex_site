@@ -1,6 +1,16 @@
 <template>
     <v-container class="mb-10">
         <v-divider class="mb-8" />
+
+        <!-- Сравнение -->
+        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+              Закрыть
+            </v-btn>
+          </template>
+          </v-snackbar>
+
+
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
@@ -64,7 +74,7 @@
                         <div class="d-flex">
                             <div style="width: 300px" v-for="(item, ind) in visibleItems" :key="ind">
                                 <div class="mb-10">
-                                <catalog-item-list-compare :el="item" />
+                                <catalog-item-list-compare :el="item" @removeItemCom="removeItem" />
                                 </div>
                                 <div v-if="differenceInput" class="s-comapre-table">
                                     <div v-for="(param, index, i) in differenceItems" class="s-comapre-table-row">
@@ -101,12 +111,14 @@ export default {
             visibleArrItems: [],
             dataFilters: [],
             dataDifFilters: [],
+            snackbarCom: false
         }
     },
     computed: {
         ...mapGetters({
             dataCom: 'compare/compareData',
-            countCom: 'compare/countItems'
+            countCom: 'compare/countItems',
+            dataResultCom: 'compare/dataResult',
         }),
         hasDistinction: function(){
             return {
@@ -170,6 +182,9 @@ export default {
             }
     },
     methods: {
+        removeItem(val){
+            this.snackbarCom = val;
+        },
         activeAllParams(){
             if(!this.allParamInput) {
                 this.allParamInput = true;
@@ -188,6 +203,7 @@ export default {
         },
         removeAll(){
             this.$store.commit('compare/removeAll');
+            this.snackbarCom = true;
         }
     },
     async asyncData(params) {

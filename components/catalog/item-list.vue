@@ -1,5 +1,31 @@
 <template>
   <v-card class="s-card-good pa-4">
+
+
+<!-- Избранное -->
+<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Сравнение -->
+        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Корзина -->
+        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+
+
+
     <div>
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
@@ -44,7 +70,7 @@
     <div class="d-flex justify-space-between">
       <div><v-btn @click="toCart(el)" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
       <div>
-        <v-btn @click="toFavorite(el)" icon><img src="/icon-like.png" alt="" /></v-btn>
+        <v-btn @click="toFavorite(el)" icon><img src="/icons/like.svg" alt="" /></v-btn>
         <v-btn @click="toCompare(el)" icon><img src="/icon-similar.png" alt="" /></v-btn>
       </div>
     </div>
@@ -52,12 +78,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 export default {
   props: {
     el: Object,
   },
   data(){
     return {
+      snackbarFav: false,
+      snackbarCom: false,
+      snackbarCart: false,
       itemList: {
         depth: '',
         width: '',
@@ -75,6 +105,13 @@ export default {
       //   type: this.el.type,
       // }
     }
+  },
+  computed: {
+    ...mapGetters ({
+      dataResultFav: 'favorite/dataResult',
+      dataResultCom: 'compare/dataResult',
+      dataResultCart: 'cart/dataResult',
+    })
   },
   async fetch (){
   let respSize = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + this.el.id);
@@ -117,6 +154,9 @@ export default {
         });
 
         this.$store.commit('compare/addItem', item);
+        this.snackbarFav = false;
+        this.snackbarCart = false;
+        this.snackbarCom = true;
       } catch(e){
         console.error(e);
       }
@@ -164,6 +204,9 @@ export default {
           // console.log(itemFav);
             // this.$router.push('/favorite');
           this.$store.commit('favorite/addItem', item);
+          this.snackbarCom = false;
+          this.snackbarCart = false;
+          this.snackbarFav = true;
       }
         catch (e){
           console.error(e);
@@ -208,6 +251,9 @@ export default {
           lengthItem,
         }
         this.$store.commit('cart/add', item);
+        this.snackbarCom = false;
+        this.snackbarFav = false;
+        this.snackbarCart = true;
       } catch (e){
         console.error(e);
       }

@@ -1,5 +1,13 @@
 <template>
     <v-container class="mb-10">
+
+        <!-- Избранное -->
+<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+    <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+      Закрыть
+    </v-btn>
+  </template>
+  </v-snackbar>
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
@@ -19,7 +27,7 @@
         <div v-show="dataFav.length !== 0">
             <v-row class="s-row">
                 <v-col cols="3" v-for="(el, i) in dataFav" :key="i">
-                    <favorite-item-list :el="el" />
+                    <favorite-item-list :el="el" @removeItemFav="removeItem" />
                 </v-col>
             </v-row>
         </div>
@@ -31,16 +39,24 @@ import { mapGetters } from 'vuex'
 export default {
     data() {
         return {
+            snackbarFav: false,
         }
     },
     computed: {
         ...mapGetters({
-            dataFav: 'favorite/favItems'
-        })
+            dataFav: 'favorite/favItems',
+            dataResultFav: 'favorite/dataResult',
+            dataResultCom: 'compare/dataResult',
+            dataResultCart: 'cart/dataResult',
+        }),
     },
     methods: {
+        removeItem(val){
+            this.snackbarFav = val
+        },
         removeAll(){
             this.$store.commit('favorite/removeAll');
+            this.snackbarFav = true;
         }
     },
     async asyncData(params) {
