@@ -89,9 +89,6 @@ export default {
     })
   },
   methods: {
-    getDataReceive() {
-      return true
-    },
     removeItem(el){
       this.$store.commit('favorite/remove', el);
       this.snackbarCart = false;

@@ -97,7 +97,8 @@ const mutations = {
     },
     remove(state, item) {
         const cart = state.cart.data;
-        const indexStorage = cart.find((element, index) => { if (element.code === item.code) { return index; } });
+        let indexStorage;
+        cart.forEach((element, index) => { if (element.code === item.code) { indexStorage = index; } });
         cart.splice(indexStorage, 1);
         state.cart.data = cart;
         state.cart.data_result = 'Товар удален из корзины';

@@ -27,7 +27,8 @@ const mutations = {
     },
     remove(state, item) {
         const compareData = state.compareData.items;
-        const indexStorage = compareData.find((element, index) => { if (element.id === item.id) { return index; } });
+        let indexStorage;
+        compareData.forEach((element, index) => { if (element.id === item.id) { indexStorage = index; } });
         compareData.splice(indexStorage, 1);
         state.compareData.items = compareData;
         state.compareData.data_result = 'Товар удален из сравнения';

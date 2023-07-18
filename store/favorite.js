@@ -46,12 +46,23 @@ const mutations = {
     },
     remove(state, item) {
         const favdata = state.favoriteData.favoriteItems;
-        const indexStorage = favdata.find((element, index) => { if (element.code === item.code) { return index; } });
+        let indexStorage; 
+        favdata.forEach((element, index) => { if (element.id === item.id) { indexStorage = index; } });
         favdata.splice(indexStorage, 1);
         state.favoriteData.favoriteItems = favdata;
         state.favoriteData.data_result = 'Товар удален из избранного';
         localStorage.setItem('favoriteItems', JSON.stringify(favdata));
     },
+    checkAvailability(state, item){
+        const favdata = state.favoriteData.favoriteItems;
+        const simillar = favdata.find((element) => { if (element.id === item.id) { return element } });
+        if (simillar) {
+            state.favoriteData.data_result = 'Такой товар уже есть в избранном';
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
 
 const actions = {

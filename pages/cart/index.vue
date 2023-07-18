@@ -9,7 +9,6 @@
           </template>
           </v-snackbar>
 
-
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex flex-row justify-space-between align-center">
             <h1>{{ title }}</h1>

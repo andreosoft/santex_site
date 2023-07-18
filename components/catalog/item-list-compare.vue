@@ -63,7 +63,12 @@
     </div>
     <div class="d-flex justify-space-between align-center">
       <div><v-btn @click="toCart(el)" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
-      <div><v-btn @click="toFavorite(el)" plain small><img src="/icons/like.svg" alt="" /></v-btn></div>
+      <div>
+        <v-btn @click="toFavorite(el)" plain small>
+          <img v-show="checkAvailable" src="/icons/like-black.svg" alt="favorite-black">
+          <img v-show="!checkAvailable" src="/icons/like.svg" alt="favorite">
+      </v-btn>
+      </div>
     </div>
   </v-card>
 </template>
@@ -84,10 +89,19 @@ export default {
   },
   computed: {
     ...mapGetters ({
+      dataFav: 'favorite/favItems',
       dataResultFav: 'favorite/dataResult',
       dataResultCom: 'compare/dataResult',
       dataResultCart: 'cart/dataResult',
-    })
+    }),
+    checkAvailable(){
+      const sim = this.dataFav.find((item) => {if(item.id === this.el.id){ return item }})
+        if (sim) {
+            return true;
+        } else {
+            return false;
+        }
+    }
   },
   methods: {
     async toCart(el){
@@ -144,6 +158,7 @@ export default {
       this.$emit('removeItemCom', this.snackbarCom);
     },
     async toFavorite(el){
+      if(!this.checkAvailable){
       try{
         let respCom = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + el.id);
         const dataCom = respCom.data.data.filters;
@@ -192,6 +207,15 @@ export default {
         catch (e){
           console.error(e);
         }
+      } else if (this.checkAvailable){
+        const item = {
+        id: el.id
+      }
+      this.$store.commit('favorite/remove', item)
+      this.snackbarCom = false;
+      this.snackbarCart = false;
+      this.snackbarFav = true;
+      }
     }
   },
 }
