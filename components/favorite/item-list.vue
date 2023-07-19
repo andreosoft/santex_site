@@ -1,21 +1,5 @@
 <template>
   <v-card class="s-card-good pa-4">
-
-        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Корзина -->
-        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-
-
     <div>
       <div style="position: relative;" class="mb-2">
         <v-img style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images+'?width=270&height=270'" />
@@ -69,32 +53,18 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
   props: {
     el: Object,
   },
   data()  {
     return {
-      snackbarFav: false,
-      snackbarCom: false,
-      snackbarCart: false,
     }
-  },
-  computed: {
-    ...mapGetters ({
-      dataResultFav: 'favorite/dataResult',
-      dataResultCom: 'compare/dataResult',
-      dataResultCart: 'cart/dataResult',
-    })
   },
   methods: {
     removeItem(el){
       this.$store.commit('favorite/remove', el);
-      this.snackbarCart = false;
-      this.snackbarCom = false;
-      this.snackbarFav = true;
-      this.$emit('removeItemFav', this.snackbarFav);
+      this.$emit('removeItemFav', true);
     },
     async toCompare(el){
       try{
@@ -121,9 +91,7 @@ export default {
                 });
                 // console.log(item)
                 this.$store.commit('compare/addItem', item);
-                this.snackbarFav = false;
-                this.snackbarCart = false;
-                this.snackbarCom = true;
+                this.$emit('addItemCom', true);
     } catch(e){
       console.log(e);
     }},
@@ -166,9 +134,7 @@ export default {
           lengthItem,
         }
         this.$store.commit('cart/add', item);
-        this.snackbarFav = false;
-        this.snackbarCom = false;
-        this.snackbarCart = true;
+        this.$emit('addItemCart', true);
       } catch (e){
         console.error(e);
       }

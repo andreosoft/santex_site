@@ -8,6 +8,22 @@
     </v-btn>
   </template>
   </v-snackbar>
+<!-- Сравнение -->
+  <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
+    <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+      Закрыть
+    </v-btn>
+  </template>
+  </v-snackbar>
+  <!-- Корзина -->
+          <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+    <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+      Закрыть
+    </v-btn>
+  </template>
+  </v-snackbar>
+
+
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
@@ -27,7 +43,7 @@
         <div v-show="dataFav.length !== 0">
             <v-row class="s-row">
                 <v-col cols="3" v-for="(el, i) in dataFav" :key="i">
-                    <favorite-item-list :el="el" @removeItemFav="removeItem" />
+                    <favorite-item-list :el="el" @removeItemFav="removeItem" @addItemCart="addItemCart" @addItemCom="addItemCom" />
                 </v-col>
             </v-row>
         </div>
@@ -40,6 +56,8 @@ export default {
     data() {
         return {
             snackbarFav: false,
+            snackbarCom: false,
+            snackbarCart: false
         }
     },
     computed: {
@@ -52,11 +70,25 @@ export default {
     },
     methods: {
         removeItem(val){
-            this.snackbarFav = val
+            this.snackbarCart = false;
+            this.snackbarCom = false;
+            this.snackbarFav = val;
         },
         removeAll(){
             this.$store.commit('favorite/removeAll');
+            this.snackbarCart = false;
+            this.snackbarCom = false;
             this.snackbarFav = true;
+        },
+        addItemCart(el){
+            this.snackbarFav = false;
+            this.snackbarCom = false;
+            this.snackbarCart = el;
+        },
+        addItemCom(el){
+            this.snackbarFav = false;
+            this.snackbarCart = false;
+            this.snackbarCom = el;
         }
     },
     async asyncData(params) {

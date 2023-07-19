@@ -1,31 +1,5 @@
 <template>
   <v-card class="s-card-good pa-4">
-
-
-<!-- Избранное -->
-<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Сравнение -->
-        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Корзина -->
-        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-
-
-<!-- {{ checkAvailable }} -->
     <div>
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
@@ -81,16 +55,13 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters } from 'vuex'
 export default {
   props: {
     el: Object,
   },
   data(){
     return {
-      snackbarFav: false,
-      snackbarCom: false,
-      snackbarCart: false,
       itemList: {
         depth: '',
         width: '',
@@ -110,11 +81,8 @@ export default {
     }
   },
   computed: {
-    ...mapGetters ({
-      dataFav: 'favorite/favItems',
-      dataResultFav: 'favorite/dataResult',
-      dataResultCom: 'compare/dataResult',
-      dataResultCart: 'cart/dataResult',
+    ...mapGetters({
+      dataFav: 'favorite/favItems'
     }),
     checkAvailable(){
       const sim = this.dataFav.find((item) => {if(item.id === this.el.id){ return item }});
@@ -162,9 +130,7 @@ export default {
         });
 
         this.$store.commit('compare/addItem', item);
-        this.snackbarFav = false;
-        this.snackbarCart = false;
-        this.snackbarCom = true;
+        this.$emit('addItemCom', true);
       } catch(e){
         console.error(e);
       }
@@ -213,9 +179,7 @@ export default {
           // console.log(itemFav);
             // this.$router.push('/favorite');
           this.$store.commit('favorite/addItem', item);
-          this.snackbarCom = false;
-          this.snackbarCart = false;
-          this.snackbarFav = true;
+          this.$emit('addItemFav', true);
       }
         catch (e){
           console.error(e);
@@ -225,9 +189,7 @@ export default {
         id: el.id
       }
       this.$store.commit('favorite/remove', item)
-        this.snackbarCom = false;
-        this.snackbarCart = false;
-        this.snackbarFav = true;
+        this.$emit('addItemFav', true);
       }
     },
     async toCart(el){
@@ -269,9 +231,7 @@ export default {
           lengthItem,
         }
         this.$store.commit('cart/add', item);
-        this.snackbarCom = false;
-        this.snackbarFav = false;
-        this.snackbarCart = true;
+        this.$emit('addItemCart', true);
       } catch (e){
         console.error(e);
       }

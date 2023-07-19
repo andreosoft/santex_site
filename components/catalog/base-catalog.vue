@@ -2,6 +2,31 @@
   <div>
     <v-row class="s-row">
       <v-col cols="3">
+
+
+<!-- Избранное -->
+<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Сравнение -->
+        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+<!-- Корзина -->
+        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+    Закрыть
+  </v-btn>
+</template>
+</v-snackbar>
+
+
         <div>
           <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
         </div>
@@ -15,7 +40,7 @@
         </v-row>
         <v-row v-else class="s-row">
           <v-col cols="4" v-for="(el, i) in data" :key="i">
-            <catalog-item-list :el="el" />
+            <catalog-item-list :el="el" @addItemFav="addItemFav" @addItemCom="addItemCom" @addItemCart="addItemCart" />
           </v-col>
         </v-row>
       </v-col>
@@ -24,6 +49,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   props: {
     data: Array,
@@ -36,5 +62,37 @@ export default {
       default: false
     }
   },
+  data(){
+    return {
+      snackbarFav: false,
+      snackbarCom: false,
+      snackbarCart: false
+    }
+  },
+  computed: {
+    ...mapGetters({
+      dataFav: 'favorite/favItems',
+      dataResultFav: 'favorite/dataResult',
+      dataResultCom: 'compare/dataResult',
+      dataResultCart: 'cart/dataResult',
+    })
+  },
+  methods: {
+    addItemFav(el){
+      this.snackbarCom = false
+      this.snackbarCart = false
+      this.snackbarFav = el;
+    },
+    addItemCom(el){
+      this.snackbarFav = false
+      this.snackbarCart = false
+      this.snackbarCom = el;
+    },
+    addItemCart(el){
+      this.snackbarCom = false
+      this.snackbarFav = false
+      this.snackbarCart = el;
+    }
+  }
 }
 </script>

@@ -9,7 +9,21 @@
             </v-btn>
           </template>
           </v-snackbar>
-
+<!-- Избранное -->
+<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+    <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+      Закрыть
+    </v-btn>
+  </template>
+  </v-snackbar>
+  <!-- Корзина -->
+          <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+    <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+      Закрыть
+    </v-btn>
+  </template>
+  </v-snackbar>
+  
 
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
@@ -74,7 +88,7 @@
                         <div class="d-flex">
                             <div style="width: 300px" v-for="(item, ind) in visibleItems" :key="ind">
                                 <div class="mb-10">
-                                <catalog-item-list-compare :el="item" @removeItemCom="removeItem" />
+                                <catalog-item-list-compare :el="item" @removeItemCom="removeItem" @addItemFav="addItemFav" @addItemCart="addItemCart" />
                                 </div>
                                 <div v-if="differenceInput" class="s-comapre-table">
                                     <div v-for="(param, index, i) in differenceItems" class="s-comapre-table-row">
@@ -111,7 +125,9 @@ export default {
             visibleArrItems: [],
             dataFilters: [],
             dataDifFilters: [],
-            snackbarCom: false
+            snackbarCom: false,
+            snackbarFav: false,
+            snackbarCart: false
         }
     },
     computed: {
@@ -119,6 +135,8 @@ export default {
             dataCom: 'compare/compareData',
             countCom: 'compare/countItems',
             dataResultCom: 'compare/dataResult',
+            dataResultCart: 'cart/dataResult',
+            dataResultFav: 'favorite/dataResult'
         }),
         hasDistinction: function(){
             return {
@@ -183,7 +201,19 @@ export default {
     },
     methods: {
         removeItem(val){
+            this.snackbarCart = false;
+            this.snackbarFav = false;
             this.snackbarCom = val;
+        },
+        addItemCart(el){
+            this.snackbarCom = false;
+            this.snackbarFav = false;
+            this.snackbarCart = el
+        },
+        addItemFav(el){
+            this.snackbarCart = false;
+            this.snackbarCom = false;
+            this.snackbarFav = el
         },
         activeAllParams(){
             if(!this.allParamInput) {

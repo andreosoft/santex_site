@@ -69,6 +69,7 @@ const mutations = {
         if (simillar) {
             simillar.count++;
             localStorage.setItem('usercart', JSON.stringify(cart));
+            state.cart.data_result = 'Товар уже есть в корзине';
             return;
         }
         item.catalog_id = item.code;

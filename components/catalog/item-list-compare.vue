@@ -1,23 +1,5 @@
 <template>
   <v-card class="s-card-campare pa-4">
-
-
-<!-- Избранное -->
-<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Корзина -->
-        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-
-
     <div class="mb-10">
       <div style="position: relative;">
         <nuxt-link :to="'/catalog/view/' + el.id">
@@ -82,17 +64,11 @@ export default {
   data(){
     return {
       fullname: false,
-      snackbarFav: false,
-      snackbarCom: false,
-      snackbarCart: false,
     }
   },
   computed: {
     ...mapGetters ({
       dataFav: 'favorite/favItems',
-      dataResultFav: 'favorite/dataResult',
-      dataResultCom: 'compare/dataResult',
-      dataResultCart: 'cart/dataResult',
     }),
     checkAvailable(){
       const sim = this.dataFav.find((item) => {if(item.id === this.el.id){ return item }})
@@ -143,19 +119,14 @@ export default {
           lengthItem,
         }
         this.$store.commit('cart/add', item);
-        this.snackbarCom = false;
-        this.snackbarFav = false;
-        this.snackbarCart = true;
+        this.$emit('addItemCart', true);
       } catch (e){
         console.error(e);
       }
     },
     removeItem(el){
       this.$store.commit('compare/remove', el);
-      this.snackbarCart = false;
-      this.snackbarFav = false;
-      this.snackbarCom = true;
-      this.$emit('removeItemCom', this.snackbarCom);
+      this.$emit('removeItemCom', true);
     },
     async toFavorite(el){
       if(!this.checkAvailable){
@@ -200,9 +171,7 @@ export default {
           // console.log(itemFav);
             // this.$router.push('/favorite');
           this.$store.commit('favorite/addItem', item);
-          this.snackbarCart = false;
-          this.snackbarCom = false;
-          this.snackbarFav = true;
+          this.$emit('addItemFav', true);
       }
         catch (e){
           console.error(e);
@@ -212,9 +181,7 @@ export default {
         id: el.id
       }
       this.$store.commit('favorite/remove', item)
-      this.snackbarCom = false;
-      this.snackbarCart = false;
-      this.snackbarFav = true;
+      this.$emit('addItemFav', true);
       }
     }
   },
