@@ -52,7 +52,7 @@
             <div class="s-header-menu-search">
               <v-text-field v-model="search" single-line outlined dense label="Я хочу найти">
                 <template v-slot:append>
-                  <img @click="submitSearch()" src="/icons/Search.svg" />
+                  <img style="cursor: pointer" @click="submitSearch()" src="/icons/Search.svg" />
                 </template>
               </v-text-field>
             </div>
