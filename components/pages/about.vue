@@ -103,7 +103,7 @@
                 </v-row>
             </div>
         </div>
-        <s-popup-consult v-model="showPopupConsult"></s-popup-consult>
+        <s-popup-consult v-model="showPopupConsult" @closePopUp="showPopupConsult = false"></s-popup-consult>
     </div>
 </template>
 
