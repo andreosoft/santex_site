@@ -46,7 +46,7 @@ export async function getData({ route, $axios, $config }) {
       dataFilters.filters[key].numFilters = [];
       for (let i = 0; i < dataFilters.filters[key].filters.length; i++) {
         const item = dataFilters.filters[key].filters[i];
-        let n = Number(item.trim().replace(/\,/g, '.'));
+        let n = item;
         if (n == NaN) continue;
         if (i == 0) { // инициализация
           maxVal = n;

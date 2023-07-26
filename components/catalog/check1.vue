@@ -3,7 +3,7 @@
     <b>{{ title }}</b>
     <div class="a-catalog-check1" :class="{ close: !toggleOpen }">
       <div v-for="(el, i) of params" :key="i">
-        <v-checkbox class="ms-2" dense hide-details :value="el" v-model="v" :label="el" />
+        <v-checkbox class="ms-2" dense hide-details :value="el" v-model="v" :label="String(el)" />
       </div>
     </div>
     <div v-if="needExpand" class="mt-2">
