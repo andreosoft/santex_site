@@ -3,7 +3,7 @@
     <div>
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
-          <v-img v-if="el.images && el.images[0]" style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images[0]+'?width=270&height=270'" />
+          <v-img v-if="el.images && el.images[0]" :contain="true" style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images[0]+'?height=250'" />
         </div>
         <div class="d-flex justify-space-between mb-2">
           <div style="margin: 3px 0; font-size: 13px">

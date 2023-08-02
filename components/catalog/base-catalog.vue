@@ -4,29 +4,27 @@
       <v-col cols="3">
 
 
-<!-- Избранное -->
-<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Сравнение -->
+        <!-- Избранное -->
+        <v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+            <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+              Закрыть
+            </v-btn>
+          </template>
+        </v-snackbar>
+        <!-- Сравнение -->
         <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Корзина -->
+            <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+              Закрыть
+            </v-btn>
+          </template>
+        </v-snackbar>
+        <!-- Корзина -->
         <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-
-
+            <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+              Закрыть
+            </v-btn>
+          </template>
+        </v-snackbar>
         <div>
           <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
         </div>
@@ -62,7 +60,7 @@ export default {
       default: false
     }
   },
-  data(){
+  data() {
     return {
       snackbarFav: false,
       snackbarCom: false,
@@ -78,17 +76,17 @@ export default {
     })
   },
   methods: {
-    addItemFav(el){
+    addItemFav(el) {
       this.snackbarCom = false
       this.snackbarCart = false
       this.snackbarFav = el;
     },
-    addItemCom(el){
+    addItemCom(el) {
       this.snackbarFav = false
       this.snackbarCart = false
       this.snackbarCom = el;
     },
-    addItemCart(el){
+    addItemCart(el) {
       this.snackbarCom = false
       this.snackbarFav = false
       this.snackbarCart = el;

@@ -21,7 +21,7 @@
               </v-card> -->
                 <v-card v-for="(el, i) in images" :key="i" class="ma-2 s-catalog-gallery"
                     :class="{ active: galleryModel == i }" @click="galleryModel = i">
-                    <v-img width="100" height="100" :src="$config.baseImageURL + el" contain/>
+                    <v-img width="100" height="100" :src="$config.baseImageURL + el + '?height=100'" :contain="true"/>
                 </v-card>
             </div>
         </div>
