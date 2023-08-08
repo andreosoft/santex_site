@@ -9,6 +9,8 @@
     <common-divider1 class="mb-10" />
     <index-catalog-items :items="catalogItems" class="mb-5" />
     <common-divider1 class="mb-10" />
+    <index-salesItems :items="salesItems" class="mb-5" />
+    <common-divider1 class="mb-10"/>
     <index-video :item="videoItem" />
   </div>
 </template>
@@ -18,6 +20,7 @@ export default {
   data() {
     return {
       carouselModel: 0,
+      salesItems: []
     };
   },
   async asyncData({ $axios, $config }) {

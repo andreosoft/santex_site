@@ -46,7 +46,7 @@
             <nuxt-link to="/blog">Блог</nuxt-link>
             <nuxt-link to="/designers">Наши дизайнеры</nuxt-link>
             <nuxt-link to="/consulting">Запись на консультацию</nuxt-link>
-            <nuxt-link to="/"><img src="/icon-discont.png" class="pr-1" />Распродажа</nuxt-link>
+            <nuxt-link to="/sales"><img src="/icon-discont.png" class="pr-1" />Распродажа</nuxt-link>
           </div>
           <form @submit.prevent="submitSearch()">
             <div class="s-header-menu-search">
