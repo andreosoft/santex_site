@@ -16,6 +16,7 @@
                 >
                 <nuxt-link :to="'/catalog/sections/' + el.id">
                   <span class="s-catalog-links-el-icon"><img/></span>
+                  <!-- <span class="s-catalog-links-el-icon"><img :src="el.icon"/></span> -->
                   {{ el.name }}
                 </nuxt-link>
                 </div>
