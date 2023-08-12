@@ -25,7 +25,7 @@
           </template>
         </v-snackbar>
         <div>
-          <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" :id="category_id" />
+          <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
         </div>
       </v-col>
       <v-col cols="9">
