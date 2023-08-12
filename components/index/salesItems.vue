@@ -10,11 +10,11 @@
             </v-row>
           </div>
           <div class="d-bock d-lg-none">
-            <v-carousel v-model="carouselModel">
+            <!-- <v-carousel v-model="carouselModel">
               <v-carousel-item v-for="(el, i) in items" :key="i">
                 <index-new-items-el-carusel :el="el" />
-              </v-carousel-item>
-            </v-carousel>
+              </v-carousel-item> -->
+            <!-- </v-carousel> -->
           </div>
         </div>
         <div class="text-center mt-14">

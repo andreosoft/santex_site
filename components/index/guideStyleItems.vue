@@ -9,10 +9,18 @@
   </v-container>
 </template>
 
+
+
 <script>
 export default {
   props: {
     items: Array,
-  }
+    qwe: Array
+  },
+  data(){
+    return {
+      dataInterior: [],
+    }
+  },
 };
 </script>

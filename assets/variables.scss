@@ -379,3 +379,31 @@ tbody tr:nth-of-type(odd) {
 .favorite{
   display: none !important;
 }
+
+.s-filterResult{
+  visibility: hidden;
+  // display: none;
+  background-color: #000;
+  position: absolute;
+  left: 389px;
+  z-index: 100;
+  border: 1px black solid;
+  padding: 10px;
+  width: 350px;
+  top: 0px;
+  border-radius: 4px;
+}
+.s-filterResultVisible{
+  visibility: visible !important;
+}
+.s-filterResult:after {
+  content: '';
+	position: absolute;
+	width: 0;
+	height: 0;
+	border: 10px solid;
+  border-color: transparent black transparent transparent;
+  top: 50%;
+  right: 100%;
+  margin-top: -10px;
+}

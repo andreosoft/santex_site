@@ -14,7 +14,7 @@
     </v-row> -->
     <catalog-numberRange :range="range" :max="max" :min="min" />
     <!--    {{range}}-->
-    <v-range-slider v-model="range" :max="max" :min="min" hide-details
+    <v-range-slider @click="$emit('location', $event.target)" v-model="range" :max="max" :min="min" hide-details
       class="align-center" />
   </div>
 </template>

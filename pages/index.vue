@@ -5,7 +5,7 @@
     <common-divider1 class="mb-10" />
     <index-new-items :items="collectionItems" class="mb-5" />
     <common-divider1 class="mb-10" />
-    <index-guide-style-items :items="styleItems" class="mb-5" />
+    <index-guide-style-items :items="styleItems" :qwe="dataInterior" class="mb-5" />
     <common-divider1 class="mb-10" />
     <index-catalog-items :items="catalogItems" class="mb-5" />
     <common-divider1 class="mb-10" />
@@ -24,6 +24,19 @@ export default {
     };
   },
   async asyncData({ $axios, $config }) {
+    // let qwe = await $axios.get($config.baseURL + "/api/site/interior");
+    // let data = qwe.data.data;
+    // console.log(qwe);
+    let dataInterior = [];
+    // try {
+    //   dataInterior = (await $axios.get($config.baseURL + '/api/site/interior')).data.data;
+    //   console.log('ДАННЫЕ ИНТЕРЬЕРОВ');
+    //   console.log(dataInterior);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
+
     const videoItem = {
       img: "/img/coll1.png",
       video: "https://www.youtube.com/embed/nOKam63GgzQ"
@@ -185,7 +198,7 @@ export default {
     }
     // console.log(catalogItems);
     // console.log(carouselItems);
-    return { carouselItems, collectionItems, styleItems, catalogItems, videoItem };
+    return { carouselItems, collectionItems, styleItems, catalogItems, videoItem, dataInterior };
   },
 };
 </script>

@@ -10,7 +10,7 @@
       </v-col>
     </v-row> -->
     <catalog-numberRange :range="v" :max="max" :min="min" />
-    <v-range-slider v-model="v" hide-details class="align-center" :min="min" :max="max">
+    <v-range-slider v-model="v" @click="$emit('location', $event.target)" hide-details class="align-center" :min="min" :max="max">
       <template>
           {{ v }}
       </template>
@@ -61,6 +61,7 @@ export default {
           if (Math.floor(n) >= v[0] && Math.ceil(n) <= v[1]) r.push(n);
         }
         return this.$emit('input', r);
+          // location: $event.target);
       }
     }
   },

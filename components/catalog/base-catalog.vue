@@ -3,7 +3,6 @@
     <v-row class="s-row">
       <v-col cols="3">
 
-
         <!-- Избранное -->
         <v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
             <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
@@ -26,7 +25,7 @@
           </template>
         </v-snackbar>
         <div>
-          <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
+          <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" :id="category_id" />
         </div>
       </v-col>
       <v-col cols="9">
