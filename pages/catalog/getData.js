@@ -102,5 +102,5 @@ export async function getData({ route, $axios, $config }) {
   const breadcrumbsData = breadcrumbs(category_id, title, searchInput);
 
   const loading = false
-  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading };
+  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, category_id };
 }

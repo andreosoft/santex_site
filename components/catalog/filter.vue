@@ -4,13 +4,9 @@
     <!-- <div>
       <v-btn @click="onUpdateData()">Показать</v-btn>
     </div> -->
-    <!-- {{ dataPrice }}
-    {{ dataF }}
-    {{ dx }}
-    {{ dy }} -->
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
-      <catalog-filterResult @filterResult="filterResults" :locationRes="dy !=0 ? dy : 0"/>
+      <catalog-filterResult @filterResult="filterResults" :locationRes="dy !=0 ? dy : 0" :resultData="resultData"/>
       <v-divider class="my-4" />
     </div>
     <div v-for="(el, i) in filters.filters" :key="i">
@@ -39,7 +35,8 @@ export default {
     return {
       dataF: {},
       dataPrice: [],
-      dy: 0
+      dy: 0,
+      resultData: 0,
     };
   },
   created() {
@@ -54,9 +51,6 @@ export default {
             r[i] = this.dataF[i];
           }
         }
-        // if (this.id) Object.assign(filters, { category_id: category_id });
-        // const resp = await this.$axios.get(this.$config.baseURL + '/api/site/catalog', { f: r, price: this.dataPrice });
-        // console.log(resp.data.data);
       }
       catch (error){
         console.error(error)
@@ -103,11 +97,44 @@ export default {
     filterResults() {
       this.onUpdateData();
     },
-    locationResult(v){
-      let rect = v.getBoundingClientRect();
-      let scrolltop = window.pageYOffset + rect.top;
-      this.dy = scrolltop-235;
-      console.log(this.dy)
+    async locationResult(v){
+      try {
+        console.log(v);
+        let rect = v.getBoundingClientRect();
+        let scrolltop = window.pageYOffset + rect.top;
+        this.dy = scrolltop-235;
+        // console.log(this.dy);
+
+        let r = {};
+        for (const i in this.dataF) {
+          if (this.dataF[i].length > 0) {
+            r[i] = this.dataF[i];
+          }
+        }
+        const res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog', { 
+          params: {
+            f: r, 
+            filters: {
+              category_id: this.id,
+              price: this.dataPrice.length !== 0 ? this.dataPrice : {},
+              status: 1
+            },
+            // sort: {
+            //   price: 'asc',
+            //   order: 'asc'
+            // },
+            // pager: {
+            //   count: 0,
+            //   limit: 30,
+            //   page: "0"
+            // },
+          }
+        });
+        this.resultData = res.data.data.length;
+      } catch (error) {
+        console.error(error)
+        
+      }
     }
   }
 };

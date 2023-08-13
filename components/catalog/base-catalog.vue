@@ -25,7 +25,7 @@
           </template>
         </v-snackbar>
         <div>
-          <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
+          <catalog-filter :id="id" :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
         </div>
       </v-col>
       <v-col cols="9">
@@ -49,6 +49,7 @@
 import { mapGetters } from 'vuex'
 export default {
   props: {
+    id: String,
     data: Array,
     dataFilters: Object,
     valueFilters: Object,

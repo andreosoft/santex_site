@@ -9,7 +9,7 @@
         <v-text-field outlined hide-details dense v-model="max"/>
       </v-col>
     </v-row> -->
-    <catalog-numberRange :range="v" :max="max" :min="min" />
+    <catalog-numberRange :range="v" :max="max" :min="min" @location="qwe" />
     <v-range-slider v-model="v" @click="$emit('location', $event.target)" hide-details class="align-center" :min="min" :max="max">
       <template>
           {{ v }}
@@ -28,8 +28,9 @@ export default {
     max: Number,
     value: Array,
   },
-  data() {
-    return {
+  methods: {
+    qwe(v) {
+      
     }
   },
   computed: {

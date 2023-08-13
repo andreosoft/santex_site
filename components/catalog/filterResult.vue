@@ -1,7 +1,7 @@
 <template>
   <div :class="{'s-filterResult': true, 's-filterResultVisible': dataRes!==0}" :style="{top: dataRes + 'px' + '!important'}">
       <div style="display: flex; justify-content: space-between; align-items: center; ">
-        <span style="text-align: center; color: white;">Найдено товаров: </span>
+        <span style="text-align: center; color: white;">Найдено товаров: {{ resultData }} </span>
         <v-btn @click="onUpdateData($event)">Показать</v-btn>
       </div>
     </div>
@@ -15,7 +15,8 @@
       locationRes: {
         type: Number,
         default: 0
-      }
+      },
+      resultData: Number
     },
     computed: {
       dataRes:{
