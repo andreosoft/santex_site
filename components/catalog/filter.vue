@@ -111,7 +111,7 @@ export default {
             r[i] = this.dataF[i];
           }
         }
-        const res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog', { 
+        const res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
           params: {
             f: r, 
             filters: {
@@ -130,7 +130,7 @@ export default {
             // },
           }
         });
-        this.resultData = res.data.data.length;
+        this.resultData = res.data.data;
       } catch (error) {
         console.error(error)
         
