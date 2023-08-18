@@ -14,13 +14,7 @@
 <script>
 export default {
   props: {
-    items: Array,
-    qwe: Array
-  },
-  data(){
-    return {
-      dataInterior: [],
-    }
-  },
+    items: Array
+  }
 };
 </script>

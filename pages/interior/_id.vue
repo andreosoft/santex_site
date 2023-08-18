@@ -5,14 +5,16 @@
         <h1>{{ title }}</h1>
         <div class="mb-14">
             <v-row class="s-row">
-                <v-col cols="6" v-for="(el, i) in data.images"><img :src="el" /></v-col>
+                <v-col cols="6" v-for="(el, i) in dataInterior.data.images">
+                    <img :src="$config.baseImageURL + el" style="width: 50%;" />
+                </v-col>
             </v-row>
         </div>
         <div>
             <h2 class="mb-8">Товары присутсвующие на фото</h2>
             <div class="mb-14">
                 <v-row class="s-row">
-                    <v-col cols="3" v-for="(el, i) in data.products" :key="i">
+                    <v-col cols="3" v-for="(el, i) in products.data" :key="i">
                         <catalog-item-list :el="el" />
                     </v-col>
                 </v-row>
@@ -51,110 +53,127 @@
         <v-divider class="mb-14" />
         <div>
             <div class="s-text-h2 mb-14 text-center">Похожие интерьеры</div>
-            <s-guide-style-items :items="data.styleItems" class="mb-5" />
+            <s-guide-style-items :items="randomInterior" class="mb-5" />
         </div>
     </v-container>
 </template>
 
 <script>
 export default {
-    async asyncData(params) {
-        const title = "Название интерьера";
+    async asyncData({ $axios, $config, route }) {
+        let dataInterior = [];
+        let products = [];
+        let randomInterior = [];
+        let Interiors = [];
+        try {
+            dataInterior = await $axios.$get($config.baseURL + "/api/site/interior/" + route.params.id)
+            products = await $axios.$get($config.baseURL + "/api/site/interior_catalog/", {params: {
+                filters: {"ic.interior_id": route.params.id}
+            }})
+            Interiors = (await $axios.$get($config.baseURL + "/api/site/interior" )).data;
+            for(let i = 0; i < Interiors.length; i++){
+                randomInterior.push(Interiors[Math.floor(Math.random(0, Interiors.length))]);
+            }
+            console.log(randomInterior);
+        } catch (error) {
+            console.error(error)
+        }
+        const title = dataInterior.data.name;
         const data = {
             images: [
                 "/img/interior/1.png",
                 "/img/interior/2.png",
             ],
-            products: [
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/1.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/2.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/1.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/1.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/1.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/1.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/1.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-                {
-                    id: 100,
-                    name: "Название товара",
-                    image: ["/img/favorite/1.png"],
-                    code: "4554545",
-                    price: 1540,
-                    old_price: 8220,
-                    brend_name: "Название бренда",
-                    size: "44 x 75 x 20",
-                    available: 1,
-                },
-            ],
+            // products: [
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/1.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/2.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/1.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/1.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/1.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/1.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/1.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            //     {
+            //         id: 100,
+            //         name: "Название товара",
+            //         image: ["/img/favorite/1.png"],
+            //         code: "4554545",
+            //         price: 1540,
+            //         old_price: 8220,
+            //         brend_name: "Название бренда",
+            //         size: "44 x 75 x 20",
+            //         available: 1,
+            //     },
+            // ],
             styleItems: [
                 {
                     img: "/img/guide1.png",
@@ -188,7 +207,7 @@ export default {
                 title: title,
             },
         ];
-        return { title, data, breadcrumbsData };
+        return { title, data, breadcrumbsData, dataInterior, products, randomInterior };
     }
 }
 </script>
