@@ -12,7 +12,7 @@
         </div>
         <div>
             <h2 class="mb-8">Товары присутсвующие на фото</h2>
-            <div class="mb-14">
+            <div class="mb-14 interior-items" :class="{ close: !toggleOpen }">
                 <v-row class="s-row">
                     <v-col cols="3" v-for="(el, i) in products.data" :key="i">
                         <catalog-item-list :el="el" />
@@ -21,7 +21,7 @@
             </div>
             <v-divider class="mb-8" />
             <div class="mt-14 mb-14 text-center">
-                <a class="s-btn-else"><i class="fas fa-redo"></i> Показать еще</a>
+                <a class="s-btn-else" @click="toggleOpen = !toggleOpen"><i class="fas fa-redo"></i>{{ toggleOpen ? 'Скрыть': 'Показать еще' }}</a>
             </div>
         </div>
         <v-divider class="mb-14" />
@@ -60,6 +60,11 @@
 
 <script>
 export default {
+    data() {
+        return {
+            toggleOpen: false
+        }
+    },
     async asyncData({ $axios, $config, route }) {
         let dataInterior = [];
         let products = [];
@@ -211,3 +216,14 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.interior-items {
+    overflow: hidden;
+  
+    &.close {
+      max-height: 550px;
+    }
+  }
+
+</style>
