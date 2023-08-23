@@ -6,7 +6,7 @@
         <div class="mb-14">
             <v-row class="s-row">
                 <v-col cols="6" v-for="(el, i) in dataInterior.data.images">
-                    <img :src="$config.baseImageURL + el" style="width: 50%;" />
+                    <img :src="$config.baseImageURL + el" style="width: 100%;" />
                 </v-col>
             </v-row>
         </div>
