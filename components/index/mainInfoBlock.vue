@@ -17,7 +17,9 @@
           или только ванной комнаты.
         </p>
         <div class="text-center mt-5">
-          <v-btn class="s-btn-main s-btn-text">ПОДРОБНЕЕ</v-btn>
+          <nuxt-link to="/consulting">
+            <v-btn class="s-btn-main s-btn-text">ПОДРОБНЕЕ</v-btn>
+          </nuxt-link>
         </div>
       </v-col>
     </v-row>
