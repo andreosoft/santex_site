@@ -150,6 +150,6 @@ data() {
                 video: "https://www.youtube.com/embed/nOKam63GgzQ"
             },
         }
-    }
+    },
 }
 </script>

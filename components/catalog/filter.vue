@@ -133,7 +133,6 @@ export default {
         this.resultData = res.data.data;
       } catch (error) {
         console.error(error)
-        
       }
     }
   }

@@ -185,7 +185,9 @@ export default {
         managerId: {
             type: Number,
             default: 0
-        }
+        },
+        NameManager: String,
+        dataManager: Array
     },
     data() {
         return {
@@ -203,18 +205,23 @@ export default {
                 time_request: null,
                 method: "Телефон",
             },
-            dataManager: [
-                "Смирнов Сергей Петрович",
-                "Смирнов1 Сергей Петрович",
-                "Смирнов2 Сергей Петрович",
-                "Смирнов3 Сергей Петрович"
-            ],
+            // dataManager: [
+            //     "Смирнов Сергей Петрович",
+            //     "Смирнов1 Сергей Петрович",
+            //     "Смирнов2 Сергей Петрович",
+            //     "Смирнов3 Сергей Петрович"
+            // ],
             dataMethod: [
                 "Телефон",
             ],
             phoneNumberMask: {
                 mask: '+7 (###) ###-##-##',
             }
+        }
+    },
+    watch: {
+        NameManager: function() {
+            this.NameManager ? this.valueManager = this.NameManager : this.valueManager = '';
         }
     },
     methods: {
