@@ -3,7 +3,6 @@
         <h1>О компании</h1>
         <div>
             <common-video fullWidth :item="videoItem" />
-            <!-- {{ aboutCommand }} -->
         </div>
         <p></p>
         <p>
@@ -160,11 +159,8 @@ export default {
                 }
             }
         )).data;
-        console.log(response)
         this.aboutCommand = response;
-        this.aboutCommand.forEach(el => {
-            this.dataManager.push(el.name);
-        })
+        this.aboutCommand.forEach(el => {this.dataManager.push(el.name)})
     }
 }
 </script>

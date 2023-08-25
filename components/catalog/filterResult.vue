@@ -1,8 +1,8 @@
 <template>
-  <div :class="{'s-filterResult': true, 's-filterResultVisible': dataRes!==0}" :style="{top: dataRes + 'px' + '!important'}">
+  <div :class="{'s-filterResult': true, 's-filterResultVisible': dataRes && visible}" :style="{top: dataRes + 'px' + '!important'}">
       <div style="display: flex; justify-content: space-between; align-items: center; ">
         <span style="text-align: center; color: white;">Найдено товаров: {{ resultData }} </span>
-        <v-btn @click="onUpdateData($event)">Показать</v-btn>
+        <v-btn @click="onUpdateData">Показать</v-btn>
       </div>
     </div>
   </template>
@@ -30,29 +30,29 @@
     },
     data(){
         return {
-            // dataValue: false
+          scrollNum: 0,
+          visible: false
         }
     },
-    // watch: {
-    //   dataRes: function(){
-    //     if(this.dataRes !== 0 && !this.dataValue){
-    //       setTimeout(() => {
-    //         this.dataValue = true;
-    //       }, 3*1000);
-    //     } else if(this.dataRes !== 0 && this.dataValue){
-    //       this.dataValue = false
-    //       setTimeout(() => {
-    //         this.dataValue = true;
-    //       }, 3*1000);
-    //     }
-          
-    //   }
-    // },
-    methods: {
-      onUpdateData(event){
-        this.$emit('filterResult', true);
+    watch: {
+      dataRes: function(){
+        this.dataRes ? this.visible = true : this.visible = false;
       }
-    }
+    },
+    methods: {
+      onUpdateData(){
+        this.$emit('filterResult', true);
+      },
+      handleScroll(){
+        if((window.scrollY - this.scrollNum > 20) && (this.visible === true)){
+          this.scrollNum = window.scrollY;
+          this.visible = false;
+        }
+      }
+    },
+    beforeMount () {
+        window.addEventListener('scroll', this.handleScroll)
+    },
   }
 
 </script>
