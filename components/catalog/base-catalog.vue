@@ -35,11 +35,14 @@
             <v-skeleton-loader class="mx-auto" max-width="300" type="card"></v-skeleton-loader>
           </v-col>
         </v-row>
-        <v-row v-else class="s-row">
+        <v-row v-else class="s-row" :class="{ close: !toggleOpen, 'catalog-items': pager.limit == 0 }">
           <v-col cols="4" v-for="(el, i) in data" :key="i">
             <catalog-item-list :el="el" @addItemFav="addItemFav" @addItemCom="addItemCom" @addItemCart="addItemCart" />
           </v-col>
         </v-row>
+        <div v-if="pager.limit == 0" class="mt-14 mb-14 text-center">
+          <a class="s-btn-else" @click="toggleOpen = !toggleOpen"><i class="fas fa-redo"></i>{{ toggleOpen ? 'Скрыть': 'Показать еще' }}</a>
+      </div>
       </v-col>
     </v-row>
   </div>
@@ -62,6 +65,7 @@ export default {
   },
   data() {
     return {
+      toggleOpen: false,
       snackbarFav: false,
       snackbarCom: false,
       snackbarCart: false
@@ -94,3 +98,13 @@ export default {
   }
 }
 </script>
+
+<style lang="scss">
+
+.catalog-items {
+  overflow: hidden;
+  &.close {
+    max-height: 550px;
+  }
+}
+</style>

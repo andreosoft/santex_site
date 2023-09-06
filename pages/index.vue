@@ -20,7 +20,6 @@ export default {
   data() {
     return {
       carouselModel: 0,
-      salesItems: []
     };
   },
   async asyncData({ $axios, $config }) {
@@ -30,12 +29,17 @@ export default {
     let dataInterior = [];
     try {
       dataInterior = (await $axios.get($config.baseURL + '/api/site/interior')).data.data;
-      console.log('ДАННЫЕ ИНТЕРЬЕРОВ');
-      console.log(dataInterior);
     } catch (error) {
       console.error(error);
     }
-
+let salesItems = [];
+    try {
+      salesItems = (await $axios.get($config.baseURL + '/api/site/promote')).data.data;
+      console.log('Товары со скидкой')
+      console.log(salesItems);
+    } catch (error) {
+      console.error(error);
+    }
 
     const videoItem = {
       img: "/img/coll1.png",
@@ -198,7 +202,7 @@ export default {
     }
     // console.log(catalogItems);
     // console.log(carouselItems);
-    return { carouselItems, collectionItems, styleItems, catalogItems, videoItem, dataInterior };
+    return { carouselItems, collectionItems, styleItems, catalogItems, videoItem, dataInterior, salesItems };
   },
 };
 </script>

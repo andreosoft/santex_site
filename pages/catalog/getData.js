@@ -1,12 +1,15 @@
 export async function getData({ route, $axios, $config }) {
   let pager = { page: 0, count: 0, limit: 30 };
   pager.page = route.query.page ?? 0;
+  let pagerPromote = { page: 0, count: 0, limit: 0 };
+  pagerPromote.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
   const category_id = route.params.id;
   const f = route.query.f ? JSON.parse(route.query.f) : {};
   const addFilters = route.query.filters ? JSON.parse(route.query.filters) : {};
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
+
   Object.assign(filters, { status: 1 });
   if (category_id) Object.assign(filters, { category_id: category_id });
   if (searchInput) Object.assign(filters, { "OR": [
@@ -23,15 +26,40 @@ export async function getData({ route, $axios, $config }) {
     }
   });
   const data = res.data.data;
+
+  let filtersPromote = {"status": 1};
+  Object.assign(filtersPromote, route.query.filters ? JSON.parse(route.query.filters) : {});
+  // Object.assign(filtersPromote, { "ic.promote_id": 1 });
+  Object.assign(filtersPromote, { "ic.promote_id": category_id });
+  const resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
+    params: {
+      f: f,
+      filters: filtersPromote,
+      sort: sort,
+      pager: pagerPromote
+    }
+  });
+  const dataPromote = resPromote.data.data;
+  const FiltersPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', {params: {filters: filtersPromote}});
+  const dataFiltersPromote = FiltersPromote.data.data;
+
+
+  
   let resCat;
-  if (category_id) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id,);
+  try {
+    if (category_id && res.data.data.length !== 0) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);
+  } catch (e) {
+    console.error(e);
+  }
   const resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filters } });
   const valueFilters = {
     price: filters.price,
     f: f
   }
   let dataFilters = resFilters.data.data;
-  // console.log(dataFilters);
+
+
+
   let conutI = 0;
   const maxI = 5;
   for (let key in dataFilters.filters) {
@@ -67,9 +95,46 @@ export async function getData({ route, $axios, $config }) {
 
     }
   }
+  // Promote page
+  let conutIPromote = 0;
+  const maxIPromote = 5;
+  for (let key in dataFiltersPromote.filters) {
+    if (dataFiltersPromote.filters[key].type === 2) {
+      conutIPromote++;
+      if (conutIPromote > maxIPromote) {
+        dataFiltersPromote.filters[key].type = 1;
+        continue;
+      }
+      let maxVal;
+      let minVal;
+      dataFiltersPromote.filters[key].numFilters = [];
+      for (let i = 0; i < dataFiltersPromote.filters[key].filters.length; i++) {
+        const item = dataFiltersPromote.filters[key].filters[i];
+        let n = item;
+        if (n == NaN) continue;
+        if (i == 0) { // инициализация
+          maxVal = n;
+          minVal = n;
+        }
+        if (n < minVal) minVal = n;
+        else if (n > maxVal) maxVal = n;
+        dataFiltersPromote.filters[key].numFilters.push(n);
+      }
+      if (minVal == NaN || maxVal == NaN) {
+        dataFiltersPromote.filters[key].type = 1;
+      } else {
+        dataFiltersPromote.filters[key].min = Math.floor(minVal);
+        dataFiltersPromote.filters[key].max = Math.ceil(maxVal);
+
+        // console.log(dataFiltersPromote.filters[key]);
+      }
+
+    }
+  }
 
   const title = resCat ? resCat.data.data.name : '';
   pager = res.data.pager;
+  pagerPromote = resPromote.data.pager;
 
 
   function breadcrumbs(category_id, title, value) {
@@ -101,6 +166,6 @@ export async function getData({ route, $axios, $config }) {
   }
   const breadcrumbsData = breadcrumbs(category_id, title, searchInput);
 
-  const loading = false
-  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, category_id };
+  const loading = false;
+  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, category_id, dataPromote, dataFiltersPromote, pagerPromote };
 }

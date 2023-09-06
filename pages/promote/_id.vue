@@ -2,19 +2,19 @@
     <v-container class="mb-10">
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-        <h1>Распродажа</h1>
+        <h1>Акции</h1>
         <v-divider class="mb-8" />
         <div>
-            <img src="https://top-santehnika.ru/upload/webp/resize_cache/186/1440_550_1/7bsk7lw5oitacxw8bcsx16p9ek3ugqrq.webp" alt="">
+          <img src="https://top-santehnika.ru/upload/webp/resize_cache/186/1440_550_1/7bsk7lw5oitacxw8bcsx16p9ek3ugqrq.webp" alt="">
         </div>
         <v-divider class="mb-8" />
         <h2>Жирные скидки -20%</h2>
         <!-- <v-divider class="mb-8" /> -->
         <p>Текстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блок</p>
         <v-divider class="mb-8" />
-        <catalog-base-catalog :data="dataPromote" :loading="loading" :dataFilters="dataFiltersPromote" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event"/>
-    <div class="text-center mt-10 ">
-      <common-pagination :value="pager" />
+        <catalog-base-catalog :data="dataPromote" :id="category_id" :loading="loading" :dataFilters="dataFiltersPromote" :valueFilters="valueFilters" :pager="pagerPromote" :sort="sort" @update-data="valueFilters = $event"/>
+    <div class="text-center mt-10">
+      <!-- <common-pagination :value="pager" /> -->
     </div>
       </v-container>
 </template>
@@ -25,14 +25,15 @@ export default {
     async asyncData(params) {
     const breadcrumbsData = [
       {
-        url: "/sales",
-        title: "Распродажа",
+        url: "/promote",
+        title: "Акции",
       }
     ];
     return { breadcrumbsData }
   },
   data() {
     return { 
+      toggleOpen: false,
       loading: true
     }
   },
@@ -49,8 +50,8 @@ export default {
         this.loading = true;
         let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
         this.loading = false;
-        this.data = p.data;
-        this.pager = p.pager;
+        this.dataPromote = p.dataPromote;
+        this.pagerPromote = p.pagerPromote;
       },
     }
   },
