@@ -5,7 +5,7 @@
         <h1>Акции</h1>
         <v-divider class="mb-8" />
         <div>
-          <img src="https://top-santehnika.ru/upload/webp/resize_cache/186/1440_550_1/7bsk7lw5oitacxw8bcsx16p9ek3ugqrq.webp" alt="">
+          <img :src="$config.baseImageURL + carouselItems[0].images[0]" alt="">
         </div>
         <v-divider class="mb-8" />
         <h2>Жирные скидки -20%</h2>
@@ -34,7 +34,7 @@ export default {
   data() {
     return { 
       toggleOpen: false,
-      loading: true
+      loading: true,
     }
   },
   watch: {

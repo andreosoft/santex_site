@@ -167,5 +167,21 @@ export async function getData({ route, $axios, $config }) {
   const breadcrumbsData = breadcrumbs(category_id, title, searchInput);
 
   const loading = false;
-  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, category_id, dataPromote, dataFiltersPromote, pagerPromote };
+
+  let carouselItems = [];
+  try {
+    carouselItems = (await $axios.get($config.baseURL + '/api/site/content', {
+      params: {
+        filters: { parent_id: 5 },
+        sort: { "key": "id", "order": "ASC" }
+      }
+    })).data.data;
+    console.log(carouselItems);
+  } catch (error) {
+    console.error(error);
+  }
+
+
+
+  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, category_id, dataPromote, dataFiltersPromote, pagerPromote, carouselItems };
 }
