@@ -12,10 +12,10 @@
     <div v-for="(el, i) in filters.filters" :key="i">
       <div>
         <div v-if="el.type == 2" class="space-check">
-          <catalog-ranges @location="locationResult" :title="el.name" v-model="dataF[i]" :params="el.numFilters" :min="el.min" :max="el.max" />
+          <catalog-ranges @location="locationResult" :title="el.name" v-model="dataF[el.filters_id]" :params="el.numFilters" :min="el.min" :max="el.max" />
         </div>
         <div v-else class="space-check">
-          <catalog-check1 @location="locationResult" :title="el.name" v-model="dataF[i]" :params="el.filters" />
+          <catalog-check1 @location="locationResult" :title="el.name" v-model="dataF[el.filters_id]" :params="el.filters" />
           <v-divider class="my-4" />
         </div>
       </div>
