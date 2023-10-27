@@ -211,7 +211,7 @@
     </div>
     <v-divider class="mb-10" />
     <div>
-      <a><i class="fas fa-long-arrow-alt-left mr-4"></i>Вернуться назад</a>
+      <a @click="redirect_back"><i class="fas fa-long-arrow-alt-left mr-4"></i>Вернуться назад</a>
     </div>
   </v-container>
 </template>
@@ -282,6 +282,7 @@ export default {
     }
   },
   methods: {
+    redirect_back(){this.$router.back()},
     toCompare(){
                 let item = {
                   id: this.data.id,
@@ -325,10 +326,10 @@ export default {
           lengthItem = item.value;
         }
       });
-      console.log('Высота ' + height)
-      console.log('Ширина ' + width)
-      console.log('Глубина ' + depth)
-      console.log('Длина ' + lengthItem)
+      // console.log('Высота ' + height)
+      // console.log('Ширина ' + width)
+      // console.log('Глубина ' + depth)
+      // console.log('Длина ' + lengthItem)
       const item = {
         id: this.data.id,
         name: this.data.name,
