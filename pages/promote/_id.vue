@@ -5,7 +5,7 @@
         <h1>Акции</h1>
         <v-divider class="mb-8" />
         <div>
-          <img :src="$config.baseImageURL + carouselItems[2]" alt="banner">
+          <img :src="$config.baseImageURL + carouselItems[carouselItems.length - 1]" alt="banner">
           <!-- <index-mainCarusel :items="carouselItems"/> -->
         </div>
         <v-divider class="mb-8" />
