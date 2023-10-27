@@ -13,7 +13,7 @@
             Код товара: {{ el.id }}
           </div>
         </div>
-        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
+        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold" :class="{ 'hidden-text': hiddentext }">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
           <div>
             <!-- <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.width }}</span> -->
@@ -59,6 +59,10 @@ import { mapGetters } from 'vuex'
 export default {
   props: {
     el: Object,
+    hiddentext: {
+      type: Boolean,
+      default: false
+    }
   },
   data(){
     return {
@@ -259,3 +263,23 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+  .hidden-text{
+    height: 48px;
+    position: relative;
+    hyphens: auto;
+    overflow: hidden !important;
+  }
+  .hidden-text:after{
+    content: "";
+    text-align: right;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 70%;
+    height: 1.2em;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), white 100%);
+    pointer-events: none;
+  }
+</style>

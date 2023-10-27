@@ -47,7 +47,7 @@
                                             <v-btn class="s-btn-text pa-4" style="background-color: transparent;" @click="showPopupConsult = true">Консультация онлайн</v-btn>
                                         </div>
                                                     <s-popup-consult v-model="showPopupConsult" @closePopUp="showPopupConsult = false"></s-popup-consult>
-                                                    <s-popup-consult-showroom v-model="showPopupConsultShowroom" @closePopUp="showPopupConsultShowroom = false"></s-popup-consult-showroom>
+                                                    <s-popup-consult-showroom v-model="showPopupConsultShowroom" @closePopUp="showPopupConsultShowroom = false" :dataManager="dataShowroom"></s-popup-consult-showroom>
                                     </div>
                                 </v-col>
                                 <v-col cols="6">
@@ -70,16 +70,28 @@ export default {
             showPopupConsultShowroom: false,
         }
     },
-    async asyncData(params) {
+    async asyncData({$config, $axios}) {
+        let dataShowroomResponse;
         const breadcrumbsData = [
             {
                 url: "",
                 title: "Запись на консультацию",
             }
         ];
-        const data = [
-        ]
-        return { data, breadcrumbsData }
+        try {
+            dataShowroomResponse = (await $axios.$get($config.baseURL + "/api/site/content/", 
+                {
+                params: {
+                    filters: {parent_id: 30, status: 1},
+                    sort: {"key": "id", "order": "ASC"}
+                }
+            })).data;
+        } catch (error) {
+            console.error(error)
+        }
+        let dataShowroom = [];
+        dataShowroomResponse.forEach(el => {dataShowroom.push(el.name)})
+        return { breadcrumbsData, dataShowroom }
     }
 }
 </script>

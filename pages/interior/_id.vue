@@ -15,7 +15,7 @@
             <div class="mb-14 interior-items" :class="{ close: !toggleOpen }">
                 <v-row class="s-row">
                     <v-col cols="3" v-for="(el, i) in products.data" :key="i">
-                        <catalog-item-list :el="el" />
+                        <catalog-item-list :el="el" :hiddentext="true" />
                     </v-col>
                 </v-row>
             </div>

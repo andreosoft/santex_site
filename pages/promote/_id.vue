@@ -5,7 +5,8 @@
         <h1>Акции</h1>
         <v-divider class="mb-8" />
         <div>
-          <img :src="$config.baseImageURL + carouselItems[0].images[0]" alt="">
+          <img :src="$config.baseImageURL + carouselItems[0]" alt="banner">
+          <!-- <index-mainCarusel :items="carouselItems"/> -->
         </div>
         <v-divider class="mb-8" />
         <h2>Жирные скидки -20%</h2>

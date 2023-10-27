@@ -170,13 +170,8 @@ export async function getData({ route, $axios, $config }) {
 
   let carouselItems = [];
   try {
-    carouselItems = (await $axios.get($config.baseURL + '/api/site/content', {
-      params: {
-        filters: { parent_id: 5 },
-        sort: { "key": "id", "order": "ASC" }
-      }
-    })).data.data;
-    console.log(carouselItems);
+    carouselItems = (await $axios.get($config.baseURL + '/api/site/promote/' + route.params.id)).data.data.images;
+    // console.log(carouselItems);
   } catch (error) {
     console.error(error);
   }
