@@ -2,7 +2,6 @@
   <div>
     <v-row class="s-row">
       <v-col cols="3">
-
         <!-- Избранное -->
         <v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
             <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
@@ -40,7 +39,7 @@
             <catalog-item-list :el="el" @addItemFav="addItemFav" @addItemCom="addItemCom" @addItemCart="addItemCart" />
           </v-col>
         </v-row>
-        <div v-if="pager.limit == 0" class="mt-14 mb-14 text-center">
+        <div v-if="pager.limit == 0 && data.length > 3" class="mt-14 mb-14 text-center">
           <a class="s-btn-else" @click="toggleOpen = !toggleOpen"><i class="fas fa-redo"></i>{{ toggleOpen ? 'Скрыть': 'Показать еще' }}</a>
       </div>
       </v-col>

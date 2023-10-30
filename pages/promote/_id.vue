@@ -1,7 +1,7 @@
 <template>
     <v-container class="mb-10">
         <v-divider class="mb-8" />
-        <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
+        <common-beadcrumbs class="mb-4" :value="breadcrumbsDataPromote" />
         <h1>Акции</h1>
         <v-divider class="mb-8" />
         <div>
@@ -21,21 +21,26 @@
 </template>
 
 <script>
+
 import {getData} from "@/pages/catalog/getData";
 export default {
-    async asyncData(params) {
-    const breadcrumbsData = [
-      {
-        url: "/promote",
-        title: "Акции",
-      }
-    ];
-    return { breadcrumbsData }
-  },
+  //   async asyncData(params) {
+  //   const breadcrumbsDataPromote = [
+  //     {
+  //       url: "/promote",
+  //       title: "Акции",
+  //     }
+  //   ];
+  //   return { breadcrumbsDataPromote }
+  // },
   data() {
     return { 
       toggleOpen: false,
       loading: true,
+      breadcrumbsDataPromote: [{
+        url: `/promote/${this.$route.params.id}`,
+        title: "Акции",
+      }]
     }
   },
   watch: {

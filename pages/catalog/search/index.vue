@@ -4,7 +4,7 @@
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>Поиск</h1>
     <div class="mb-10">
-      <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ data.length }} шт.</p>
+      <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ pager.count }} шт.</p>
     </div>
     <v-divider class="mb-10" />
     <base-catalog :value="searchInput" :loading="loading" :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager"

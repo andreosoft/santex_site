@@ -26,7 +26,7 @@ export async function getData({ route, $axios, $config }) {
     }
   });
   const data = res.data.data;
-
+  
   let filtersPromote = {"status": 1};
   Object.assign(filtersPromote, route.query.filters ? JSON.parse(route.query.filters) : {});
   // Object.assign(filtersPromote, { "ic.promote_id": 1 });
@@ -170,7 +170,7 @@ export async function getData({ route, $axios, $config }) {
 
   let carouselItems = [];
   try {
-    carouselItems = (await $axios.get($config.baseURL + '/api/site/promote/' + route.params.id)).data.data.images;
+    if (res.data.data.length == 0) carouselItems = (await $axios.get($config.baseURL + '/api/site/promote/' + route.params.id)).data.data.images;
     // console.log(carouselItems);
   } catch (error) {
     console.error(error);
