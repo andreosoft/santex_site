@@ -46,11 +46,8 @@ export async function getData({ route, $axios, $config }) {
 
   
   let resCat;
-  try {
-    if (category_id && res.data.data.length !== 0) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);
-  } catch (e) {
-    console.error(e);
-  }
+  try { if (category_id && res.data.data.length !== 0) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);} catch (e) {console.error(e)}
+  
   const resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filters } });
   const valueFilters = {
     price: filters.price,
@@ -170,7 +167,7 @@ export async function getData({ route, $axios, $config }) {
 
   let carouselItems = [];
   try {
-    if (res.data.data.length == 0) carouselItems = (await $axios.get($config.baseURL + '/api/site/promote/' + route.params.id)).data.data.images;
+    if (res.data.data.length == 0 && route.params.id) carouselItems = (await $axios.get($config.baseURL + '/api/site/promote/' + route.params.id)).data.data.images;
     // console.log(carouselItems);
   } catch (error) {
     console.error(error);

@@ -26,7 +26,6 @@
 <script>
 export default {
   props: {
-    updateDataFilters: Function,
     value: Object,
     filters: Object,
     id: String
@@ -56,6 +55,15 @@ export default {
         console.error(error)
       }
     },
+    filters: async function(){
+         try {
+           this.initValueFilters();
+           console.log("Инициализировано")
+         }
+         catch (error){
+           console.error(error)
+         }
+    },
   },
   computed: {
     // onUpdateData() {
@@ -78,8 +86,8 @@ export default {
     initValueFilters() {
       for (const key in this.filters.filters) {
         let f = [];
-        if (this.value?.f[key]) f = this.value.f[key];
-        this.$set(this.dataF, key, f);
+        if (this.value?.f[this.filters.filters[key]["filters_id"]]) f = this.value.f[this.filters.filters[key]["filters_id"]];
+        this.$set(this.dataF, this.filters.filters[key]["filters_id"], f);
       }
     },
     onUpdateData() {
@@ -89,7 +97,7 @@ export default {
           r[i] = this.dataF[i];
         }
       }
-      // console.log({ f: r, price: this.dataPrice });
+      // console.log({ f: r, });
       this.$emit('input', { f: r, price: this.dataPrice });
       this.dy = 0;
       window.scrollTo(0, 0);
@@ -111,14 +119,24 @@ export default {
             r[i] = this.dataF[i];
           }
         }
+        
+        let filtersCount = {
+          category_id: this.id ? this.id : '',
+          price: this.dataPrice.length !== 0 ? this.dataPrice : {},
+          status: 1
+        }
+
+        if (this.$route.query.q) Object.assign(filtersCount, { "OR": [
+            {id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+            {name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+            {vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+            {factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }}] });
+
+            console.log(filtersCount);
         const res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
           params: {
             f: r, 
-            filters: {
-              category_id: this.id,
-              price: this.dataPrice.length !== 0 ? this.dataPrice : {},
-              status: 1
-            },
+            filters: filtersCount,
             // sort: {
             //   price: 'asc',
             //   order: 'asc'

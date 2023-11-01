@@ -7,8 +7,17 @@
       <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ pager.count }} шт.</p>
     </div>
     <v-divider class="mb-10" />
-    <base-catalog :value="searchInput" :loading="loading" :data="data" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager"
-      :sort="sort" @update-filters="dataFilters = $event" @update-data="updateValueFilters" />
+    <base-catalog
+    :id="category_id"
+    :value="searchInput"
+    :loading="loading"
+    :data="data"
+    :dataFilters="dataFilters"
+    :valueFilters="valueFilters"
+    :pager="pager"
+    :sort="sort"
+    @update-filters="dataFilters = $event" 
+    @update-data="updateValueFilters" />
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -45,6 +54,8 @@ export default {
         let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
         this.loading = false;
         this.data = p.data;
+        this.dataFilters = p.dataFilters;
+        this.valueFilters = p.valueFilters;
         this.pager = p.pager;
         this.searchInput = p.searchInput;
       },
