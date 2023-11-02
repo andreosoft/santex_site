@@ -18,8 +18,11 @@
         <v-divider />
         <div class="my-3 d-flex justify-space-between align-center">
           <div>
-            <span style="font-size: 46px; font-weight: bold;">
+            <span v-if="data.price" style="font-size: 46px; font-weight: bold;">
               <number :value="data.price" /> <span style="font-weight: normal;">₽</span>
+            </span>
+            <span v-else style="font-size: 46px; font-weight: bold;">
+              <span style="font-weight: normal;">Цена не указана</span>
             </span>
             <span class="ml-4 grey--text" style="
                   display: inline-block;

@@ -32,11 +32,15 @@
           </div>
         </div>
         <div class="my-2" style=" font-weight: bold;">
-          <span style="font-size: 20px">
+          <span v-if="el.price" style="font-size: 20px">
             <number :value="el.price" /> ₽
-          </span><span class="ml-2" v-if="el.old_price"
+          </span>
+          <span v-else style="font-size: 20px">
+            Цена не указана
+          </span>
+          <span class="ml-2" v-if="el.price_old"
             style="font-size: 13px; text-decoration: line-through; color: #949494">
-            <number :value="el.old_price" /> ₽
+            <number :value="el.price_old" /> ₽
           </span>
         </div>
       </nuxt-link>
