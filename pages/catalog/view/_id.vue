@@ -10,7 +10,7 @@
       <v-col cols="6">
         <div class="d-flex justify-space-between">
           <div>
-            <catalog-available :value="data.available" />
+            <catalog-available :value="data.store" />
           </div>
           <div style="font-size: 14px;" class="grey--text"><span>Код товара: </span><span>{{ data.id }}</span></div>
         </div>
@@ -27,8 +27,8 @@
                   font-size: 22px;
                   vertical-align: top;
                   text-decoration: line-through;
-                " v-if="data.old_price">
-              <number :value="data.old_price" /> ₽
+                " v-if="data.price_old">
+              <number :value="data.price_old" /> ₽
             </span>
           </div>
           <div><a>
