@@ -97,21 +97,6 @@ export default {
         if (sim) {return true;} else {return false;}
     }
   },
-  async fetch (){
-  let respSize = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + this.el.id);
-  const dataSize = respSize.data.data.filters;
-  dataSize.forEach(item => {
-          if(item.name === 'Высота'){
-            this.itemList.height = item.value
-          } else if(item.name === 'Ширина') {
-            this.itemList.width = item.value
-          } else if(item.name === 'Глубина'){
-            this.itemList.depth = item.value
-          } else if(item.name === 'Длина'){
-            this.itemList.lengthItem = item.value;
-          }
-        });
-},
   methods: {
     async toCompare(el){
       try{
