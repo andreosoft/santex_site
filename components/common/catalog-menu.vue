@@ -50,7 +50,7 @@
                         :key="i"
                         @click="$emit('input')"
                       >
-                        <nuxt-link class="underlined" :to="el.url">{{ el.name }}</nuxt-link>
+                        <nuxt-link class="underlined" :to="el">{{ el }}</nuxt-link>
                       </v-col>
                     </v-row>
                   </div>

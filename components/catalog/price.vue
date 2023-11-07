@@ -12,7 +12,7 @@
           @change="$set(range, 1, $event)" />
       </v-col>
     </v-row> -->
-    <catalog-numberRange :range="range" :max="max" :min="min" @location="qwe" />
+    <catalog-numberRange :range="range" :max="max" :min="min" @location="$emit('location', $event)"  @dataNumberRange="range = $event"  />
     <!--    {{range}}-->
     <v-range-slider @click="$emit('location', $event.target)" v-model="range" :max="max" :min="min" hide-details
       class="align-center" />
@@ -26,11 +26,6 @@ export default {
     max: Number,
     min: Number,
     value: Array
-  },
-  methods: {
-    qwe(v){
-      console.log(v);
-    }
   },
   computed: {
     range: {

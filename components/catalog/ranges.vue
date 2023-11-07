@@ -1,6 +1,7 @@
 <template>
   <div>
     <b> {{ title }} </b>
+    <!-- {{ v }} -->
     <!-- <v-row class="my-1">
       <v-col cols="6">
         <v-text-field outlined hide-details dense v-model="min" />
@@ -9,11 +10,9 @@
         <v-text-field outlined hide-details dense v-model="max"/>
       </v-col>
     </v-row> -->
-    <catalog-numberRange :range="v" :max="max" :min="min" @location="qwe" />
+    <catalog-numberRange :range="v" :max="max" :min="min" @location="$emit('location', $event)"/>
     <v-range-slider v-model="v" @click="$emit('location', $event.target)" hide-details class="align-center" :min="min" :max="max">
-      <template>
-          {{ v }}
-      </template>
+      <template>{{ v }}</template>
     </v-range-slider>
   </div>
 </template>
@@ -27,11 +26,6 @@ export default {
     min: Number,
     max: Number,
     value: Array,
-  },
-  methods: {
-    qwe(v) {
-      
-    }
   },
   computed: {
     v: {

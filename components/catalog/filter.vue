@@ -6,6 +6,12 @@
     </div> -->
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
+        <catalog-brands
+        v-if="filters.brands"
+        @location="locationResult"
+        :params="filters.brands"
+        v-model="dataF.brand"
+        />
       <catalog-filterResult @filterResult="filterResults" :locationRes="dy !=0 ? dy : 0" :resultData="resultData"/>
       <v-divider class="my-4" />
     </div>
@@ -32,7 +38,9 @@ export default {
   },
   data() {
     return {
-      dataF: {},
+      dataF: {
+        "brand": [],
+      },
       dataPrice: [],
       dy: 0,
       resultData: 0,
@@ -58,7 +66,7 @@ export default {
     filters: async function(){
          try {
            this.initValueFilters();
-           console.log("Инициализировано")
+          //  console.log("Инициализировано")
          }
          catch (error){
            console.error(error)
@@ -86,19 +94,28 @@ export default {
     initValueFilters() {
       for (const key in this.filters.filters) {
         let f = [];
-        if (this.value?.f[this.filters.filters[key]["filters_id"]]) f = this.value.f[this.filters.filters[key]["filters_id"]];
+        if (this.value?.f[this.filters.filters[key]["filters_id"]]){
+          f = this.value.f[this.filters.filters[key]["filters_id"]];
+        } 
         this.$set(this.dataF, this.filters.filters[key]["filters_id"], f);
       }
+        // for (const key in this.filters.brands) {
+        //   if(this.filters.brands[key].brand){
+        //     let f = [];
+        //     if (this.value?.f[this.filters.brands[key].brand]) f = this.value.f[this.filters.brands[key].brand];
+        //     this.$set(this.dataF["brands"], this.filters.brands[key].brand, f);
+        //   }
+        // }
     },
     onUpdateData() {
       let r = {};
       for (const i in this.dataF) {
-        if (this.dataF[i].length > 0) {
+        if (this.dataF[i].length > 0 && i !== "brand") {
           r[i] = this.dataF[i];
         }
       }
-      // console.log({ f: r, });
-      this.$emit('input', { f: r, price: this.dataPrice });
+      // console.log(r);
+      this.$emit('input', { f: r, price: this.dataPrice, brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {}  });
       this.dy = 0;
       window.scrollTo(0, 0);
     },
@@ -115,13 +132,14 @@ export default {
 
         let r = {};
         for (const i in this.dataF) {
-          if (this.dataF[i].length > 0) {
+          if (this.dataF[i].length > 0 && i !== "brand") {
             r[i] = this.dataF[i];
           }
         }
-        
+
         let filtersCount = {
           category_id: this.id ? this.id : '',
+          brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
           price: this.dataPrice.length !== 0 ? this.dataPrice : {},
           status: 1
         }
@@ -132,7 +150,7 @@ export default {
             {vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
             {factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }}] });
 
-            console.log(filtersCount);
+            // console.log(filtersCount);
         const res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
           params: {
             f: r, 
@@ -153,6 +171,7 @@ export default {
             f: r, 
             filters: {
               "ic.promote_id": this.id,
+              brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
               price: this.dataPrice.length !== 0 ? this.dataPrice : {},
               status: 1
             },

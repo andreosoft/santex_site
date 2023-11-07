@@ -17,6 +17,9 @@ export async function getData({ route, $axios, $config }) {
     {name: { condition: "LIKE", value: "%" + searchInput + "%" }},
     {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
     {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
+    
+    // console.log('filters');
+    // console.log(filters);
   const res = await $axios.get($config.baseURL + '/api/site/catalog', {
     params: {
       f: f,
@@ -31,17 +34,33 @@ export async function getData({ route, $axios, $config }) {
   Object.assign(filtersPromote, route.query.filters ? JSON.parse(route.query.filters) : {});
   // Object.assign(filtersPromote, { "ic.promote_id": 1 });
   Object.assign(filtersPromote, { "ic.promote_id": category_id });
-  const resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
-    params: {
-      f: f,
-      filters: filtersPromote,
-      sort: sort,
-      pager: pagerPromote
+  let resPromote;
+  try {
+    if(res.data.data.length == 0){
+      resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
+        params: {
+          f: f,
+          filters: filtersPromote,
+          sort: sort,
+          pager: pagerPromote
+        }
+      });
     }
-  });
-  const dataPromote = resPromote.data.data;
-  const FiltersPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', {params: {filters: filtersPromote}});
-  const dataFiltersPromote = FiltersPromote.data.data;
+  } catch (e) {
+    console.error(e);
+  }
+  const dataPromote = resPromote ? resPromote.data.data : '';
+  // const resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
+  //   params: {
+  //     f: f,
+  //     filters: filtersPromote,
+  //     sort: sort,
+  //     pager: pagerPromote
+  //   }
+  // });
+  // const dataPromote = resPromote.data.data;
+  const FiltersPromote = resPromote ? await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', {params: {filters: filtersPromote}}) : '';
+  const dataFiltersPromote = FiltersPromote ? FiltersPromote.data.data : '';
 
 
   
@@ -131,7 +150,7 @@ export async function getData({ route, $axios, $config }) {
 
   const title = resCat ? resCat.data.data.name : '';
   pager = res.data.pager;
-  pagerPromote = resPromote.data.pager;
+  pagerPromote = resPromote ? resPromote.data.pager : '';
 
 
   function breadcrumbs(category_id, title, value) {
