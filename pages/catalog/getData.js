@@ -18,8 +18,7 @@ export async function getData({ route, $axios, $config }) {
     {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
     {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
     
-    // console.log('filters');
-    // console.log(filters);
+    // console.log(route);
   const res = await $axios.get($config.baseURL + '/api/site/catalog', {
     params: {
       f: f,

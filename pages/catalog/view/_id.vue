@@ -150,7 +150,7 @@
       <h2 class="mb-8">Соберите комплект и получите скидку</h2>
       <catalog-complect-block :data="data.complect_data" />
     </div> -->
-    <div class="mb-8">
+    <div class="mb-8" id="full-info">
       <v-tabs class=" mb-14" style="border-bottom: 1px solid #ddd" v-model="tabModel">
         <v-tab>Описание и характеристики</v-tab>
         <v-tab>Комплектующие</v-tab>
@@ -160,7 +160,7 @@
         <v-tab-item>
           <div class="mb-6" v-html="data.content" />
           <div class="mb-4">
-            <v-row id="full-info">
+            <v-row>
               <v-col :cols="6">
                 <v-simple-table dense>
                   <tbody>
@@ -285,7 +285,9 @@ export default {
     }
   },
   methods: {
-    redirect_back(){this.$router.back()},
+    redirect_back(){
+      if(this.$route.hash){this.$router.go(-2)}else{this.$router.back()}
+    },
     toCompare(){
                 let item = {
                   id: this.data.id,

@@ -42,9 +42,13 @@ export default {
   },
   watch: {
     valueFilters(v) {
+      console.log(v)
       let filters = {};
       if (v.price && v.price.length > 0) {
         filters.price = v.price;
+      }
+      if (v.brand && v.brand.length > 0) {
+        filters.brand = v.brand;
       }
       this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
     },

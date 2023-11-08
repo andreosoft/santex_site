@@ -36,6 +36,7 @@
     },
     watch: {
       dataRes: function(){
+        // console.log(this.dataRes);
         this.dataRes ? this.visible = true : this.visible = false;
       }
     },
@@ -44,7 +45,9 @@
         this.$emit('filterResult', true);
       },
       handleScroll(){
-        if((window.scrollY - this.scrollNum > 20) && (this.visible === true)){
+        // console.log(window.scrollY);
+        // console.log(this.visible);
+        if((window.scrollY - this.scrollNum > 40) && (this.visible == true)){
           this.scrollNum = window.scrollY;
           this.visible = false;
         }
