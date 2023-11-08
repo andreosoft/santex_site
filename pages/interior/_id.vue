@@ -3,10 +3,10 @@
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <h1>{{ title }}</h1>
-        <div v-show="dataInterior.data.introtext" class="my-3">{{ dataInterior.data.introtext }}</div>
+        <div v-show="dataInterior?.data?.introtext" class="my-3">{{ dataInterior?.data?.introtext }}</div>
         <div class="mb-14">
             <v-row class="s-row">
-                <v-col cols="6" v-for="(el, i) in dataInterior.data.images">
+                <v-col cols="6" v-for="(el, i) in dataInterior?.data?.images" :key="i">
                     <img :src="$config.baseImageURL + el" style="width: 100%;" />
                 </v-col>
             </v-row>
