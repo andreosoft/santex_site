@@ -6,10 +6,9 @@
     <div class="mb-10">
       <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ pager.count }} шт.</p>
     </div>
+    <!-- {{ dataFilters }} -->
     <v-divider class="mb-10" />
     <base-catalog
-    :id="category_id"
-    :value="searchInput"
     :loading="loading"
     :data="data"
     :dataFilters="dataFilters"
@@ -17,7 +16,7 @@
     :pager="pager"
     :sort="sort"
     @update-filters="dataFilters = $event" 
-    @update-data="updateValueFilters" />
+    @update-data="valueFilters = $event" />
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -34,11 +33,6 @@ export default {
     return {
       loading: true
     };
-  },
-  methods: {
-    updateValueFilters(value) {
-      this.valueFilters = value;
-    }
   },
   watch: {
     valueFilters(v) {

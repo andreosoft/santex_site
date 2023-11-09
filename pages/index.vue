@@ -35,8 +35,8 @@ export default {
 let salesItems = [];
     try {
       salesItems = (await $axios.get($config.baseURL + '/api/site/promote')).data.data;
-      console.log('Товары со скидкой')
-      console.log(salesItems);
+      // console.log('Товары со скидкой')
+      // console.log(salesItems);
     } catch (error) {
       console.error(error);
     }
@@ -182,7 +182,7 @@ let salesItems = [];
     try {
       catalogItems = (await $axios.get($config.baseURL + '/api/site/categories', {
         params: {
-          filters: { parent_id: 0, status: 1, main_show: 1 },
+          filters: { status: 1, main_show: 1 },
           sort: { "key": "sort", "order": "ASC" }
         },
       })).data.data;

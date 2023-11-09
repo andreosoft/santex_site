@@ -5,6 +5,8 @@
       <v-btn @click="onUpdateData()">Показать</v-btn>
     </div> -->
     <!-- {{ dataF }} -->
+    <!-- {{ value }} -->
+    <catalog-filterResult @filterResult="filterResults" :locationRes="dy" :resultData="resultData"/>
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
         <catalog-brands
@@ -13,7 +15,6 @@
         :params="filters.brands"
         v-model="dataF.brand"
         />
-      <catalog-filterResult @filterResult="filterResults" :locationRes="dy !=0 ? dy : 0" :resultData="resultData"/>
       <v-divider class="my-4" />
     </div>
     <div v-for="(el, i) in filters.filters" :key="i">
@@ -35,7 +36,6 @@ export default {
   props: {
     value: Object,
     filters: Object,
-    id: String
   },
   data() {
     return {
@@ -51,28 +51,39 @@ export default {
     this.initValueFilters();
   },
   watch:{
-    dataF: async function(){
-      try{
-        let r = {};
-        for (const i in this.dataF) {
-          if (this.dataF[i].length > 0) {
-            r[i] = this.dataF[i];
-          }
-        }
-      }
-      catch (error){
-        console.error(error)
-      }
-    },
+  //   dataF: async function(){
+  //     try{
+  //       let r = {};
+  //       for (const i in this.dataF) {
+  //         if (this.dataF[i].length > 0) {
+  //           r[i] = this.dataF[i];
+  //         }
+  //       }
+  //     }
+  //     catch (error){
+  //       console.error(error)
+  //     }
+  //   },
     filters: async function(){
          try {
            this.initValueFilters();
-          //  console.log("Инициализировано")
+          //  console.log('filters function')
          }
          catch (error){
            console.error(error)
          }
     },
+    value: async function(){
+      try {
+        // console.log('value function')
+        this.initValueFilters();
+        this.value.brand ? this.dataF.brand = this.value.brand : this.dataF.brand = [];
+        // console.log("Инициализировано")
+      }
+      catch (error){
+        console.error(error)
+      }
+    }
   },
   computed: {
     // onUpdateData() {
@@ -98,6 +109,8 @@ export default {
         if (this.value?.f[this.filters.filters[key]["filters_id"]]){
           f = this.value.f[this.filters.filters[key]["filters_id"]];
         } 
+        console.log(this.filters.filters[key]["filters_id"], f);
+        console.log(this.dataF);
         this.$set(this.dataF, this.filters.filters[key]["filters_id"], f);
       }
         // for (const key in this.filters.brands) {
@@ -115,9 +128,11 @@ export default {
           r[i] = this.dataF[i];
         }
       }
+
       // console.log(r);
+      // console.log(this.dataF.brand);
       this.$emit('input', { f: r, price: this.dataPrice, brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {}  });
-      console.log(this.dataF.brand);
+      // console.log(this.dataF.brand);
       this.dy = 0;
       window.scrollTo(0, 0);
     },
@@ -126,11 +141,10 @@ export default {
     },
     async locationResult(v){
       try {
-        console.log(v);
         let rect = v.getBoundingClientRect();
         let scrolltop = window.pageYOffset + rect.top;
         this.dy = scrolltop-235;
-        // console.log(this.dy);
+        console.log(v, this.dy);
 
         let r = {};
         for (const i in this.dataF) {
@@ -138,9 +152,8 @@ export default {
             r[i] = this.dataF[i];
           }
         }
-
         let filtersCount = {
-          category_id: this.id ? this.id : '',
+          category_id: this.$route.params.id ? this.$route.params.id : '',
           brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
           price: this.dataPrice.length !== 0 ? this.dataPrice : {},
           status: 1
@@ -152,8 +165,9 @@ export default {
             {vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
             {factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }}] });
 
-            // console.log(filtersCount);
-        const res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
+            let res, resPromote;
+            if(this.$route.name.match('catalog')){
+              res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
           params: {
             f: r, 
             filters: filtersCount,
@@ -168,14 +182,13 @@ export default {
             // },
           }
         });
-        this.resultData = res.data.data
-        console.log(this.$route)
-        if(!res.data.data){
-          const resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/count', { 
+            }
+        if(this.$route.name.match('promote')){
+          resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/count', { 
             params: {
               f: r, 
               filters: {
-                "ic.promote_id": this.id,
+                "ic.promote_id": this.$route.params.id,
                 brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
                 price: this.dataPrice.length !== 0 ? this.dataPrice : {},
                 status: 1
@@ -191,8 +204,8 @@ export default {
               // },
             }
           });
-          this.resultData = resPromote.data.data
         }
+        this.resultData = res ? res.data.data : resPromote.data.data
       } catch (error) {
         console.error(error)
       }

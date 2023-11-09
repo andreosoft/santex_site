@@ -1,28 +1,27 @@
 <template>
   <div>
-    <div  style="margin-bottom: 96px !important;" class="s-text-h2 text-center">Каталог товаров</div>
-    <div class="d-none d-xl-block">
+    <div id="head" style="margin-bottom: 96px !important;" class="s-text-h2 text-center">Каталог товаров</div>
+    <!-- <div class="d-none d-xl-block">
       <v-row>
         <v-col class="pa-0" xl="2"  v-for="(el, i) in items.slice(0,12)" :key="i">
-          <!-- {{ el.name }} -->
           <index-catalog-items-el :el="el" />
         </v-col>
       </v-row>
-    </div>
-    <div class="d-none d-lg-block d-xl-none">
+    </div> -->
+    <div class="d-lg-block">
       <v-row>
-        <v-col class="pa-0" lg="3"  v-for="(el, i) in items.slice(0,8)" :key="i">
+        <v-col class="pa-0" lg="3"  v-for="(el, i) in dataCatalog" :key="i">
           <index-catalog-items-el :el="el" />
         </v-col>
       </v-row>
     </div>
-    <div class="d-none d-md-block d-lg-none">
+    <!-- <div class="d-none d-md-block d-lg-none">
       <v-row>
         <v-col class="pa-0" md="4"  v-for="(el, i) in items.slice(0,9)" :key="i">
           <index-catalog-items-el :el="el" />
         </v-col>
       </v-row>
-    </div>
+    </div> -->
     <div class="d-bock d-lg-none">
       <!-- <v-carousel v-model="carouselModel">
         <v-carousel-item v-for="(el, i) in items" :key="i">
@@ -31,7 +30,7 @@
       </v-carousel> -->
     </div>
     <div class="text-center mt-14 pt-8">
-        <v-btn class="s-btn-main s-btn-text"><NuxtLink to="/">ВСЕ КАТЕГОРИИ</NuxtLink></v-btn>
+        <v-btn @click="dataCatalog.length == 8 ? dataCatalog = items : dataCatalog = items.slice(0, 8)" class="s-btn-main s-btn-text">ВСЕ КАТЕГОРИИ</v-btn>
     </div>
   </div>
 </template>
@@ -40,6 +39,11 @@
 export default {
     props: {
         items: Array
+    },
+    data() {
+        return {
+            dataCatalog: this.items.slice(0, 8)
+        }
     }
 }
 </script>
