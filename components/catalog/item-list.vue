@@ -24,21 +24,23 @@
             <div v-else-if="!itemList.height"><span style="color: #949494">Габариты (Г.Ш): </span>
               <span>{{`${itemList.depth + ' x '} ${itemList.width}`}}</span>
             </div> -->
-            <div v-if="!el.hight && !el.width && !el.length"><span style="color: #949494">Габариты (Д.Ш.В): </span>
+            <div v-if="el.hight && el.width && el.length"><span style="color: #949494">Габариты (Д.Ш.В): </span>
+              <span>{{`${el.length} x ${el.width} x ${el.hight}` }}</span>
+            </div>
+            <div v-else-if="!el.length && el.width && el.hight"><span style="color: #949494">Габариты (Ш.В): </span>
+              <span>{{`${el.width} ${' x ' + el.hight}` }}</span>
+            </div>
+            <div v-else-if="!el.width && el.length && el.hight"><span style="color: #949494">Габариты (Д.В): </span>
+              <span>{{`${el.length}${' x ' + el.hight}` }}</span>
+            </div>
+            <div v-else-if="!el.hight && el.length && el.width"><span style="color: #949494">Габариты (Д.Ш): </span>
+              <span>{{`${el.length} x ${el.width}` }}</span>
+            </div>
+            <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
               <span>Не указаны</span>
             </div>
-              <div v-else-if="!el.length"><span style="color: #949494">Габариты (Ш.В): </span>
-                <span>{{`${el.width} ${' x ' + el.hight}` }}</span>
-              </div>
-              <div v-else-if="!el.width"><span style="color: #949494">Габариты (Д.В): </span>
-                <span>{{`${el.length}${' x ' + el.hight}` }}</span>
-              </div>
-              <div v-else-if="!el.hight"><span style="color: #949494">Габариты (Д.Ш): </span>
-                <span>{{`${el.length} x ${el.width}` }}</span>
-              </div>
-              <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
-                <span>{{`${el.length} x ${el.width} x ${el.hight}` }}</span>
-              </div>
+              
+              
               
           </div>
           <div>

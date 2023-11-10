@@ -19,14 +19,20 @@
         <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
           <div>
-            <div v-if="el.depth && el.height"><span style="color: #949494">Габариты (Г.Ш.В): </span>
-              <span>{{`${el.depth + ' x '} ${el.width} ${' x ' + el.height}` }}</span>
+            <div v-if="el.height && el.width && el.length"><span style="color: #949494">Габариты (Д.Ш.В): </span>
+              <span>{{`${el.length} x ${el.width} x ${el.height}` }}</span>
             </div>
-            <div v-else-if="!el.height"><span style="color: #949494">Габариты (Г.Ш): </span>
-              <span>{{`${el.depth + ' x '} ${el.width}`}}</span>
+            <div v-else-if="!el.length && el.width && el.height"><span style="color: #949494">Габариты (Ш.В): </span>
+              <span>{{`${el.width} ${' x ' + el.height}` }}</span>
+            </div>
+            <div v-else-if="!el.width && el.length && el.height"><span style="color: #949494">Габариты (Д.В): </span>
+              <span>{{`${el.length}${' x ' + el.height}` }}</span>
+            </div>
+            <div v-else-if="!el.height && el.length && el.width"><span style="color: #949494">Габариты (Д.Ш): </span>
+              <span>{{`${el.length} x ${el.width}` }}</span>
             </div>
             <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
-              <span>{{`${el.lengthItem} x ${el.width} ${' x ' + el.height}` }}</span>
+              <span>Не указаны</span>
             </div>
           </div>
           <div>
