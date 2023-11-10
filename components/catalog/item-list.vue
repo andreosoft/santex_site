@@ -1,6 +1,7 @@
 <template>
   <v-card class="s-card-good pa-4">
     <div>
+      <!-- {{ el }} -->
       <nuxt-link :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
           <v-img v-if="el.images && el.images[0]" :contain="true" style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images[0]+'?height=250'" />
@@ -17,15 +18,28 @@
         <div class="my-1" style="font-size: 11px">
           <div>
             <!-- <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.width }}</span> -->
-            <div v-if="itemList.depth && itemList.height"><span style="color: #949494">Габариты (Г.Ш.В): </span>
+            <!-- <div v-if="itemList.depth && itemList.height"><span style="color: #949494">Габариты (Г.Ш.В): </span>
               <span>{{`${itemList.depth + ' x '} ${itemList.width} ${' x ' + itemList.height}` }}</span>
             </div>
             <div v-else-if="!itemList.height"><span style="color: #949494">Габариты (Г.Ш): </span>
               <span>{{`${itemList.depth + ' x '} ${itemList.width}`}}</span>
+            </div> -->
+            <div v-if="!el.hight && !el.width && !el.length"><span style="color: #949494">Габариты (Д.Ш.В): </span>
+              <span>Не указаны</span>
             </div>
-              <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
-                <span>{{`${itemList.lengthItem} x ${itemList.width} ${' x ' + itemList.height}` }}</span>
+              <div v-else-if="!el.length"><span style="color: #949494">Габариты (Ш.В): </span>
+                <span>{{`${el.width} ${' x ' + el.hight}` }}</span>
               </div>
+              <div v-else-if="!el.width"><span style="color: #949494">Габариты (Д.В): </span>
+                <span>{{`${el.length}${' x ' + el.hight}` }}</span>
+              </div>
+              <div v-else-if="!el.hight"><span style="color: #949494">Габариты (Д.Ш): </span>
+                <span>{{`${el.length} x ${el.width}` }}</span>
+              </div>
+              <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
+                <span>{{`${el.length} x ${el.width} x ${el.hight}` }}</span>
+              </div>
+              
           </div>
           <div>
             <span style="color: #949494">Бренд: </span><span>{{ el.brand }}</span>
@@ -135,21 +149,8 @@ export default {
         let respCom = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + el.id);
         const dataCom = respCom.data.data.filters;
         // console.log(dataCom);
-        let height = '';
-        let width = '';
         let depth = '';
-        let lengthItem = '';
-        dataCom.forEach(item => {
-          if(item.name === 'Высота'){
-            height = item.value
-          } else if(item.name === 'Ширина') {
-            width = item.value
-          } else if(item.name === 'Глубина'){
-            depth = item.value
-          } else if(item.name === 'Длина'){
-            lengthItem = item.value;
-          }
-        });
+        dataCom.forEach(item => {if(item.name === 'Глубина'){depth = item.value}});
           const item = {
             id: el.id,
             name: el.name,
@@ -160,10 +161,10 @@ export default {
             count: 1,
             type: el.type,
             store: el.store,
-            width,
-            height,
+            width: el.width,
+            height: el.hight,
             depth,
-            lengthItem,
+            lengthItem: el.length,
           }
           // console.log('Высота ' + itemFav.height)
           // console.log('Ширина ' + itemFav.width)
@@ -190,19 +191,10 @@ export default {
         let respCom = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/' + el.id);
         const dataCom = respCom.data.data.filters;
         // console.log(dataCom);
-        let height = '';
-        let width = '';
         let depth = '';
-        let lengthItem = '';
         dataCom.forEach(item => {
-          if(item.name === 'Высота'){
-            height = item.value
-          } else if(item.name === 'Ширина') {
-            width = item.value
-          } else if(item.name === 'Глубина'){
+          if(item.name === 'Глубина'){
             depth = item.value
-          } else if(item.name === 'Длина'){
-            lengthItem = item.value;
           }
         });
         // console.log('Высота ' + height)
@@ -218,10 +210,10 @@ export default {
           brand: el.brand,
           count: 1,
           type: el.type,
-          width,
-          height,
+          width: el.width,
+          height: el.hight,
           depth,
-          lengthItem,
+          lengthItem: el.length,
         }
         this.$store.commit('cart/add', item);
         this.$emit('addItemCart', true);

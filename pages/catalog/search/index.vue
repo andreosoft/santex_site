@@ -6,7 +6,7 @@
     <div class="mb-10">
       <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ pager.count }} шт.</p>
     </div>
-    <!-- {{ dataFilters }} -->
+    <!-- {{ pager }} -->
     <v-divider class="mb-10" />
     <base-catalog
     :loading="loading"
@@ -18,7 +18,7 @@
     @update-filters="dataFilters = $event" 
     @update-data="valueFilters = $event" />
     <div class="text-center mt-10 ">
-      <common-pagination :value="pager" />
+      <common-pagination v-if="pager.count>30" :value="pager" />
     </div>
   </v-container>
 </template>
