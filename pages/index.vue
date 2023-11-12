@@ -45,73 +45,7 @@ let salesItems = [];
       img: "/img/coll1.png",
       video: "https://www.youtube.com/embed/nOKam63GgzQ"
     }
-    // const catalogItems = [
-    //   {
-    //     img: "/img/cat1.png",
-    //     title: "Унитазы",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat2.png",
-    //     title: "Ванны",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat3.png",
-    //     title: "Душевые уголки",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat4.png",
-    //     title: "Инсталяции",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat5.png",
-    //     title: "Смесители",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat6.png",
-    //     title: "Душ",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat7.png",
-    //     title: "Полотенцесушители",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat8.png",
-    //     title: "Сифоны",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat9.png",
-    //     title: "МЕбель для ванных комнат",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat10.png",
-    //     title: "Кухонные мойки",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat3.png",
-    //     title: "Душевые уголки",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat4.png",
-    //     title: "Инсталяции",
-    //     to: "/"
-    //   },
-    //   {
-    //     img: "/img/cat5.png",
-    //     title: "Смесители",
-    //     to: "/"
-    //   },
-    // ]
+    
     const styleItems = [
       {
         img: "/img/guide1.png",
