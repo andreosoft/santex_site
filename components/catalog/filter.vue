@@ -132,7 +132,7 @@ export default {
       // console.log(r);
       // console.log(this.dataF.brand);
       this.$emit('input', { f: r, price: this.dataPrice, brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {}  });
-      // console.log(this.dataF.brand);
+
       this.dy = 0;
       window.scrollTo(0, 0);
     },
@@ -143,8 +143,12 @@ export default {
       try {
         let rect = v.getBoundingClientRect();
         let scrolltop = window.pageYOffset + rect.top;
-        this.dy = scrolltop-235;
-        console.log(v, this.dy);
+        // let elem = document.body.querySelector('.parent');
+        // let rectElem = elem.getBoundingClientRect();
+        // let scrollTopElem = window.pageYOffset || document.documentElement.scrollTop;
+        // let parentTop = rectElem.top + scrollTopElem;
+        // console.log(parentTop)
+        this.dy = scrolltop - 418;
 
         let r = {};
         for (const i in this.dataF) {

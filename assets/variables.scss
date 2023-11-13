@@ -384,8 +384,9 @@ tbody tr:nth-of-type(odd) {
   visibility: hidden;
   // display: none;
   background-color: #000;
-  position: absolute;
-  left: 389px;
+  position: relative;
+  // left: calc(100% + 10px);
+  left: 115%;
   z-index: 100;
   border: 1px black solid;
   padding: 10px;

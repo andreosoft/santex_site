@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b>Производитель</b>
+        <b>Бренды</b>
       <div class="a-catalog-check1" :class="{ close: !toggleOpen }">
         <div v-for="(el, i) of params" :key="i">
           <v-checkbox v-if="el.brand" class="ms-2" dense hide-details @click="$emit('location', $event.target)" :value="String(el.brand)" v-model="v" :label="String(el.brand)" />

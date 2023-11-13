@@ -56,11 +56,7 @@
 
 <script>
 export default {
-    data() {
-        return {
-        }
-    },
-    async asyncData(params) {
+    async asyncData({$config, $axios}) {
         const breadcrumbsData = [
             {
                 url: "",
@@ -122,6 +118,17 @@ ICON design studio.</p>`,
                 url: ""
             }
         ]
+        try {
+            let dataDesigners = (await $axios.get($config.baseURL + '/api/site/content', {
+                params: {
+                    filters: { parent_id: 43, status: 1 },
+                }
+            })).data.data;
+            console.log(dataDesigners);
+        } catch (error) {
+            console.error(error)
+            
+        }
         return { data, breadcrumbsData }
     }
 }
