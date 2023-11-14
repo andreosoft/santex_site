@@ -5,7 +5,7 @@
             мы реализовали много проектов. </h3>
         <h4 class="mb-16">Вы можете с ними познакомиться и заказать дизайн проект.</h4>
         <div>
-            <div class="my-8" v-for="(el, i) in dataDesigners" :key="i">
+            <div class="my-8" v-for="(el, i) in data" :key="i">
                 <div v-if="!(i % 2)">
                     <v-row>
                         <v-col cols="5">
@@ -46,9 +46,9 @@
                 </div>
             </div>
         </div>
-        <div class="">
+        <div>
             <div class="mt-16 text-center">
-                <a class="s-btn-else"><i class="fas fa-redo"></i> Показать еще</a>
+                <a @click="data.length == 4 ?  data = dataDesigners.slice(0, dataDesigners.length) : data = dataDesigners.slice(0, 4)" class="s-btn-else"><i class="fas fa-redo"></i> {{ data.length == 4 ? 'Показать все' : 'Скрыть' }}</a>
             </div>
         </div>
     </v-container>
@@ -63,19 +63,19 @@ export default {
                 title: "Наши дизайнеры",
             }
         ];
-        let dataDesigners;
+        let dataDesigners, data;
         try {
             dataDesigners = (await $axios.get($config.baseURL + '/api/site/content', {
                 params: {
                     filters: { parent_id: 43, status: 1 },
                 }
             })).data.data;
-            // console.log(dataDesigners);
+            data = dataDesigners.slice(0, 4);
+            console.log(data.length);
         } catch (error) {
             console.error(error)
-            
         }
-        return { breadcrumbsData, dataDesigners }
+        return { breadcrumbsData, data, dataDesigners }
     }
 }
 </script>

@@ -6,7 +6,7 @@
     <div class="mb-10">
       <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ pager.count }} шт.</p>
     </div>
-    <!-- {{ pager }} -->
+    <!-- {{ dataFilters.filters }} -->
     <v-divider class="mb-10" />
     <base-catalog
     :loading="loading"
@@ -36,7 +36,7 @@ export default {
   },
   watch: {
     valueFilters(v) {
-      console.log(v)
+      // console.log(v)
       let filters = {};
       if (v.price && v.price.length > 0) {
         filters.price = v.price;
