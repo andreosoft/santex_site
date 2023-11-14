@@ -142,7 +142,7 @@ export default {
     },
     locationResult: debounce(function(v){
       this.locationResultFinal(v);
-    }, 500),
+    }, 1000),
     async locationResultFinal(v){
       try {
         let rect = v.getBoundingClientRect();
