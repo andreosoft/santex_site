@@ -6,7 +6,7 @@
     </div> -->
     <!-- {{ dataF }} -->
     <!-- {{ value }} -->
-    <catalog-filterResult @filterResult="filterResults" :locationRes="dy" :resultData="resultData"/>
+    <catalog-filterResult @filterResult="onUpdateData" :locationRes="dy" :resultData="resultData"/>
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
         <catalog-brands
@@ -122,7 +122,7 @@ export default {
         //   }
         // }
     },
-    onUpdateData() {
+    onUpdateData(q) {
       let r = {};
       for (const i in this.dataF) {
         if (this.dataF[i].length > 0 && i !== "brand") {
@@ -137,13 +137,7 @@ export default {
       this.dy = 0;
       window.scrollTo(0, 0);
     },
-    filterResults() {
-      this.onUpdateData();
-    },
-    locationResult: debounce(function(v){
-      this.locationResultFinal(v);
-    }, 1000),
-    async locationResultFinal(v){
+    locationResult: debounce(async function(v){
       try {
         let rect = v.getBoundingClientRect();
         let scrolltop = window.pageYOffset + rect.top;
@@ -217,7 +211,7 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    }
+    }, 1000)
   }
 };
 </script>
