@@ -32,6 +32,7 @@
 </template>
 
 <script>
+import {debounce} from "lodash"
 export default {
   props: {
     value: Object,
@@ -139,7 +140,10 @@ export default {
     filterResults() {
       this.onUpdateData();
     },
-    async locationResult(v){
+    locationResult: debounce(function(v){
+      this.locationResultFinal(v);
+    }, 500),
+    async locationResultFinal(v){
       try {
         let rect = v.getBoundingClientRect();
         let scrolltop = window.pageYOffset + rect.top;
