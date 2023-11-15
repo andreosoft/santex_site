@@ -1,6 +1,7 @@
 <template>
     <v-container style="max-width: 400px;" v-if="value.limit > 0">
-        <v-pagination v-if="page && length" :value="page" @input="onPage($event)" :length="length" circle></v-pagination>
+        {{ page }} / {{ length }}
+        <!-- <v-pagination v-if="page && length" :value="page" @input="onPage($event)" :length="length" circle></v-pagination> -->
     </v-container>
 </template>
 
