@@ -5,7 +5,7 @@
     <h1>{{ title }}</h1>
     <!-- <base-catalog :data="data" :loading="loading" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event"/> -->
     <div class="text-center mt-10 ">
-      <common-pagination :value="pager" />
+      <!-- <common-pagination :value="pager" /> -->
     </div>
   </v-container>
 </template>
