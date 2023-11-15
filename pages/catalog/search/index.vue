@@ -6,7 +6,6 @@
     <div class="mb-10">
       <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ pager.count }} шт.</p>
     </div>
-    <!-- {{ dataFilters.filters }} -->
     <v-divider class="mb-10" />
     <base-catalog
     :loading="loading"
@@ -44,6 +43,8 @@ export default {
       if (v.brand && v.brand.length > 0) {
         filters.brand = v.brand;
       }
+      // console.log(v);
+      // console.log(filters == v);
       this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
     },
     "$route": {
@@ -54,6 +55,9 @@ export default {
         this.data = p.data;
         this.dataFilters = p.dataFilters;
         this.valueFilters = p.valueFilters;
+        // console.log(p.valueFilters);
+        // console.log(Object.is(this.valueFilters, q));
+        // let valueFiltersFinal = p.valueFilters;
         this.pager = p.pager;
         this.searchInput = p.searchInput;
       },

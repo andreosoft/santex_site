@@ -42,7 +42,7 @@ export default {
   data() {
     return {
       dataF: {
-        "brand": [],
+        brand: [],
       },
       dataPrice: [],
       dy: 0,
@@ -66,25 +66,25 @@ export default {
   //       console.error(error)
   //     }
   //   },
-    filters: async function(){
-         try {
+    filters: function(){
+        //  try {
            this.initValueFilters();
-          //  console.log('filters function')
-         }
-         catch (error){
-           console.error(error)
-         }
+           console.log('filters function')
+        //  }
+        //  catch (error){
+        //    console.error(error)
+        //  }
     },
-    value: async function(){
-      try {
-        // console.log('value function')
+    value: function(){
+      // try {
+        console.log('value function')
         this.initValueFilters();
         this.value.brand ? this.dataF.brand = this.value.brand : this.dataF.brand = [];
         // console.log("Инициализировано")
-      }
-      catch (error){
-        console.error(error)
-      }
+      // }
+      // catch (error){
+      //   console.error(error)
+      // }
     }
   },
   computed: {
@@ -106,14 +106,16 @@ export default {
   },
   methods: {
     initValueFilters() {
+      this.dataF = {
+        brand: [],
+      };
       for (const key in this.filters.filters) {
         let f = [];
         if (this.value?.f[this.filters.filters[key]["filters_id"]]){
           f = this.value.f[this.filters.filters[key]["filters_id"]];
         } 
-        console.log(this.filters.filters[key]["filters_id"], f);
+        // console.log(this.filters.filters[key]["filters_id"], f);
         this.$set(this.dataF, this.filters.filters[key]["filters_id"], f);
-        console.log(this.dataF);
       }
         // for (const key in this.filters.brands) {
         //   if(this.filters.brands[key].brand){
