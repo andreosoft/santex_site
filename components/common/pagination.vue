@@ -1,6 +1,6 @@
 <template>
     <v-container style="max-width: 400px;" v-if="value.limit > 0">
-        <v-pagination :value="page" @input="onPage($event)" :length="length" circle></v-pagination>
+        <!-- <v-pagination :value="page" @input="onPage($event)" :length="length" circle></v-pagination> -->
     </v-container>
 </template>
 
