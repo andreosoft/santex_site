@@ -36,7 +36,7 @@
         </v-row>
         <v-row v-else class="s-row" :class="{ close: !toggleOpen, 'catalog-items': pager.limit == 0 }">
           <v-col cols="4" v-for="(el, i) in data" :key="i">
-            <catalog-item-list :el="el" @addItemFav="addItemFav" @addItemCom="addItemCom" @addItemCart="addItemCart" />
+            <!-- <catalog-item-list :el="el" @addItemFav="addItemFav" @addItemCom="addItemCom" @addItemCart="addItemCart" /> -->
           </v-col>
         </v-row>
         <div v-if="pager.limit == 0 && data.length > 3" class="mt-14 mb-14 text-center">
