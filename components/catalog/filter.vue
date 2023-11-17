@@ -140,11 +140,11 @@ export default {
     locationResult: debounce(async function(v){
       try {
         // console.log(v);
-        // let rect = v.getBoundingClientRect().top + scrollY;
+        let rect = v.getBoundingClientRect();
         // console.log(rect);
         // let scrolltop = document.body.querySelector('.parent').getBoundingClientRect().top + scrollY;
         // console.log(scrolltop);
-        // let scrolltop = window.pageYOffset + rect.top;
+        let scrolltop = window.pageYOffset + rect.top;
         // let elem = document.body.querySelector('.parent');
         // let rectElem = elem.getBoundingClientRect();
         // let scrollTopElem = window.pageYOffset || document.documentElement.scrollTop;
