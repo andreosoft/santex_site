@@ -4,9 +4,6 @@
     <!-- <div>
       <v-btn @click="onUpdateData()">Показать</v-btn>
     </div> -->
-    <!-- {{ dataF }}
-    <br>
-    {{ value }} -->
     <catalog-filterResult @filterResult="onUpdateData" :locationRes="dy" :resultData="resultData"/>
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
@@ -135,15 +132,19 @@ export default {
 
       // console.log(r);
       // console.log(this.dataF.brand);
-      this.$emit('input', { f: r, price: this.dataPrice, brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {}  });
+      this.$emit('input', { f: r, price: this.dataPrice, brand: this.dataF.brand.length !== 0 ? this.dataF.brand : []  });
 
       this.dy = 0;
       window.scrollTo(0, 0);
     },
     locationResult: debounce(async function(v){
       try {
-        let rect = v.getBoundingClientRect();
-        let scrolltop = window.pageYOffset + rect.top;
+        // console.log(v);
+        // let rect = v.getBoundingClientRect().top + scrollY;
+        // console.log(rect);
+        // let scrolltop = document.body.querySelector('.parent').getBoundingClientRect().top + scrollY;
+        // console.log(scrolltop);
+        // let scrolltop = window.pageYOffset + rect.top;
         // let elem = document.body.querySelector('.parent');
         // let rectElem = elem.getBoundingClientRect();
         // let scrollTopElem = window.pageYOffset || document.documentElement.scrollTop;

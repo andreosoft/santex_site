@@ -17,7 +17,7 @@
     @update-filters="dataFilters = $event" 
     @update-data="valueFilters = $event" />
     <div class="text-center mt-10 ">
-      <common-pagination v-if="pager.count>30" :value="pager" />
+      <common-pagination :value="pager" />
     </div>
   </v-container>
 </template>
