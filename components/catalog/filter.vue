@@ -66,7 +66,7 @@ export default {
     filters: function(){
         //  try {
            this.initValueFilters();
-           console.log('filters function')
+          //  console.log('filters function')
         //  }
         //  catch (error){
         //    console.error(error)
@@ -74,7 +74,7 @@ export default {
     },
     value: function(){
       // try {
-        console.log('value function')
+        // console.log('value function')
         this.initValueFilters();
         this.value.brand ? this.dataF.brand = this.value.brand : this.dataF.brand = [];
         // console.log("Инициализировано")
