@@ -104,14 +104,14 @@ export default {
                 if(page>0 && page < this.length - 1){
                     this.$router.push({ query: Object.assign({}, this.$route.query, { page: page }) })
                     this.$emit('input', Object.assign(this.value, { page: page }));
-                    // window.scrollTo(0, 0);                
+                    window.scrollTo(0, 0);                
                 }
             } else{
                 const page = +e.target.value - 1;
                 if(page >= 0 && page < this.length){
                     this.$router.push({ query: Object.assign({}, this.$route.query, { page: page }) })
                     this.$emit('input', Object.assign(this.value, { page: page }));
-                    // window.scrollTo(0, 0);
+                    window.scrollTo(0, 0);
                 }
             }
         }
