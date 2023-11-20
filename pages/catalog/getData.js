@@ -91,8 +91,8 @@ export async function getData({ route, $axios, $config }) {
   }
   
   const valueFilters = {
-    price: filters.price,
     f: f,
+    price: filters.price,
     brand: filters.brand,
   }
   let dataFilters = resFilters ? resFilters.data.data : '';

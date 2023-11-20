@@ -15,7 +15,7 @@
     :pager="pager"
     :sort="sort"
     @update-filters="dataFilters = $event" 
-    @update-data="valueFilters = $event" />
+    @update-data="valueFiltersFinal" />
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -30,11 +30,11 @@ export default {
   components: { BaseCatalog },
   data() {
     return {
-      loading: true
+      loading: true,
     };
   },
-  watch: {
-    valueFilters(v) {
+  methods: {
+    valueFiltersFinal(v) {
       let filters = {};
       if (v.price && v.price.length > 0) {
         filters.price = v.price;
@@ -42,11 +42,13 @@ export default {
       if (v.brand && v.brand.length > 0) {
         filters.brand = v.brand;
       }
-
-      if(filters.price || filters.brand || v.f[0]) { 
+  
+      if(typeof v.price == 'object' || typeof v.brand == 'object' || v.f[0]) { 
         this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
       }
     },
+  },
+  watch: {
     "$route": {
       async handler() {
         this.loading = true;
