@@ -35,7 +35,6 @@ export default {
   },
   watch: {
     valueFilters(v) {
-      // console.log(v)
       let filters = {};
       if (v.price && v.price.length > 0) {
         filters.price = v.price;
@@ -43,9 +42,10 @@ export default {
       if (v.brand && v.brand.length > 0) {
         filters.brand = v.brand;
       }
-      // console.log(v);
-      // console.log(filters == v);
-      this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
+
+      if(filters.price || filters.brand || v.f[0]) { 
+        this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
+      }
     },
     "$route": {
       async handler() {
@@ -55,9 +55,6 @@ export default {
         this.data = p.data;
         this.dataFilters = p.dataFilters;
         this.valueFilters = p.valueFilters;
-        // console.log(p.valueFilters);
-        // console.log(Object.is(this.valueFilters, q));
-        // let valueFiltersFinal = p.valueFilters;
         this.pager = p.pager;
         this.searchInput = p.searchInput;
       },
