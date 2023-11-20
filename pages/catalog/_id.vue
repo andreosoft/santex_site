@@ -23,7 +23,7 @@ export default {
   },
   watch: {
     valueFilters(v) {
-      console.log(v)
+      // console.log(v)
       let filters = {};
       if (v.price && v.price.length > 0) {
         filters.price = v.price;
