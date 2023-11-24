@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-row v-if="data[0].isparent == 0" class="s-row d-flex justify-center mb-5 mt-5">
+      <!-- {{data}} -->
       <div>
         <img src="/banners/banner1.png" alt="banner">
       </div>
@@ -56,9 +57,12 @@
           </v-col>
         </v-row>
         <v-row v-else class="s-row" :class="{ close: !toggleOpen, 'catalog-items': pager.limit == 0 }">
-          <v-col cols="4" v-for="(el, i) in data" :key="i">
+          <!-- <v-col v-if="data[0].isparent !== 0" cols="4" v-for="(el, i) in data" :key="i">
             <catalog-item-list :el="el" @addItemFav="addItemFav" @addItemCom="addItemCom" @addItemCart="addItemCart" />
-          </v-col>
+          </v-col> -->
+            <v-col cols="4" v-for="(el, i) in data" :key="i">
+              <s-guide-style-items-el :el="el" />
+            </v-col>
         </v-row>
         <div v-if="pager.limit == 0 && data.length > 3" class="mt-14 mb-14 text-center">
           <a class="s-btn-else" @click="toggleOpen = !toggleOpen"><i class="fas fa-redo"></i>{{ toggleOpen ? 'Скрыть': 'Показать еще' }}</a>

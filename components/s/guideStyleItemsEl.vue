@@ -1,6 +1,15 @@
 <template>
   <v-card>
-    <NuxtLink :to="'/interior/' + el.id">
+    <NuxtLink v-if="el.isparent == 0" :to="'/catalog/' + el.id">
+      <img v-if="el.images" :src="$config.baseImageURL + el.images[0]" style="width: 100%;"/>
+      <div v-else style="width: 419px; height: 419px; background-color: black;"></div>
+      <div style="position: absolute; bottom: 50px; left: 0; right: 0">
+        <div class="pa-2 text-center">
+          <v-btn class="s-btn-text">Перейти</v-btn>
+        </div>
+      </div>
+    </NuxtLink>
+    <NuxtLink v-else :to="'/interior/' + el.id">
       <img :src="$config.baseImageURL + el.images[0]" style="width: 100%;"/>
       <div style="position: absolute; bottom: 50px; left: 0; right: 0">
         <div class="pa-2 text-center">
