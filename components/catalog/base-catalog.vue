@@ -3,6 +3,7 @@
     <v-row v-if="data[0].isparent == 0" class="s-row d-flex justify-center mb-5 mt-5">
       <!-- {{data}} -->
       <div>
+        <!-- <img v-if="categoriesData.images" :src="$config.baseImageURL + categoriesData.images[0]" alt="banner"> -->
         <img src="/banners/banner1.png" alt="banner">
       </div>
     </v-row>
@@ -66,9 +67,14 @@
             <s-guide-style-items-el :el="el" />
           </v-col>
         </v-row>
-        <div v-if="pager.limit == 0 && data.length > 3" class="mt-14 mb-14 text-center">
+        <v-row class="s-row">
+          <!-- <v-col cols="4" v-for="(el, i) in data" :key="i">
+            <s-guide-style-items-el :el="el" />
+          </v-col> -->
+        </v-row>
+        <!-- <div v-if="pager.limit == 0 && data.length > 3" class="mt-14 mb-14 text-center">
           <a class="s-btn-else" @click="toggleOpen = !toggleOpen"><i class="fas fa-redo"></i>{{ toggleOpen ? 'Скрыть': 'Показать еще' }}</a>
-      </div>
+      </div> -->
       </v-col>
     </v-row>
   </div>
@@ -86,7 +92,8 @@ export default {
     loading: {
       type: Boolean,
       default: false
-    }
+    },
+    categoriesData: Object
   },
   data() {
     return {

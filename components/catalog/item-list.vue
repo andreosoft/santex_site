@@ -1,7 +1,6 @@
 <template>
   <v-card class="s-card-good pa-4">
     <div>
-      <!-- {{ el }} -->
       <nuxt-link v-if="el.isparent !== 0" :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
           <v-img v-if="el.images && el.images[0]" :contain="true" style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images[0]+'?height=250'" />

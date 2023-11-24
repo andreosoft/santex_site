@@ -5,6 +5,7 @@
       <div v-else style="width: 419px; height: 419px; background-color: black;"></div>
       <div style="position: absolute; bottom: 50px; left: 0; right: 0">
         <div class="pa-2 text-center">
+          <p style="color: white; font-weight: bold" class="s-btn-text">{{ el.name }}</p>
           <v-btn class="s-btn-text">Перейти</v-btn>
         </div>
       </div>
