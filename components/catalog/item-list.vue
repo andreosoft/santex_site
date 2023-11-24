@@ -2,7 +2,7 @@
   <v-card class="s-card-good pa-4">
     <div>
       <!-- {{ el }} -->
-      <nuxt-link :to="'/catalog/view/' + el.id">
+      <nuxt-link v-if="el.isparent !== 0" :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
           <v-img v-if="el.images && el.images[0]" :contain="true" style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images[0]+'?height=250'" />
         </div>
@@ -60,8 +60,66 @@
           </span>
         </div>
       </nuxt-link>
+      <nuxt-link v-else :to="'/catalog/' + el.id">
+        <div style="position: relative;" class="mb-2">
+          <v-img v-if="el.images && el.images[0]" :contain="true" style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images[0]+'?height=250'" />
+        </div>
+        <div v-if="el.isparent !== 0" class="d-flex justify-space-between mb-2">
+          <div style="margin: 3px 0; font-size: 13px">
+            <catalog-available :value="el.store" />
+          </div>
+          <div style="margin: 3px 0; font-size: 13px; color: #949494">
+            Код товара: {{ el.id }}
+          </div>
+        </div>
+        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold" :class="{ 'hidden-text': hiddentext }">{{ el.name }}</div>
+        <div class="my-1" style="font-size: 11px">
+          <div v-if="el.width || el.depth || el.height">
+            <!-- <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.width }}</span> -->
+            <!-- <div v-if="itemList.depth && itemList.height"><span style="color: #949494">Габариты (Г.Ш.В): </span>
+              <span>{{`${itemList.depth + ' x '} ${itemList.width} ${' x ' + itemList.height}` }}</span>
+            </div>
+            <div v-else-if="!itemList.height"><span style="color: #949494">Габариты (Г.Ш): </span>
+              <span>{{`${itemList.depth + ' x '} ${itemList.width}`}}</span>
+            </div> -->
+            <div v-if="el.hight && el.width && el.length"><span style="color: #949494">Габариты (Д.Ш.В): </span>
+              <span>{{`${el.length} x ${el.width} x ${el.hight}` }}</span>
+            </div>
+            <div v-else-if="!el.length && el.width && el.hight"><span style="color: #949494">Габариты (Ш.В): </span>
+              <span>{{`${el.width} ${' x ' + el.hight}` }}</span>
+            </div>
+            <div v-else-if="!el.width && el.length && el.hight"><span style="color: #949494">Габариты (Д.В): </span>
+              <span>{{`${el.length}${' x ' + el.hight}` }}</span>
+            </div>
+            <div v-else-if="!el.hight && el.length && el.width"><span style="color: #949494">Габариты (Д.Ш): </span>
+              <span>{{`${el.length} x ${el.width}` }}</span>
+            </div>
+            <div v-else><span style="color: #949494">Габариты (Д.Ш.В): </span>
+              <span>Не указаны</span>
+            </div>
+              
+              
+              
+          </div>
+          <div>
+            <span v-if="el.brand" style="color: #949494">Бренд: </span><span>{{ el.brand }}</span>
+          </div>
+        </div>
+        <div class="my-2" v-if="el.isparent !== 0" style=" font-weight: bold;">
+          <span v-if="el.price" style="font-size: 20px">
+            <number :value="el.price" /> ₽
+          </span>
+          <span v-else style="font-size: 20px">
+            Цена не указана
+          </span>
+          <span class="ml-2" v-if="el.price_old"
+            style="font-size: 13px; text-decoration: line-through; color: #949494">
+            <number :value="el.price_old" /> ₽
+          </span>
+        </div>
+      </nuxt-link>
     </div>
-    <div class="d-flex justify-space-between">
+    <div v-if="el.isparent !== 0" class="d-flex justify-space-between">
       <div><v-btn @click="toCart(el)" dark class="s-btn-cart s-btn-text">В корзину</v-btn></div>
       <div>
         <v-btn @click="toFavorite(el)" icon>

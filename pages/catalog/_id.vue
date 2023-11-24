@@ -3,7 +3,7 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
-    <base-catalog :data="data" :loading="loading" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event"/>
+    <base-catalog :data="subcat ? subcat?.content : data" :loading="loading" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event"/>
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -13,12 +13,19 @@
 <script>
 import {getData} from "@/pages/catalog/getData";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
+import { mapGetters } from "vuex";
 
 export default {
   components: {BaseCatalog},
   data() {
     return { 
       loading: true
+    }
+  },
+  computed: {
+    ...mapGetters ({categories: 'getCategories'}),
+    subcat(){
+      return this.categories.find(item => item.id == this.category_id)
     }
   },
   watch: {

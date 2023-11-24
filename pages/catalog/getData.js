@@ -4,11 +4,13 @@ export async function getData({ route, $axios, $config }) {
   let pagerPromote = { page: 0, count: 0, limit: 0 };
   pagerPromote.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
+  // const sortSub = route.query.sort ? JSON.parse(route.query.sort) : { key: "name", order: "ASC" };
   const category_id = route.params.id;
   const f = route.query.f ? JSON.parse(route.query.f) : {};
   const addFilters = route.query.filters ? JSON.parse(route.query.filters) : {};
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
+  // console.log(addFilters);
 
   Object.assign(filters, { status: 1 });
   if (category_id) Object.assign(filters, { category_id: category_id });
@@ -34,6 +36,24 @@ export async function getData({ route, $axios, $config }) {
     } catch (e) {
       console.error(e);
     }
+
+
+    // if (route.params.id) Object.assign(subcatfilters, { "parent_id": category_id });
+  // let resCategories;
+  //   try {
+  //     if(route.name.match('catalog')){
+  //       resCategories = await $axios.get($config.baseURL + '/api/site/categories', {
+  //         params: {
+  //           f: f,
+  //           filters: subcatfilters,
+  //           sort: sortSub,
+  //           pager: pager
+  //         }
+  //       });
+  //     }
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
   // res = await $axios.get($config.baseURL + '/api/site/catalog', {
   //   params: {
   //     f: f,
@@ -217,5 +237,5 @@ export async function getData({ route, $axios, $config }) {
 
 
 
-  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, dataPromote, dataFiltersPromote, pagerPromote, carouselItems };
+  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, dataPromote, dataFiltersPromote, pagerPromote, carouselItems, category_id };
 }
