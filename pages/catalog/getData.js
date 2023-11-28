@@ -10,7 +10,6 @@ export async function getData({ route, $axios, $config }) {
   const addFilters = route.query.filters ? JSON.parse(route.query.filters) : {};
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
-  // console.log(addFilters);
 
   Object.assign(filters, { status: 1 });
   if (category_id) Object.assign(filters, { category_id: category_id });
@@ -199,16 +198,25 @@ export async function getData({ route, $axios, $config }) {
   function breadcrumbs(category_id, title, value) {
     let breadcrumbsData;
     if (category_id !== undefined) {
-      breadcrumbsData = [
-        {
-          url: "",
-          title: "Каталог",
-        },
-        {
-          url: "/catalog/" + category_id,
-          title: title,
-        },
-      ];
+      if(resCat.data.data.parent_name){
+        breadcrumbsData = [
+          {
+            url: "/catalog/" + resCat.data.data.parent_id,
+            title: resCat.data.data.parent_name,
+          },
+          {
+            url: "/catalog/" + category_id,
+            title: title,
+          },
+        ];
+      } else {
+        breadcrumbsData = [
+          {
+            url: "/catalog/" + category_id,
+            title: title,
+          },
+        ];
+      }
     } else if (value !== undefined) {
       breadcrumbsData = [
         {
