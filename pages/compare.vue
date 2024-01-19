@@ -24,7 +24,6 @@
   </template>
   </v-snackbar>
   
-
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex justify-space-between">
             <h1>{{ title }}</h1>
@@ -116,6 +115,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import { uniq } from 'lodash';
 export default {
     data() {
         return {
@@ -130,29 +130,77 @@ export default {
             snackbarCart: false
         }
     },
+    watch: {
+        differenceInput(){
+         this.allParamInput = !this.differenceInput
+        },
+        allParamInput(){
+        // this.differenceItems?.length == 0
+         this.differenceInput = !this.allParamInput
+        },
+        dataDifFilters(){
+        if(this.dataDifFilters?.length == 0){
+            this.allParamInput = true
+            this.differenceInput = false
+        }
+        }
+    },
     computed: {
         ...mapGetters({
             dataCom: 'compare/compareData',
             countCom: 'compare/countItems',
             dataResultCom: 'compare/dataResult',
             dataResultCart: 'cart/dataResult',
-            dataResultFav: 'favorite/dataResult'
+            dataResultFav: 'favorite/dataResult',
+            categoriesParent: 'getCategories'
         }),
+        hasDifference() {
+            if(this.dataDifFilters?.length == 0){
+                return false
+            } else {
+                return true
+            }
+        },
         hasDistinction: function(){
             return {
-                'fa-circle-check': this.differenceInput,
-                'fa-circle': (!this.differenceInput) || (this.dataDifFilters.length == 0) || (this.valueList !== "Все товары")
+                'fa-circle-check': (this.differenceInput) && (this.dataDifFilters.length > 0),
+                'fa-circle': (!this.differenceInput) || (this.dataDifFilters.length == 0)
             }
         },
         paramsCom(){
-            let arr = [];
-            arr[0] = "Все товары";
-            this.dataCom?.map((obj) => {arr.push(obj.name);})
-            return arr;
+            const arr = ["Все товары"];
+            this.dataCom?.map((obj) => {arr.push(obj.category_id);})
+            arr.forEach((item, i) => {
+                if(i>0){
+                    this.categoriesParent.forEach(el => {
+                        el.content.forEach(el_sub => {
+                            if(el_sub.id == item){
+                                    arr[i] = el_sub.name
+                            }
+                        })
+                    })
+                }
+            })
+            return uniq(arr);
         },
         visibleItems(){
             this.visibleArrItems = [];
-            this.valueList !== "Все товары" ? this.visibleArrItems.push(this.dataCom.find(el => el.name == this.valueList)) : this.visibleArrItems = this.dataCom;
+            if(this.valueList !== "Все товары"){
+                this.categoriesParent.forEach(el => {
+                        el.content.forEach(el_sub => {
+                            if(el_sub.name == this.valueList){
+                                this.dataCom.forEach(el => {
+                                    if(el.category_id == el_sub.id){
+                                        this.visibleArrItems.push(el);
+                                    }
+                                })
+                            }
+                        })
+                    })
+            } 
+            else{
+                this.visibleArrItems = this.dataCom;
+            }
             // let arr = [val];
             return this.visibleArrItems;
         },
@@ -189,17 +237,41 @@ export default {
                     return this.dataDifFilters;
                 };
             },
-            noDifference: function () {
+        noDifference: function () {
                 return{
                     // true: this.dataDifFilters?.length !== 0 && this.valueList == "Все товары",
                     // false: this.dataDifFilters?.length === 0 && this.valueList !== "Все товары",
-                    'grey--text': (this.differenceItems?.length == 0) || (this.valueList !== "Все товары"),
+                    'grey--text': (this.differenceItems?.length == 0),
                     'mb-4': true,
                     'triggerInput': true
                 }
             }
     },
     methods: {
+        otherLength(param){
+            return this.dataCom.filter(el => el.category_id == this.subCategory(param)).length
+        },
+        subCategory(param){
+            let ret;
+            if(typeof param == 'number'){
+                this.categoriesParent.forEach(el => {
+                            el.content.forEach(el_sub => {
+                                if(el_sub.id == param){
+                                        ret = el_sub.name
+                                }
+                            })
+                        })
+            } else{
+                this.categoriesParent.forEach(el => {
+                            el.content.forEach(el_sub => {
+                                if(el_sub.name == param){
+                                        ret = el_sub.id
+                                }
+                            })
+                        })
+            }
+            return ret
+        },
         removeItem(val){
             this.snackbarCart = false;
             this.snackbarFav = false;
@@ -219,12 +291,10 @@ export default {
             if(!this.allParamInput) {
                 this.allParamInput = true;
                 this.differenceInput = false;
-            } else{
-                this.allParamInput = false;
             }
         },
         activeDifference(){
-            if((!this.differenceInput) && (this.differenceItems.length !== 0) && (this.valueList == "Все товары")){
+            if((!this.differenceInput) && (this.differenceItems.length !== 0)){
                 this.differenceInput = true;
                 this.allParamInput = false;
             } else {
@@ -244,147 +314,7 @@ export default {
                 title: title,
             }
         ];
-        // const data = [
-        //     {
-        //         id: 100,
-        //         name: "Название товара",
-        //         image: ["/img/favorite/1.png"],
-        //         code: "4554545",
-        //         price: 1540,
-        //         old_price: 8220,
-        //         brend_name: "Название бренда",
-        //         size: "44 x 75 x 20",
-        //         available: 1,
-        //         dataParams: {
-        //             "Ширина": "60 cm",
-        //             "Глубина": "55 cm",
-        //             "Высота": "10 cm§",
-        //             "Габариты2": "60x55",
-        //             "Ширина стиральной машины": "60 cm",
-        //             "Глубина стиральной машины": "45 cm",
-        //             "Вид раковины": "-",
-        //             "Форма": "Прямоугольная",
-        //             "Расстояние от смесителя до слива": "12 см>",
-        //             "Рекомендованная мин. длина излива": "14 см",
-        //             "Гарантия": "2 года",
-        //             "Страна": "Россия",
-        //             "Линии форм": "Прямые",
-        //             "Раковина-столешница": "Нет",
-        //             "Со скрытым сливом": "Да",
-        //         }
-        //     },
-        //     {
-        //         id: 100,
-        //         name: "Название товара",
-        //         image: ["/img/favorite/3.png"],
-        //         code: "4554545",
-        //         price: 1540,
-        //         old_price: 8220,
-        //         brend_name: "Название бренда",
-        //         size: "44 x 75 x 20",
-        //         available: 1,
-        //         dataParams: {
-        //             "Ширина": "60 cm",
-        //             "Глубина": "55 cm",
-        //             "Высота": "10 cm§",
-        //             "Габариты2": "60x55",
-        //             "Ширина стиральной машины": "60 cm",
-        //             "Глубина стиральной машины": "45 cm",
-        //             "Вид раковины": "-",
-        //             "Форма": "Прямоугольная",
-        //             "Расстояние от смесителя до слива": "12 см>",
-        //             "Рекомендованная мин. длина излива": "14 см",
-        //             "Гарантия": "2 года",
-        //             "Страна": "Россия",
-        //             "Линии форм": "Прямые",
-        //             "Раковина-столешница": "Нет",
-        //             "Со скрытым сливом": "Да",
-        //         }
-        //     },
-        //     {
-        //         id: 100,
-        //         name: "Название товара",
-        //         image: ["/img/favorite/4.png"],
-        //         code: "4554545",
-        //         price: 1540,
-        //         old_price: 8220,
-        //         brend_name: "Название бренда",
-        //         size: "44 x 75 x 20",
-        //         available: 1,
-        //         dataParams: {
-        //             "Ширина": "60 cm",
-        //             "Глубина": "55 cm",
-        //             "Высота": "10 cm§",
-        //             "Габариты2": "60x55",
-        //             "Ширина стиральной машины": "60 cm",
-        //             "Глубина стиральной машины": "45 cm",
-        //             "Вид раковины": "-",
-        //             "Форма": "Прямоугольная",
-        //             "Расстояние от смесителя до слива": "12 см>",
-        //             "Рекомендованная мин. длина излива": "14 см",
-        //             "Гарантия": "2 года",
-        //             "Страна": "Россия",
-        //             "Линии форм": "Прямые",
-        //             "Раковина-столешница": "Нет",
-        //             "Со скрытым сливом": "Да",
-        //         }
-        //     },
-        //     {
-        //         id: 100,
-        //         name: "Название товара",
-        //         image: ["/img/favorite/5.png"],
-        //         code: "4554545",
-        //         price: 1540,
-        //         old_price: 8220,
-        //         brend_name: "Название бренда",
-        //         size: "44 x 75 x 20",
-        //         available: 1,
-        //         dataParams: {
-        //             "Ширина": "60 cm",
-        //             "Глубина": "55 cm",
-        //             "Высота": "10 cm§",
-        //             "Габариты2": "60x55",
-        //             "Ширина стиральной машины": "60 cm",
-        //             "Глубина стиральной машины": "45 cm",
-        //             "Вид раковины": "-",
-        //             "Форма": "Прямоугольная",
-        //             "Расстояние от смесителя до слива": "12 см>",
-        //             "Рекомендованная мин. длина излива": "14 см",
-        //             "Гарантия": "2 года",
-        //             "Страна": "Россия",
-        //             "Линии форм": "Прямые",
-        //             "Раковина-столешница": "Нет",
-        //             "Со скрытым сливом": "Да",
-        //         }
-        //     },
-        //     {
-        //         id: 100,
-        //         name: "Название товара",
-        //         image: ["/img/favorite/6.png"],
-        //         code: "4554545",
-        //         price: 1540,
-        //         old_price: 8220,
-        //         brend_name: "Название бренда",
-        //         size: "44 x 75 x 20",
-        //         available: 1,
-        //         dataParams: {
-        //             "Ширина": "60 cm",
-        //             "Глубина": "55 cm",
-        //             "Высота": "10 cm§",
-        //             "Габариты2": "60x55",
-        //             "Ширина стиральной машины": "60 cm",
-        //             "Глубина стиральной машины": "45 cm",
-        //             "Вид раковины": "-",
-        //             "Форма": "Прямоугольная",
-        //             "Расстояние от смесителя до слива": "12 см>",
-        //             "Рекомендованная мин. длина излива": "14 см",
-        //             "Гарантия": "2 года",
-        //             "Страна": "Россия",
-        //             "Линии форм": "Прямые",
-        //             "Раковина-столешница": "Нет",
-        //             "Со скрытым сливом": "Да",
-        //         }
-        //     }];
+
         return { title, breadcrumbsData }
     }
 }

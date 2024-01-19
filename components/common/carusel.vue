@@ -4,8 +4,8 @@
       <section ref="splideEl" class="splide">
         <div class="splide__track">
           <ul class="splide__list">
-            <li v-for="(els, i) in data" :key="i" class="splide__slide">
-              <slot :els="els"></slot>
+            <li v-for="(els, i) in items" :key="i" class="splide__slide">
+              <s-guide-style-items-el :el="els" />
             </li>
           </ul>
         </div>
@@ -46,8 +46,9 @@ export default {
   },
   mounted() {
     var splide = new Splide(this.$refs.splideEl, {
-      perPage: 1,
-      fixedWidth: "1370px",
+      perPage: 3,
+      gap: '1.5rem',
+      // fixedWidth: "1370px",
       rewind: true,
       type: 'loop'
     });

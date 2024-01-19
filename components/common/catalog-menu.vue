@@ -15,7 +15,9 @@
                   :key="i"
                 >
                 <nuxt-link :to="'/catalog/' + el.id">
-                  <span class="s-catalog-links-el-icon"><img/></span>
+                  <span class="s-catalog-links-el-icon">
+                    <img/>
+                  </span>
                   <!-- <span class="s-catalog-links-el-icon"><img :src="el.icon"/></span> -->
                   {{ el.name }}
                 </nuxt-link>
@@ -50,7 +52,7 @@
                         :key="i"
                         @click="$emit('input')"
                       >
-                        <nuxt-link class="underlined" :to="el">{{ el }}</nuxt-link>
+                        <nuxt-link class="underlined" to="#">{{ el }}</nuxt-link>
                       </v-col>
                     </v-row>
                   </div>

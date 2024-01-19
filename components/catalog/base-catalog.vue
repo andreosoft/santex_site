@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="data[0]">
     <v-row v-if="data[0].isparent == 0" class="s-row d-flex justify-center mb-5 mt-5">
       <!-- {{data}} -->
       <div>

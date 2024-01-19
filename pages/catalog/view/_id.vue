@@ -231,10 +231,6 @@ async function getData({ route, $axios, $config }) {
   console.log(dataCat);
   const breadcrumbsData = [
     {
-      url: "",
-      title: "Каталог",
-    },
-    {
       url: "/catalog/" + dataCat.id,
       title: dataCat.name,
     },
@@ -291,6 +287,7 @@ export default {
     toCompare(){
                 let item = {
                   id: this.data.id,
+                  category_id: this.data.category_id,
                   name: this.data.name,
                   image: this.data.images ? this.data.images[0] : '',
                   price: this.data.price,
