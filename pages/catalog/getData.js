@@ -94,7 +94,11 @@ export async function getData({ route, $axios, $config }) {
   //   }
   // });
   // const dataPromote = resPromote.data.data;
-  const FiltersPromote = resPromote ? await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', {params: {filters: filtersPromote}}) : '';
+  let filtersPromoteOnly = {"status": 1};
+  Object.assign(filtersPromoteOnly, { "ic.promote_id": category_id });
+
+  
+  const FiltersPromote = resPromote ? await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', {params: {filters: filtersPromoteOnly}}) : '';
   const dataFiltersPromote = FiltersPromote ? FiltersPromote.data.data : '';
 
 
@@ -102,9 +106,19 @@ export async function getData({ route, $axios, $config }) {
   let resCat;
   try { if (category_id && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);} catch (e) {console.error(e)}
   
+  let filtersOnly = {};
+  Object.assign(filtersOnly, { status: 1 });
+  if (category_id) Object.assign(filtersOnly, { category_id: category_id });
+  if (searchInput) Object.assign(filtersOnly, { "OR": [
+    {id: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {name: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
+    {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
+    
+
   let resFilters;
   try {
-    if(res) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filters } });  
+    if(res) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filtersOnly } });  
   } catch (e) {
     console.error(e)
   }
@@ -251,7 +265,6 @@ export async function getData({ route, $axios, $config }) {
   } catch (error) {
     console.error(error);
   }
-
 
 
   return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, dataPromote, dataFiltersPromote, pagerPromote, carouselItems, category_id };

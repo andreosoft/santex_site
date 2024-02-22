@@ -46,7 +46,7 @@
                     <v-col cols="5">
                         <div class="d-flex">
                             <div class="mr-4 pa-2" style="border: 0.5px solid black">
-                                <v-img style="width: 100px; height: 100px;" :src="$config.baseImageURL+el.img+'?width=270&height=270'" />
+                                <v-img contain style="width: 100px; height: 100px;" :src="$config.baseImageURL+el.img+'?width=270&height=270'" />
                             </div>
                             <div>
                                 <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>

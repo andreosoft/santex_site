@@ -33,7 +33,7 @@
         }
       },
       needExpand() {
-        if (this.params.length > 8) return true;
+        if (this.params.length > 4) return true;
         return false;
       }
     }
