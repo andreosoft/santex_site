@@ -1,6 +1,6 @@
 <template>
   <div v-if="data[0]">
-    <v-row v-if="data[0].isparent == 0" class="s-row d-flex justify-center mb-5 mt-5">
+    <v-row v-if="data[0].hasOwnProperty('isparent')" class="s-row d-flex justify-center mb-5 mt-5">
       <!-- {{data}} -->
       <div>
         <!-- <img v-if="categoriesData.images" :src="$config.baseImageURL + categoriesData.images[0]" alt="banner"> -->
@@ -29,12 +29,12 @@
       </template>
     </v-snackbar>
     <v-row class="s-row">
-      <v-col v-if="data[0].isparent !== 0" cols="3">
+      <v-col v-if="!data[0].hasOwnProperty('isparent')" cols="3">
         <div>
           <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
         </div>
       </v-col>
-      <v-col v-if="data[0].isparent !== 0" cols="9">
+      <v-col v-if="!data[0].hasOwnProperty('isparent')" cols="9">
         <catalog-top-bar :count="pager.count" :sort="sort" />
         <v-row v-if="loading" class="s-row">
           <v-col cols="4" v-for="(el, i) in pager.limit" :key="i">
@@ -57,7 +57,7 @@
             <v-skeleton-loader class="mx-auto" max-width="300" type="card"></v-skeleton-loader>
           </v-col>
         </v-row>
-        <v-row v-else-if="data[0].isparent !== 0" class="s-row" :class="{ close: !toggleOpen, 'catalog-items': pager.limit == 0 }">
+        <v-row v-else-if="!data[0].hasOwnProperty('isparent')" class="s-row" :class="{ close: !toggleOpen, 'catalog-items': pager.limit == 0 }">
           <v-col cols="4" v-for="(el, i) in data" :key="i">
             <catalog-item-list :el="el" @addItemFav="addItemFav" @addItemCom="addItemCom" @addItemCart="addItemCart" />
           </v-col>

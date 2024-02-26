@@ -2,8 +2,16 @@
   <v-container class="mb-10">
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-    <h1>{{ title }}</h1>
-    <base-catalog :data="subcat ? subcat?.content : data" :categoriesData="subcat ? subcat : {}" :loading="loading" :dataFilters="dataFilters" :valueFilters="valueFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event"/>
+    <h1>{{ title ? title : subcat?.name }}</h1>
+    <base-catalog 
+      :data="subcat ? subcat?.content : data" 
+      :categoriesData="subcat ? subcat : {}" 
+      :loading="loading" 
+      :dataFilters="dataFilters" 
+      :valueFilters="valueFilters" 
+      :pager="pager" 
+      :sort="sort" 
+      @update-data="valueFilters = $event"/>
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -23,7 +31,10 @@ export default {
     }
   },
   computed: {
-    ...mapGetters ({categories: 'getCategories'}),
+    ...mapGetters ({allCategories: 'getCategories'}),
+    categories(){
+      return [{id: 'allcategories', name: 'Каталог', isparent: 0,  parent_id: 0, content: this.allCategories}, ...this.allCategories]
+    },
     subcat(){
       return this.categories.find(item => item.id == this.category_id)
     }

@@ -37,7 +37,7 @@
             <div style="font-weight: bold; font-size: 46px;">В избранном пусто</div>
             <div style="font-size: 20px; margin: 5px 0 30px 0;">Перейдите в каталог</div>
             <div>
-              <v-btn dark to="/catalog/156">В каталог</v-btn>
+              <v-btn dark to="/catalog/allcategories">В каталог</v-btn>
             </div>
           </div>
         <div v-show="dataFav.length !== 0">

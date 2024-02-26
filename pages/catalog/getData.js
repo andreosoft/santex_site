@@ -104,7 +104,7 @@ export async function getData({ route, $axios, $config }) {
 
   
   let resCat;
-  try { if (category_id && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);} catch (e) {console.error(e)}
+  try { if (category_id && category_id !== 'allcategories' && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);} catch (e) {console.error(e)}
   
   let filtersOnly = {};
   Object.assign(filtersOnly, { status: 1 });
@@ -212,9 +212,20 @@ export async function getData({ route, $axios, $config }) {
   function breadcrumbs(category_id, title, value) {
     let breadcrumbsData;
     if (category_id !== undefined) {
-      if(resCat){
+      if(category_id == 'allcategories'){
+        breadcrumbsData = [
+          {
+            url: "/catalog/" + category_id,
+            title: 'Каталог',
+          },
+        ];
+      } else if(resCat){
         if (resCat.data.data.parent_id){
           breadcrumbsData = [
+            {
+              url: "/catalog/" + 'allcategories',
+              title: 'Каталог',
+            },
             {
               url: "/catalog/" + resCat.data.data.parent_id,
               title: resCat.data.data.parent_name,
@@ -226,6 +237,10 @@ export async function getData({ route, $axios, $config }) {
           ];
         } else {
           breadcrumbsData = [
+            {
+              url: "/catalog/" + 'allcategories',
+              title: 'Каталог',
+            },
             {
               url: "/catalog/" + category_id,
               title: title,
@@ -246,10 +261,10 @@ export async function getData({ route, $axios, $config }) {
           url: "",
           title: "Поиск"
         },
-        {
-          url: "",
-          title: value
-        }
+        // {
+        //   url: "",
+        //   title: value
+        // }
       ]
     }
     return breadcrumbsData;
