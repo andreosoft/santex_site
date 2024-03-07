@@ -6,7 +6,7 @@
 
         </span>
 
-        <v-dialog v-model="dialog" scrollable persistent :overlay="false" max-width="730px"
+        <v-dialog v-model="dialog" scrollable persistent :overlay="false" max-width="730px" style="z-index: 2000;"
             transition="dialog-transition">
             <div class="s-popup">
                 <div>

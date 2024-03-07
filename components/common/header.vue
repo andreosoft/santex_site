@@ -1,6 +1,6 @@
 <template>
   <div>
-    <common-top />
+    <common-top @showCatalog="showCatalogMenu = false" />
     <v-container>
       <div class="py-4 mb-6">
         <div class="d-flex justify-space-between">
@@ -10,18 +10,18 @@
             <a class="s-header-phones pr-3" href="tel://84952256285">8 495 225 62 85</a>
           <a target="_blank" href="https://api.whatsapp.com/send/?phone=89672823107"><span><img src="/icons/whats_small.svg" alt="" /></span></a>
           </div>
-          <div class="s-header-actions-block">
-            <nuxt-link to="/"><img src="/icons/profile.svg" alt="" /></nuxt-link>
-            <nuxt-link class="ml-6" to="/favorite">
+          <div class="s-header-actions-block" @click="disableMenu($event)">
+            <nuxt-link class="s-main-link" to="/"><img src="/icons/profile.svg" alt="" /></nuxt-link>
+            <nuxt-link class="ml-6 s-main-link" to="/favorite">
               <img src="/icons/like.svg" alt="" />
               <div v-show="countItemsFav !== 0" class="cartIcon">{{ countItemsFav }}</div>
             </nuxt-link>
-            <nuxt-link class="ml-6" to="/compare">
+            <nuxt-link class="ml-6 s-main-link" to="/compare">
               <img src="/icons/compare.svg" alt="" />
               <div v-show="countItemsCom !== 0" class="cartIcon">{{ countItemsCom }}</div>
             </nuxt-link>
             <!-- <div style="width: 70px;" class="ml-6 d-inline-block"> -->
-              <nuxt-link class="ml-6" to="/cart">
+              <nuxt-link class="ml-6 s-main-link" to="/cart">
                   <img src="/icons/basket.svg" alt="compare" />
                   <div v-show="countItems !== 0" class="cartIcon">{{ countItems }}</div>
               </nuxt-link>
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-      <div class="s-header-main-logo">
+      <div class="s-header-main-logo" @click="showCatalogMenu = false">
         <nuxt-link to="/"><img src="/icons/logo.svg" /></nuxt-link>
       </div>
       <div>
@@ -41,12 +41,12 @@
               товаров
             </div>
           </div>
-          <div class="s-header-menu-links pt-2">
-            <nuxt-link to="/brends">Бренды</nuxt-link>
-            <nuxt-link to="/blog">Блог</nuxt-link>
-            <nuxt-link to="/designers">Наши дизайнеры</nuxt-link>
-            <nuxt-link to="/consulting">Запись на консультацию</nuxt-link>
-            <nuxt-link to="/promote/1"><img src="/icon-discont.png" class="pr-1" />Распродажа</nuxt-link>
+          <div class="s-header-menu-links pt-2" @click="disableMenu($event)">
+            <nuxt-link class="s-main-link" to="/brends">Бренды</nuxt-link>
+            <nuxt-link class="s-main-link" to="/blog">Блог</nuxt-link>
+            <nuxt-link class="s-main-link" to="/designers">Наши дизайнеры</nuxt-link>
+            <nuxt-link class="s-main-link" to="/consulting">Запись на консультацию</nuxt-link>
+            <nuxt-link class="s-main-link" to="/promote/1"><img src="/icon-discont.png" class="pr-1" />Распродажа</nuxt-link>
           </div>
           <form @submit.prevent="submitSearch()">
             <div class="s-header-menu-search">
@@ -78,8 +78,14 @@ export default {
     }
   },
   methods: {
+    disableMenu(e){
+      if(e.target.classList.contains('s-main-link') || e.target.closest('.s-main-link')){
+        this.showCatalogMenu = false;
+      }
+    },
     submitSearch() {
       this.$router.push({ path: '/catalog/search', query: { q: this.search } })
+      this.showCatalogMenu = false;
     },
   },
   computed: {
