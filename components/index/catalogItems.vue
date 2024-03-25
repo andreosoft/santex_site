@@ -22,13 +22,13 @@
         </v-col>
       </v-row>
     </div> -->
-    <div class="d-bock d-lg-none">
-      <!-- <v-carousel v-model="carouselModel">
+    <!-- <div class="d-bock d-lg-none">
+      <v-carousel v-model="carouselModel">
         <v-carousel-item v-for="(el, i) in items" :key="i">
           <index-new-items-el-carusel :el="el" />
         </v-carousel-item>
-      </v-carousel> -->
-    </div>
+      </v-carousel>
+    </div> -->
     <div class="text-center mt-14 pt-8">
         <v-btn @click="dataCatalog.length == 8 ? dataCatalog = items : dataCatalog = items.slice(0, 8)" class="s-btn-main s-btn-text">ВСЕ КАТЕГОРИИ</v-btn>
     </div>

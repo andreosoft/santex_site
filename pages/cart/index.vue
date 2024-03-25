@@ -40,92 +40,94 @@
                             <div class="grey--text"></div>
                         </v-col>
                     </v-row>
-            <div v-for="(el, i) in cart" :key="i" class="align-center">
-                <v-row>
-                    <v-col cols="5">
-                        <div class="d-flex">
-                            <div class="mr-4 pa-2" style="border: 0.5px solid black">
-                                <v-img contain style="width: 100px; height: 100px;" :src="$config.baseImageURL+el.img+'?width=270&height=270'" />
-                            </div>
-                            <div>
-                                <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
-                                <div @click="toItem(el)" style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
-                                <div style="font-size: 13px">
-                                    <span class="grey--text mr-2">Бренд:</span>
-                                    <span>{{ el.brand }}</span>
-                                </div>
-                                <div style="font-size: 13px" v-show="el.height && el.width && el.length">
-                                    <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
-                                    <span>{{`${el.length} x ${el.width} x ${el.height}` }}</span>
-                                  </div>
-                                  <div style="font-size: 13px" v-show="!el.length && el.width && el.height">
-                                    <span class="grey--text mr-2">Габариты (Ш.В): </span>
-                                    <span>{{`${el.width} ${' x ' + el.height}` }}</span>
-                                  </div>
-                                  <div style="font-size: 13px" v-show="!el.width && el.length && el.height">
-                                    <span class="grey--text mr-2">Габариты (Д.В): </span>
-                                    <span>{{`${el.length}${' x ' + el.height}` }}</span>
-                                  </div>
-                                  <div style="font-size: 13px" v-show="!el.height && el.length && el.width">
-                                    <span class="grey--text mr-2">Габариты (Д.Ш): </span>
-                                    <span>{{`${el.length} x ${el.width}` }}</span>
-                                  </div>
-                                  <div style="font-size: 13px" v-show="!el.length && !el.width && !el.height">
-                                    <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
-                                    <span>Не указаны</span>
-                                  </div>
-
-
-                            </div>
+                    <div>
+                        <div v-for="(el, i) in cart" :key="i" class="align-center">
+                            <v-row>
+                                <v-col cols="5">
+                                    <div class="d-flex">
+                                        <div class="mr-4 pa-2" style="border: 0.5px solid black">
+                                            <v-img contain style="width: 100px; height: 100px;" :src="$config.baseImageURL+el.img+'?width=270&height=270'" />
+                                        </div>
+                                        <div>
+                                            <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
+                                            <div @click="toItem(el)" style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
+                                            <div style="font-size: 13px">
+                                                <span class="grey--text mr-2">Бренд:</span>
+                                                <span>{{ el.brand }}</span>
+                                            </div>
+                                            <div style="font-size: 13px" v-show="el.height && el.width && el.length">
+                                                <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
+                                                <span>{{`${el.length} x ${el.width} x ${el.height}` }}</span>
+                                              </div>
+                                              <div style="font-size: 13px" v-show="!el.length && el.width && el.height">
+                                                <span class="grey--text mr-2">Габариты (Ш.В): </span>
+                                                <span>{{`${el.width} ${' x ' + el.height}` }}</span>
+                                              </div>
+                                              <div style="font-size: 13px" v-show="!el.width && el.length && el.height">
+                                                <span class="grey--text mr-2">Габариты (Д.В): </span>
+                                                <span>{{`${el.length}${' x ' + el.height}` }}</span>
+                                              </div>
+                                              <div style="font-size: 13px" v-show="!el.height && el.length && el.width">
+                                                <span class="grey--text mr-2">Габариты (Д.Ш): </span>
+                                                <span>{{`${el.length} x ${el.width}` }}</span>
+                                              </div>
+                                              <div style="font-size: 13px" v-show="!el.length && !el.width && !el.height">
+                                                <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
+                                                <span>Не указаны</span>
+                                              </div>
+            
+            
+                                        </div>
+                                    </div>
+                                </v-col>
+                                <v-col cols="2">
+                                    <div style="font-size: 22px">
+                                        <b><number :value="el.price" /> ₽</b>
+                                    </div>
+                                </v-col>
+                                <v-col cols="2">
+                                    <div style="max-width: 160px" class="cart-count">
+                                        <div v-show="el.type == 2" class="mb-2 justify-space-between" :class="{ 'd-flex': el.type == 2 }">
+                                            <v-btn class="s-btn-text" dark>м<sup>2</sup></v-btn>
+                                            <v-btn class="s-btn-text">упак</v-btn>
+                                        </div>
+                                        <v-text-field
+                                        type="number" 
+                                        @blur="preventZero($event.target.value, el.code)" 
+                                        hide-details 
+                                        class="s-input-text-center" 
+                                        outlined 
+                                        dense 
+                                        :value="el.count"
+                                        >
+                                            <v-btn @click="countPlus(el)" style="margin-top: -6px;" slot="append" icon>
+                                                <i class="fa-solid fa-plus"></i>
+                                            </v-btn>
+                                            <v-btn @click="countMinus(el)" style="margin-top: -6px;" slot="prepend-inner" icon>
+                                                <i class="fa-solid fa-minus"></i>
+                                            </v-btn>
+                                        </v-text-field>
+                                    </div>
+                                </v-col>
+                                <v-col cols="2">
+                                    <div>
+                                        <div style="font-size: 22px">
+                                            <b><number :value="el.count * el.price" /> ₽</b>
+                                        </div>
+                                        <div v-show="el.old_price" style="font-size: 16px; text-decoration: line-through;"
+                                            class="grey--text">
+                                            <b><number :value="el.count * el.old_price" /> ₽</b>
+                                        </div>
+                                    </div>
+                                </v-col>
+                                <v-col cols="1">
+                                    <div>
+                                        <v-btn icon><img @click="deleteItem(el)" src="/icons/trash.png" alt="removeitem-icon"/></v-btn>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                            <v-divider class="my-8" />
                         </div>
-                    </v-col>
-                    <v-col cols="2">
-                        <div style="font-size: 22px">
-                            <b><number :value="el.price" /> ₽</b>
-                        </div>
-                    </v-col>
-                    <v-col cols="2">
-                        <div style="max-width: 160px" class="cart-count">
-                            <div v-show="el.type == 2" class="mb-2 justify-space-between" :class="{ 'd-flex': el.type == 2 }">
-                                <v-btn class="s-btn-text" dark>м<sup>2</sup></v-btn>
-                                <v-btn class="s-btn-text">упак</v-btn>
-                            </div>
-                            <v-text-field
-                            type="number" 
-                            @blur="preventZero($event.target.value, el.code)" 
-                            hide-details 
-                            class="s-input-text-center" 
-                            outlined 
-                            dense 
-                            :value="el.count"
-                            >
-                                <v-btn @click="countPlus(el)" style="margin-top: -6px;" slot="append" icon>
-                                    <i class="fa-solid fa-plus"></i>
-                                </v-btn>
-                                <v-btn @click="countMinus(el)" style="margin-top: -6px;" slot="prepend-inner" icon>
-                                    <i class="fa-solid fa-minus"></i>
-                                </v-btn>
-                            </v-text-field>
-                        </div>
-                    </v-col>
-                    <v-col cols="2">
-                        <div>
-                            <div style="font-size: 22px">
-                                <b><number :value="el.count * el.price" /> ₽</b>
-                            </div>
-                            <div v-show="el.old_price" style="font-size: 16px; text-decoration: line-through;"
-                                class="grey--text">
-                                <b><number :value="el.count * el.old_price" /> ₽</b>
-                            </div>
-                        </div>
-                    </v-col>
-                    <v-col cols="1">
-                        <div>
-                            <v-btn icon><img @click="deleteItem(el)" src="/icons/trash.png" alt="removeitem-icon"/></v-btn>
-                        </div>
-                    </v-col>
-                </v-row>
-                <v-divider class="my-8" />
             </div>
         </div>
         <div class="mb-8">

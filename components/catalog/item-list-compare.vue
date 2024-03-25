@@ -9,7 +9,7 @@
           <v-btn @click="removeItem(el)" icon style="padding-bottom: 4px;"><i style="font-size: 20px;" class="grey--text fas fa-times-circle"></i></v-btn>
         </div>
       </div>
-      <div class="d-flex justify-space-between mb-4">
+      <div class="d-flex justify-space-between mt-2 mb-4">
         <div style="margin: 3px 0; font-size: 13px">
           <catalog-available :value="el.store" />
         </div>
@@ -37,10 +37,11 @@
         <div class="my-2" style=" font-weight: bold;">
           <span style="font-size: 20px; font-weight: bold;">
             <number :value="el.price" /> ₽
-          </span><span class="ml-2" v-if="el.old_price"
+          </span>
+          <!-- <span class="ml-2" v-if="el.old_price"
           style="font-size: 13px; text-decoration: line-through; color: #949494">
           <number :value="el.old_price" /> ₽
-        </span>
+        </span> -->
       </div>
     </div>
     <div class="d-flex justify-space-between align-center">

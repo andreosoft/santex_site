@@ -4,8 +4,8 @@
     <div style="margin-bottom: 110px!important;">
       <div class="d-none d-lg-block">
         <v-row>
-          <v-col class="pa-0" lg="6" v-for="(el, i) in items" :key="i">
-            <index-new-items-el :el="el" />
+          <v-col class="pa-0 col-lg-6" v-for="(el, i) in activeData" :key="i">
+            <index-new-items-el style="height: 488px" :el="el" />
           </v-col>
         </v-row>
       </div>
@@ -18,8 +18,8 @@
       </div>
     </div>
     <div class="text-center mt-14">
-      <v-btn class="s-btn-main s-btn-text">
-        <NuxtLink to="/promote/2">БОЛЬШЕ НОВИНОК</NuxtLink>
+      <v-btn @click="toggleTwo < items.length ? toggleTwo+=2 : toggleTwo=2" class="s-btn-main s-btn-text">
+        <span>{{toggleTwo < items.length ? 'БОЛЬШЕ НОВИНОК' : 'СКРЫТЬ'}}</span>
       </v-btn>
     </div>
   </div>
@@ -33,8 +33,14 @@ export default {
   data() {
     return {
       carouselModel: 0,
+      toggleTwo: 2,
     };
   },
+  computed: {
+    activeData() {
+      return this.items.slice(0, this.toggleTwo); 
+    },
+  }
 };
 </script>
 
