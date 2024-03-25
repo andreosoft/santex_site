@@ -7,6 +7,17 @@
       <p><b>Вы искали: </b><span class="underlined">{{ searchInput }}</span>, найдено {{ pager.count }} шт.</p>
     </div>
     <v-divider class="mb-10" />
+    <div v-show="data.length == 0">
+      <div class="mb-10" style="font-weight: bold;">К сожалению по вашему запросу ничего не найдено.</br>
+          Попробуйте изменить ключевые слова поиска.</div>
+      <div style="width: 724px;">
+        <v-text-field @keyup.enter="submitSearch()" v-model="search" single-line outlined dense label="Я хочу найти">
+          <template v-slot:append>
+            <img style="cursor: pointer" @click="submitSearch()" src="/icons/Search.svg" />
+          </template>
+        </v-text-field>
+      </div>
+  </div>
     <base-catalog
     :loading="loading"
     :data="data"
@@ -31,9 +42,13 @@ export default {
   data() {
     return {
       loading: true,
+      search: ''
     };
   },
   methods: {
+    submitSearch() {
+      this.$router.push({ path: '/catalog/search', query: { q: this.search } })
+    },
     valueFiltersFinal(v) {
       let filters = {};
       if (v.price && v.price.length > 0) {
@@ -59,6 +74,7 @@ export default {
         this.valueFilters = p.valueFilters;
         this.pager = p.pager;
         this.searchInput = p.searchInput;
+        this.search = '';
       },
     },
   },

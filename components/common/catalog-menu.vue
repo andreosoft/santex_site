@@ -52,7 +52,7 @@
                         :key="i"
                         @click="$emit('input')"
                       >
-                        <nuxt-link class="underlined" to="#">{{ el }}</nuxt-link>
+                        <nuxt-link class="underlined" :to="'/catalog/search?q=' + el">{{ el }}</nuxt-link>
                       </v-col>
                     </v-row>
                   </div>

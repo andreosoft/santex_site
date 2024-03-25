@@ -2,16 +2,15 @@
     <v-container class="mb-10">
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsDataPromote" />
-        <h1>Акции</h1>
+        <h1 v-if="infoPromote && infoPromote[0].name">{{ infoPromote[0].name }}</h1>
         <v-divider class="mb-8" />
         <div>
-          <img :src="$config.baseImageURL + carouselItems[carouselItems.length - 1]" alt="banner">
+          <img v-if="carouselItems" :src="$config.baseImageURL + carouselItems[carouselItems.length - 1]" alt="banner">
           <!-- <index-mainCarusel :items="carouselItems"/> -->
         </div>
-        <v-divider class="mb-8" />
-        <h2>Жирные скидки -20%</h2>
+        <v-divider v-if="carouselItems"  class="mb-8" />
         <!-- <v-divider class="mb-8" /> -->
-        <p>Текстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блокТекстовый блок</p>
+        <div v-if="infoPromote && infoPromote[0].content" v-html="infoPromote[0].content"></div>
         <v-divider class="mb-8" />
         <catalog-base-catalog :data="dataPromote" :loading="loading" :dataFilters="dataFiltersPromote" :valueFilters="valueFilters" :pager="pagerPromote" :sort="sort" @update-data="valueFilters = $event"/>
     <div class="text-center mt-10">
@@ -36,11 +35,7 @@ export default {
   data() {
     return { 
       toggleOpen: false,
-      loading: true,
-      breadcrumbsDataPromote: [{
-        url: `/promote/${this.$route.params.id}`,
-        title: "Акции",
-      }]
+      loading: true
     }
   },
   watch: {

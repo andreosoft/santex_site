@@ -96,6 +96,20 @@ const mutations = {
         state.cart.data = item;
         localStorage.setItem('usercart', JSON.stringify(state.cart.data));
     },
+    updateCount(state, data) {
+    //   console.log(data);
+      let count = data.event;
+      const cart = state.cart.data;
+      const sim = cart.find((element) => { if (element.code == data.code) { return element } });
+      console.log(count);
+      if(+count>0){
+          sim.count = +count;
+      } else {
+            console.log('qwewqe')
+          sim.count = 1;
+      }
+      localStorage.setItem('usercart', JSON.stringify(cart));
+    },
     remove(state, item) {
         const cart = state.cart.data;
         let indexStorage;

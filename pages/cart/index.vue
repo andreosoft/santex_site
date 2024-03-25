@@ -12,35 +12,34 @@
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex flex-row justify-space-between align-center">
             <h1>{{ title }}</h1>
-            <v-btn v-show="cart.length !== 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
+            <v-btn v-show="cart.length > 0" @click="removeAll" outlined class="mb-5 pt-2 pb-2 clearBtn">Очистить корзину <img src="/icons/del_card.svg" class="del_card ms-2" /></v-btn>
         </div>
         <v-divider class="mb-8" />
-        <div v-if="cart.length == 0" style="padding: 120px 0;" class="text-center">
+        <div v-show="cart.length == 0" style="padding: 120px 0;" class="text-center">
             <div style="font-weight: bold; font-size: 46px;">Ваша корзина пуста</div>
             <div style="font-size: 20px; margin: 5px 0 30px 0;">Перейдите в каталог</div>
             <div>
               <v-btn dark to="/catalog/allcategories">В каталог</v-btn>
             </div>
           </div>
-        <div v-else>
-            <v-row>
-                <v-col cols="5">
-                    <div class="grey--text">Товар</div>
-                </v-col>
-                <v-col cols="2">
-                    <div class="grey--text">Стоимость</div>
-                </v-col>
-                <v-col cols="2">
-                    <div class="grey--text">Количество</div>
-                </v-col>
-                <v-col cols="2">
-                    <div class="grey--text">Цена</div>
-                </v-col>
-                <v-col cols="1">
-                    <div class="grey--text"></div>
-                </v-col>
-            </v-row>
-
+        <div v-show="cart.length > 0">
+                    <v-row>
+                        <v-col cols="5">
+                            <div class="grey--text">Товар</div>
+                        </v-col>
+                        <v-col cols="2">
+                            <div class="grey--text">Стоимость</div>
+                        </v-col>
+                        <v-col cols="2">
+                            <div class="grey--text">Количество</div>
+                        </v-col>
+                        <v-col cols="2">
+                            <div class="grey--text">Цена</div>
+                        </v-col>
+                        <v-col cols="1">
+                            <div class="grey--text"></div>
+                        </v-col>
+                    </v-row>
             <div v-for="(el, i) in cart" :key="i" class="align-center">
                 <v-row>
                     <v-col cols="5">
@@ -51,27 +50,28 @@
                             <div>
                                 <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
                                 <div @click="toItem(el)" style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
-                                <!-- <div v-if="el.depth !== '' " style="font-size: 13px"><span class="grey--text mr-2">Габариты
-                                        (Г.Ш.В):</span><span>{{`${el.depth} x ${el.width} x ${el.height}` }}</span></div>
-                                <div v-else style="font-size: 13px"><span class="grey--text mr-2">Габариты
-                                        (Д.Ш.В):</span><span>{{`${el.lengthItem} x ${el.width} x ${el.height}` }}</span></div> -->
-                                <div style="font-size: 13px"><span class="grey--text mr-2">Бренд:</span><span>{{
-                                        el.brand
-                                }}</span></div>
-
-                                <div style="font-size: 13px" v-if="el.height && el.width && el.length"><span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
+                                <div style="font-size: 13px">
+                                    <span class="grey--text mr-2">Бренд:</span>
+                                    <span>{{ el.brand }}</span>
+                                </div>
+                                <div style="font-size: 13px" v-show="el.height && el.width && el.length">
+                                    <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
                                     <span>{{`${el.length} x ${el.width} x ${el.height}` }}</span>
                                   </div>
-                                  <div style="font-size: 13px" v-else-if="!el.length && el.width && el.height"><span class="grey--text mr-2">Габариты (Ш.В): </span>
+                                  <div style="font-size: 13px" v-show="!el.length && el.width && el.height">
+                                    <span class="grey--text mr-2">Габариты (Ш.В): </span>
                                     <span>{{`${el.width} ${' x ' + el.height}` }}</span>
                                   </div>
-                                  <div style="font-size: 13px" v-else-if="!el.width && el.length && el.height"><span class="grey--text mr-2">Габариты (Д.В): </span>
+                                  <div style="font-size: 13px" v-show="!el.width && el.length && el.height">
+                                    <span class="grey--text mr-2">Габариты (Д.В): </span>
                                     <span>{{`${el.length}${' x ' + el.height}` }}</span>
                                   </div>
-                                  <div style="font-size: 13px" v-else-if="!el.height && el.length && el.width"><span class="grey--text mr-2">Габариты (Д.Ш): </span>
+                                  <div style="font-size: 13px" v-show="!el.height && el.length && el.width">
+                                    <span class="grey--text mr-2">Габариты (Д.Ш): </span>
                                     <span>{{`${el.length} x ${el.width}` }}</span>
                                   </div>
-                                  <div style="font-size: 13px" v-else><span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
+                                  <div style="font-size: 13px" v-show="!el.length && !el.width && !el.height">
+                                    <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
                                     <span>Не указаны</span>
                                   </div>
 
@@ -85,16 +85,26 @@
                         </div>
                     </v-col>
                     <v-col cols="2">
-                        <div style="max-width: 160px">
-                            <div class="mb-2 d-flex justify-space-between" v-if="el.type == 2">
+                        <div style="max-width: 160px" class="cart-count">
+                            <div v-show="el.type == 2" class="mb-2 justify-space-between" :class="{ 'd-flex': el.type == 2 }">
                                 <v-btn class="s-btn-text" dark>м<sup>2</sup></v-btn>
                                 <v-btn class="s-btn-text">упак</v-btn>
                             </div>
-                            <v-text-field hide-details class="s-input-text-center" outlined dense v-model="el.count">
-                                <v-btn @click="countPlus(el)" style="margin-top: -6px;" slot="append" icon><i
-                                        class="fa-solid fa-plus"></i></v-btn>
-                                <v-btn @click="countMinus(el)" style="margin-top: -6px;"
-                                    slot="prepend-inner" icon><i class="fa-solid fa-minus"></i></v-btn>
+                            <v-text-field
+                            type="number" 
+                            @blur="preventZero($event.target.value, el.code)" 
+                            hide-details 
+                            class="s-input-text-center" 
+                            outlined 
+                            dense 
+                            :value="el.count"
+                            >
+                                <v-btn @click="countPlus(el)" style="margin-top: -6px;" slot="append" icon>
+                                    <i class="fa-solid fa-plus"></i>
+                                </v-btn>
+                                <v-btn @click="countMinus(el)" style="margin-top: -6px;" slot="prepend-inner" icon>
+                                    <i class="fa-solid fa-minus"></i>
+                                </v-btn>
                             </v-text-field>
                         </div>
                     </v-col>
@@ -103,7 +113,7 @@
                             <div style="font-size: 22px">
                                 <b><number :value="el.count * el.price" /> ₽</b>
                             </div>
-                            <div v-if="el.old_price" style="font-size: 16px; text-decoration: line-through;"
+                            <div v-show="el.old_price" style="font-size: 16px; text-decoration: line-through;"
                                 class="grey--text">
                                 <b><number :value="el.count * el.old_price" /> ₽</b>
                             </div>
@@ -119,7 +129,7 @@
             </div>
         </div>
         <div class="mb-8">
-            <v-row v-if="cart.length !== 0">
+            <v-row v-show="cart.length !== 0">
                 <v-col cols="3">
                     <v-text-field outlined hide-details placeholder="Введите промо-код">
                         <v-btn style="margin-top: -8px;" slot="append" fab dark small><i
@@ -134,7 +144,7 @@
                             <div style="font-size: 28px">
                                 <b><number :value="totalPrice" /> ₽</b>
                             </div>
-                            <div v-if="totalDiscount && totalDiscount !== 0" style="font-size: 14px" class="red--text">Экономия:
+                            <div v-show="totalDiscount && totalDiscount !== 0" style="font-size: 14px" class="red--text">Экономия:
                                 <number :value="totalDiscount" /> ₽
                             </div>
                         </div>
@@ -146,11 +156,14 @@
                     </div>
                     <div>
                         <span class="green--text">
-                            <span class="green mr-2" style="color: #fff; border-radius: 50%;width: 28px;
-    display: inline-block;
-    height: 28px;
-    text-align: center;
-    padding-top: 2px;"><img src="/icons/timer.png" /></span>В рассрочку </span>
+                            <span class="green mr-2" 
+                            style="color: #fff; border-radius: 50%;width: 28px;
+                                    display: inline-block;
+                                    height: 28px;
+                                    text-align: center;
+                                    padding-top: 2px;">
+                                <img src="/icons/timer.png" />
+                            </span>В рассрочку </span>
                         <span><b style="text-decoration: underline;">от 2 460 ₽/мес.</b></span>
                     </div>
                 </v-col>
@@ -178,33 +191,6 @@ export default {
                 title: title,
             }
         ];
-        // const data = [
-        //     {
-        //         id: 100,
-        //         name: "Название товара",
-        //         image: ["/img/cart/1.png"],
-        //         code: "4554545",
-        //         price: 1540,
-        //         old_price: 8220,
-        //         brend_name: "Название бренда",
-        //         size: "44 x 75 x 20",
-        //         available: 1,
-        //         count: 1,
-        //     },
-        //     {
-        //         id: 100,
-        //         type: 2,
-        //         name: "Название товара",
-        //         image: ["/img/cart/2.png"],
-        //         code: "4554545",
-        //         price: 1540,
-        //         old_price: 8220,
-        //         brend_name: "Название бренда",
-        //         size: "44 x 75 x 20",
-        //         available: 1,
-        //         count: 1.2,
-        //     },
-        // ]
         return { title, breadcrumbsData }
     },
     computed: {
@@ -216,6 +202,15 @@ export default {
     }),
     },
     methods: {
+        preventZero(event, code){
+            if(event == 0){
+                event == 1
+                this.$store.commit('cart/updateCount', {event, code});
+            } else {
+                this.$store.commit('cart/updateCount', {event, code});
+            }
+            // if (e.target.value === 0) e.target.value = 1
+        },
         deleteItem(el){
             this.$store.commit('cart/remove', el)
             this.snackbarCart = true
@@ -240,6 +235,14 @@ export default {
 
 
 <style lang="scss">
+.cart-count{
+    input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+         -webkit-appearance: none; 
+    }
+    input[type="number"] { 
+        -moz-appearance: textfield; 
+    }
+}
 .v-btn--icon{
     color: black !important;
 }

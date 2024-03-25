@@ -64,11 +64,19 @@ export async function getData({ route, $axios, $config }) {
   const data = res ? res.data.data : [];
   
   // console.log();
+  let carouselItems = [];
+  let infoPromote;
+  try {
+    if (route.name.match('promote')) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', {params: {filters: {type: category_id}}})).data.data;
+    carouselItems = infoPromote ? infoPromote[0].images : [];
+  } catch (error) {
+    console.error(error);
+  }
 
   let filtersPromote = {"status": 1};
   Object.assign(filtersPromote, route.query.filters ? JSON.parse(route.query.filters) : {});
   // Object.assign(filtersPromote, { "ic.promote_id": 1 });
-  Object.assign(filtersPromote, { "ic.promote_id": category_id });
+  if (route.name.match('promote')) Object.assign(filtersPromote, { "ic.promote_id": infoPromote[0].id });
   let resPromote;
   try {
     if(route.name.match('promote')){
@@ -95,14 +103,12 @@ export async function getData({ route, $axios, $config }) {
   // });
   // const dataPromote = resPromote.data.data;
   let filtersPromoteOnly = {"status": 1};
-  Object.assign(filtersPromoteOnly, { "ic.promote_id": category_id });
+  if (route.name.match('promote')) Object.assign(filtersPromoteOnly, { "ic.promote_id": infoPromote[0].id });
 
   
   const FiltersPromote = resPromote ? await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', {params: {filters: filtersPromoteOnly}}) : '';
   const dataFiltersPromote = FiltersPromote ? FiltersPromote.data.data : '';
 
-
-  
   let resCat;
   try { if (category_id && category_id !== 'allcategories' && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);} catch (e) {console.error(e)}
   
@@ -270,17 +276,14 @@ export async function getData({ route, $axios, $config }) {
     return breadcrumbsData;
   }
   const breadcrumbsData = breadcrumbs(category_id, title, searchInput);
-
+  let breadcrumbsDataPromote;
+  if(route.name.match('promote')) breadcrumbsDataPromote = [{
+    url: `/promote/${category_id}`,
+    title: infoPromote[0].name,
+  }]
   const loading = false;
 
-  let carouselItems = [];
-  try {
-    if (route.name.match('promote')) carouselItems = (await $axios.get($config.baseURL + '/api/site/promote/' + route.params.id)).data.data.images;
-    // console.log(carouselItems);
-  } catch (error) {
-    console.error(error);
-  }
 
 
-  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, dataPromote, dataFiltersPromote, pagerPromote, carouselItems, category_id };
+  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, dataPromote, dataFiltersPromote, pagerPromote, carouselItems, category_id, infoPromote, breadcrumbsDataPromote };
 }

@@ -1,6 +1,6 @@
 <template>
   <v-app style="background: url(/img/404.png); ">
-    <common-header />
+    <common-header :catalogMenuItems="$store.state.categories" />
     <v-main>
       <v-container class="mb-10">
         <v-divider class="mb-8" />

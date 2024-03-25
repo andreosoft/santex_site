@@ -50,7 +50,7 @@
           </div>
           <form @submit.prevent="submitSearch()">
             <div class="s-header-menu-search">
-              <v-text-field v-model="search" single-line outlined dense label="Я хочу найти">
+              <v-text-field @keyup.enter="submitSearch()" v-model="search" single-line outlined dense label="Я хочу найти">
                 <template v-slot:append>
                   <img style="cursor: pointer" @click="submitSearch()" src="/icons/Search.svg" />
                 </template>

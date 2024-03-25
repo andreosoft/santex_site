@@ -34,7 +34,7 @@ export default {
     }
 let salesItems = [];
     try {
-      salesItems = (await $axios.get($config.baseURL + '/api/site/promote')).data.data;
+      salesItems = (await $axios.get($config.baseURL + '/api/site/promote', { params: { filters: { type: 1 } } })).data.data;
       // console.log('Товары со скидкой')
       // console.log(salesItems);
     } catch (error) {
