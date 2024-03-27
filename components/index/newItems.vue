@@ -18,8 +18,8 @@
       </div>
     </div>
     <div class="text-center mt-14">
-      <v-btn @click="toggleTwo < items.length ? toggleTwo+=2 : toggleTwo=2" class="s-btn-main s-btn-text">
-        <span>{{toggleTwo < items.length ? 'БОЛЬШЕ НОВИНОК' : 'СКРЫТЬ'}}</span>
+      <v-btn class="s-btn-main s-btn-text">
+        <nuxt-link to="/promote/2">БОЛЬШЕ НОВИНОК</nuxt-link>
       </v-btn>
     </div>
   </div>

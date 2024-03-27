@@ -5,7 +5,8 @@
         <div class="splide__track">
           <ul class="splide__list">
             <li v-for="(els, i) in items" :key="i" class="splide__slide">
-              <s-guide-style-items-el :el="els" />
+              <common-video v-if="blog" :item="els" />
+              <s-guide-style-items-el v-else :el="els" />
             </li>
           </ul>
         </div>
@@ -38,6 +39,10 @@ export default {
       type: Number,
       default: 2,
     },
+    blog: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
