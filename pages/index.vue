@@ -3,14 +3,14 @@
     <index-mainCarusel :items="carouselItems" class="mb-10" />
     <index-mainInfoBlock />
     <common-divider1 class="mb-10" />
-    <index-new-items v-if="itemsNewRes" :items="newItems" class="mb-5" />
-    <common-divider1 v-if="itemsNewRes" class="mb-10" />
+    <index-new-items v-if="newItems" :items="newItems" class="mb-5" />
+    <common-divider1 v-if="newItems" class="mb-10" />
     <index-guide-style-items :items="dataInterior" class="mb-5" />
     <common-divider1 class="mb-10" />
     <index-catalog-items :items="catalogItems" class="mb-5" />
     <common-divider1 class="mb-10" />
-    <index-salesItems :items="salesItems" class="mb-5" />
-    <common-divider1 class="mb-10"/>
+    <index-salesItems v-if="salesItems" :items="salesItems" class="mb-5" />
+    <common-divider1 v-if="salesItems" class="mb-10"/>
     <index-video :item="videoItem" />
   </div>
 </template>
@@ -32,13 +32,13 @@ export default {
     }
 let salesItems = [];
     try {
-      salesItems = (await $axios.get($config.baseURL + '/api/site/promote', { params: { filters: { type: 1, status: 1 } } })).data.data;
+      salesItems = (await $axios.get($config.baseURL + '/api/site/promote', { params: { filters: { type: 3, status: 1 } } })).data.data;
       // console.log('Товары со скидкой')
       // console.log(salesItems);
     } catch (error) {
       console.error(error);
     }
-    console.log(salesItems);
+    // console.log(salesItems);
     let salesRes;
   try {
       salesRes = (await $axios.get($config.baseURL + '/api/site/promote_catalog', {
@@ -67,6 +67,7 @@ let salesItems = [];
     } catch (error) {
       console.error(error);
     }
+    // console.log(newItems);
   let itemsNewRes;
   try {
       itemsNewRes = (await $axios.get($config.baseURL + '/api/site/promote_catalog', {

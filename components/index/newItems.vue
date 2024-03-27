@@ -18,8 +18,9 @@
       </div>
     </div>
     <div class="text-center mt-14">
-      <v-btn class="s-btn-main s-btn-text">
-        <nuxt-link to="/promote/2">БОЛЬШЕ НОВИНОК</nuxt-link>
+      <v-btn @click="toggleTwo < items.length ? toggleTwo+=2 : toggleTwo = 2" class="s-btn-main s-btn-text">
+        <span v-if="items.length > 2">{{ toggleTwo < items.length ? 'БОЛЬШЕ НОВИНОК' : 'СКРЫТЬ' }}</span>
+        <span v-else>БОЛЬШЕ НОВИНОК</span>
       </v-btn>
     </div>
   </div>

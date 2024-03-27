@@ -5,10 +5,11 @@
         <h1 v-if="infoPromote && infoPromote[0].name">{{ infoPromote[0].name }}</h1>
         <v-divider class="mb-8" />
         <div>
-          <img v-if="carouselItems" :src="$config.baseImageURL + carouselItems[carouselItems.length - 1]" alt="banner">
+          <img v-if="carouselItems && carouselItems.length" :src="$config.baseImageURL + carouselItems[carouselItems.length - 1]" alt="banner">
           <!-- <index-mainCarusel :items="carouselItems"/> -->
         </div>
-        <v-divider v-if="carouselItems"  class="mb-8" />
+        <v-divider v-if="carouselItems && carouselItems.length"  class="mb-8" />
+        <h4 v-if="infoPromote && infoPromote[0].introtext" v-html="infoPromote[0].introtext"></h4>
         <!-- <v-divider class="mb-8" /> -->
         <div v-if="infoPromote && infoPromote[0].content" v-html="infoPromote[0].content"></div>
         <v-divider class="mb-8" />
