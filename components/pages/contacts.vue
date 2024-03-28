@@ -39,14 +39,14 @@
         </v-row>
         <v-row class="mb-4">
             <v-col cols="4">
-                <a class="d-flex align-center mb-6 ">
+                <a href="https://www.instagram.com/santehkomfort?igsh=MTN6OWVmaTNlcHMwcQ==" class="d-flex align-center mb-6 ">
                     <div class="pa-1 pr-4"><img src="/icons/contact/inst.png" /></div>
                     <div>
                         <div class="grey--text"><b>Instagram</b></div>
-                        <div><b>tanya_prodesign</b></div>
+                        <div><b>santehkomfort</b></div>
                     </div>
                 </a>
-                <a class="d-flex align-center">
+                <a href="https://instagram.com/tanya_prodesign" class="d-flex align-center">
                     <div class="pa-1 pr-4"><img src="/icons/contact/inst.png" /></div>
                     <div>
                         <div class="grey--text"><b>Instagram</b></div>
@@ -55,23 +55,23 @@
                 </a>
             </v-col>
             <v-col cols="4">
-                <a class="d-flex align-center mb-6 ">
+                <a href="https://api.whatsapp.com/send/?phone=79672823107" class="d-flex align-center mb-6 ">
                     <div class="pa-1 pr-4"><img src="/icons/contact/whatsapp.png" /></div>
                     <div>
-                        <div class="grey--text"><b>WhatsApp</b></div>
-                        <div><b>8 (495) 225-62-85</b></div>
+                        <div class="grey--text"><b>Сантехника</b></div>
+                        <div><b>+7 (967) 282-31-07</b></div>
                     </div>
                 </a>
-                <a class="d-flex align-center">
+                <a href="https://api.whatsapp.com/send/?phone=79055368559" class="d-flex align-center">
                     <div class="pa-1 pr-4"><img src="/icons/contact/whatsapp.png" /></div>
                     <div>
-                        <div class="grey--text"><b>WhatsApp</b></div>
-                        <div><b>8 (495) 225-62-85</b></div>
+                        <div class="grey--text"><b>Плитка</b></div>
+                        <div><b>+7 (905) 536-85-59</b></div>
                     </div>
                 </a>
             </v-col>
             <v-col cols="4">
-                <a class="d-flex align-center mb-6 ">
+                <a href="https://youtube.com/@tanyaprodesign" class="d-flex align-center mb-6 ">
                     <div class="pa-1 pr-4"><img src="/icons/contact/youtube.png" /></div>
                     <div>
                         <div class="grey--text"><b>Youtube</b></div>

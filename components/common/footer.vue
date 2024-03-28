@@ -66,11 +66,11 @@ export default {
       showPopupConsult: false,
       leftLinks: [
         {
-          to: "/",
+          to: "/catalog/allcategories",
           title: "Каталог",
         },
         {
-          to: "/",
+          to: "/promote/1",
           title: "Распродажа",
         },
         {

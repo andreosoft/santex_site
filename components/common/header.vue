@@ -1,5 +1,6 @@
 <template>
   <div>
+    <common-alert/>
     <common-top @showCatalog="showCatalogMenu = false" />
     <v-container>
       <div class="py-4 mb-6">

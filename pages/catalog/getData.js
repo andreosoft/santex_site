@@ -136,6 +136,12 @@ export async function getData({ route, $axios, $config }) {
     price: filters.price,
     brand: filters.brand,
   }
+  const valueFiltersPromote = {
+    f: f,
+    price: filtersPromote.price,
+    brand: filtersPromote.brand,
+    category_id: filtersPromote.category_id
+  }
   let dataFilters = resFilters ? resFilters.data.data : '';
 
 
@@ -287,5 +293,24 @@ export async function getData({ route, $axios, $config }) {
 
 
 
-  return { title, data, breadcrumbsData, sort, pager, dataFilters, filters, valueFilters, searchInput, loading, dataPromote, dataFiltersPromote, pagerPromote, carouselItems, category_id, infoPromote, breadcrumbsDataPromote };
+  return { 
+    title, 
+    data, 
+    breadcrumbsData, 
+    sort, 
+    pager, 
+    dataFilters, 
+    filters, 
+    valueFilters, 
+    searchInput, 
+    loading, 
+    dataPromote, 
+    valueFiltersPromote, 
+    dataFiltersPromote, 
+    pagerPromote, 
+    carouselItems, 
+    category_id, 
+    infoPromote, 
+    breadcrumbsDataPromote 
+  };
 }

@@ -2,9 +2,9 @@
     <div>
         <div style="margin-bottom: 96px !important;" class="s-text-h2 text-center">Распродажа</div>
         <div style="margin-bottom: 110px!important;">
-          <div class="d-none d-lg-block">
+          <div>
             <v-row>
-              <v-col class="pa-0" lg="6" v-for="(el, i) in activeData" :key="i">
+              <v-col class="pa-0 col-12" v-for="(el, i) in activeData" :key="i">
                 <index-new-items-el :sales="true" style="height: 488px" :el="el" />
               </v-col>
             </v-row>
