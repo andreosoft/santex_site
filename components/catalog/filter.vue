@@ -13,13 +13,13 @@
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
         <catalog-brands
-        v-if="filters.brands"
+        v-if="filters.brands && filters.brands.length>1"
         @location="locationResult"
         :params="filters.brands"
         v-model="dataF.brand"
         />
         <catalog-categories class="mt-4"
-        v-if="filters.categories"
+        v-if="filters.categories && filters.categories.length>1"
         @location="locationResult"
         :params="filters.categories"
         v-model="dataF.category_id"
