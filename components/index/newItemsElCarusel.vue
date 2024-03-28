@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <NuxtLink :to="sales ? '/promote/1' : '/promote/2'">
-      <v-img v-if="el.images" :src="$config.baseImageURL + el.images[0]" />
+      <v-img v-if="el.images && el.images[0]" :src="$config.baseImageURL + el.images[0]" />
       <div class="s-cart-tite-1" style="bottom: 160px">
         <div class="pa-10">
           <div class="d-inline-block mr-3" style="vertical-align: top">

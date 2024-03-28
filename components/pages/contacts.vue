@@ -101,7 +101,7 @@
                 </a>
             </v-col>
             <v-col cols="4">
-                <p class="grey--text">
+                <p class="grey--text pb-0">
                     <b>E-mail</b>
                 </p>
                 <h4><a href="mailto:info@santax.ru">info@santax.ru</a></h4>
