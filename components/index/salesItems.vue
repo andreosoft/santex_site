@@ -18,9 +18,10 @@
           </div> -->
         </div>
         <div class="text-center mt-14">
-          <v-btn @click="toggleTwo < items.length ? toggleTwo+=2 : toggleTwo = 2" class="s-btn-main s-btn-text">
-            <span v-if="items.length > 2">{{ toggleTwo < items.length ? 'БОЛЬШЕ ТОВАРОВ' : 'СКРЫТЬ' }}</span>
-            <span v-else>БОЛЬШЕ ТОВАРОВ</span>
+          <!-- <v-btn @click="toggleTwo < items.length ? toggleTwo+=1 : toggleTwo = 1" class="s-btn-main s-btn-text"> -->
+          <v-btn class="s-btn-main s-btn-text">
+            <!-- <span v-if="items.length > 2">{{ toggleTwo < items.length ? 'БОЛЬШЕ ТОВАРОВ' : 'СКРЫТЬ' }}</span> -->
+            <span>БОЛЬШЕ ТОВАРОВ</span>
           </v-btn>
         </div>
       </div>
@@ -34,7 +35,7 @@ export default {
     },
     data() {
     return {
-      toggleTwo: 2,
+      toggleTwo: 1,
     };
   },
   computed: {
