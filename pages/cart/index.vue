@@ -81,8 +81,11 @@
                                     </div>
                                 </v-col>
                                 <v-col cols="2">
-                                    <div style="font-size: 22px">
+                                    <div v-if="el.price" style="font-size: 22px">
                                         <b><number :value="el.price" /> ₽</b>
+                                    </div>
+                                    <div v-else style="font-size: 22px">
+                                        <b>Цена не указана</b>
                                     </div>
                                 </v-col>
                                 <v-col cols="2">
@@ -111,8 +114,11 @@
                                 </v-col>
                                 <v-col cols="2">
                                     <div>
-                                        <div style="font-size: 22px">
+                                        <div v-if="el.price" style="font-size: 22px">
                                             <b><number :value="el.count * el.price" /> ₽</b>
+                                        </div>
+                                        <div v-else style="font-size: 22px">
+                                            <b>Цена не указана</b>
                                         </div>
                                         <div v-show="el.old_price" style="font-size: 16px; text-decoration: line-through;"
                                             class="grey--text">

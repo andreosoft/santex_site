@@ -16,7 +16,7 @@
             Код товара: {{ el.id }}
           </div>
         </div>
-        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;">{{ el.name }}</div>
+        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold;" :class="{ 'hidden-text': true }">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
           <div>
             <div v-if="el.height && el.width && el.length"><span style="color: #949494">Габариты (Д.Ш.В): </span>
@@ -40,9 +40,13 @@
           </div>
         </div>
         <div class="my-2" style=" font-weight: bold;">
-          <span style="font-size: 20px">
+          <span v-if="el.price" style="font-size: 20px">
             <number :value="el.price" /> ₽
-          </span><span class="ml-2" v-if="el.old_price"
+          </span>
+          <span v-else style="font-size: 20px">
+            Цена не указана
+          </span>
+          <span class="ml-2" v-if="el.old_price"
             style="font-size: 13px; text-decoration: line-through; color: #949494">
             <number :value="el.old_price" /> ₽
           </span>

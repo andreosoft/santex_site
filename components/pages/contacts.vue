@@ -31,7 +31,7 @@
                             <b>САНТЕХНИКА</b>
                         </p>
                         <h4 class="pb-2">
-                            <a href="tel://79672823107">+7 (967) 282-31-07</a>
+                            <a href="tel://84952256285">8 (495) 225 62 85</a>
                         </h4>
                         <p>Ежедневно с 10:00 до 20:00</p>
                     </v-col>
@@ -101,7 +101,7 @@
                 </a>
             </v-col>
             <v-col cols="4">
-                <p class="grey--text pb-0">
+                <p class="grey--text mb-0">
                     <b>E-mail</b>
                 </p>
                 <h4><a href="mailto:info@santax.ru">info@santax.ru</a></h4>

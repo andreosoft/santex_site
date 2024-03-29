@@ -2,7 +2,7 @@
   <v-container class="mb-14">
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-    <h1>{{ data.name }}</h1>
+    <h1 style="word-break: break-word">{{ data.name }}</h1>
     <v-row class="mt-4">
       <v-col cols="6">
         <common-image-gallery :value="data.images" />
