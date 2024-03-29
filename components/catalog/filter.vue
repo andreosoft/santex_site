@@ -37,6 +37,13 @@
         </div>
       </div>
     </div>
+    <v-btn 
+    @click="toggleFunction($event)" 
+    outlined
+    class="s-btn-cart s-btn-text clearBtn w-100 mt-3">       
+      Сбросить фильтр
+       <img class="ml-2 el_card" src="/icons/Close catalog.svg" alt="">
+     </v-btn>
   </div>
 </template>
 
@@ -129,6 +136,26 @@ export default {
     // }
   },
   methods: {
+    toggleFunction(e){
+      this.clearFilters();
+      this.locationResult(e.target);
+    },
+    clearFilters(){
+      this.dataF = {
+        brand: [],
+        category_id: [],
+      };
+      this.dataPrice = [];
+      for (const key in this.filters.filters) {
+        // let f = [];
+        // if (this.value?.f[this.filters.filters[key]["filters_id"]]){
+        //   f = this.value.f[this.filters.filters[key]["filters_id"]];
+        // } 
+        // console.log(this.filters.filters[key]["filters_id"], f);
+        this.$set(this.dataF, this.filters.filters[key]["filters_id"], []);
+      }
+      this.resultData = 0;
+    },
     initValueFilters() {
       this.dataF = {
         brand: this.value.brand ? this.value.brand : [],
@@ -256,3 +283,10 @@ export default {
   }
 };
 </script>
+
+<style lang="scss">
+.s-clear-filter{
+  background-color: #e0e0e0 !important;
+  border: unset !important;
+}
+</style>

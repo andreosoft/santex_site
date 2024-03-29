@@ -5,7 +5,7 @@
           <div>
             <v-row>
               <v-col class="pa-0 col-12" v-for="(el, i) in activeData" :key="i">
-                <index-new-items-el :sales="true" style="height: 488px" :el="el" />
+                <index-new-items-el :sales="true" :el="el" />
               </v-col>
             </v-row>
           </div>
