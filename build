@@ -3,16 +3,16 @@ PORT=22
 SERVER='content@212.109.195.201'
 PACKNAME='santex'
 
-npm run build
+#npm run build
 
 # scp -i ~/.ssh/id_rsa -r -P $PORT .nuxt $SERVER:/srv/santex/site
-scp -i ~/.ssh/id_rsa -r -P $PORT static $SERVER:/srv/$PACKNAME/site
+#scp -i ~/.ssh/id_rsa -r -P $PORT static $SERVER:/srv/$PACKNAME/site
 
-tar -czvf build.tar.gz -C .nuxt .
-ssh -p $PORT $SERVER rm -r /srv/$PACKNAME/site/.nuxt
-scp -r -P $PORT build.tar.gz $SERVER:/srv/$PACKNAME/site/
-ssh -p $PORT $SERVER mkdir /srv/$PACKNAME/site/.nuxt
-ssh -p $PORT $SERVER tar -xvzf /srv/$PACKNAME/site/build.tar.gz -C /srv/$PACKNAME/site/.nuxt
+#tar -czvf build.tar.gz -C .nuxt .
+#ssh -p $PORT $SERVER rm -r /srv/$PACKNAME/site/.nuxt
+#scp -r -P $PORT build.tar.gz $SERVER:/srv/$PACKNAME/site/
+#ssh -p $PORT $SERVER mkdir /srv/$PACKNAME/site/.nuxt
+#ssh -p $PORT $SERVER tar -xvzf /srv/$PACKNAME/site/build.tar.gz -C /srv/$PACKNAME/site/.nuxt
 
 scp -i ~/.ssh/id_rsa -r -P $PORT nuxt.config.js $SERVER:/srv/$PACKNAME/site
 scp -i ~/.ssh/id_rsa -r -P $PORT package.json $SERVER:/srv/$PACKNAME/site
