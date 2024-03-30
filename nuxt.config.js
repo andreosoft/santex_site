@@ -15,7 +15,7 @@ export default {
     title: 'Сантехкомфорт Элит',
     meta: [
       { charset: 'utf-8' },
-      { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      // { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { id: 'description', name: 'description', content: 'Сантехкомфорт Элит магазин сантехнических материалов' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
