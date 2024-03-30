@@ -1,19 +1,23 @@
 #!/bin/sh
+PORT=22
+SERVER='content@212.109.195.201'
+PACKNAME='santex'
 
 npm run build
 
-# scp -i ~/.ssh/id_rsa -r -P 22 .nuxt andrey@92.63.192.228:/srv/santex/site
-# scp -i ~/.ssh/id_rsa -r -P 22 static andrey@92.63.192.228:/srv/santex/site
+# scp -i ~/.ssh/id_rsa -r -P $PORT .nuxt $SERVER:/srv/santex/site
+scp -i ~/.ssh/id_rsa -r -P $PORT static $SERVER:/srv/$PACKNAME/site
+
 tar -czvf build.tar.gz -C .nuxt .
-ssh -p 22 andrey@92.63.192.228 rm -r /srv/santex/site/.nuxt
-scp -r -P 22 build.tar.gz andrey@92.63.192.228:/srv/santex/site/
-ssh -p 22 andrey@92.63.192.228 mkdir /srv/santex/site/.nuxt
-ssh -p 22 andrey@92.63.192.228 tar -xvzf /srv/santex/site/build.tar.gz -C /srv/santex/site/.nuxt
+ssh -p $PORT $SERVER rm -r /srv/$PACKNAME/site/.nuxt
+scp -r -P $PORT build.tar.gz $SERVER:/srv/$PACKNAME/site/
+ssh -p $PORT $SERVER mkdir /srv/$PACKNAME/site/.nuxt
+ssh -p $PORT $SERVER tar -xvzf /srv/$PACKNAME/site/build.tar.gz -C /srv/$PACKNAME/site/.nuxt
 
-scp -i ~/.ssh/id_rsa -r -P 22 nuxt.config.js andrey@92.63.192.228:/srv/santex/site
-scp -i ~/.ssh/id_rsa -r -P 22 package.json andrey@92.63.192.228:/srv/santex/site
+scp -i ~/.ssh/id_rsa -r -P $PORT nuxt.config.js $SERVER:/srv/$PACKNAME/site
+scp -i ~/.ssh/id_rsa -r -P $PORT package.json $SERVER:/srv/$PACKNAME/site
 
-ssh andrey@92.63.192.228 pm2 restart 1
+ssh $SERVER pm2 restart 1
 
 git add .
 git commit -m 'commit'
