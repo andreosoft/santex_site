@@ -1,22 +1,29 @@
 import colors from 'vuetify/es5/util/colors'
 
 export default {
+  server: {
+    port: 3000,
+    host: '127.0.0.1'
+  },
   publicRuntimeConfig: {
     baseURL: process.env.BASE_URL || 'https://api.santehkomfort.ru',
     baseImageURL: "https://api.santehkomfort.ru/api/image/download/"
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - santex',
-    title: 'santex-site',
+    titleTemplate: '%s',
+    title: 'Сантехкомфорт Элит',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { id: 'description', name: 'description', content: '' },
+      { id: 'description', name: 'description', content: 'Сантехкомфорт Элит магазин сантехнических материалов' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'shortcut icon', href: '/favicon.ico' },
+      { rel: 'apple-touch-icon', href: '/favicon.ico' }
+      
     ]
   },
 
