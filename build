@@ -18,7 +18,7 @@ scp -i ~/.ssh/id_rsa -r -P $PORT nuxt.config.js $SERVER:/srv/$PACKNAME/site
 #scp -i ~/.ssh/id_rsa -r -P 22 nuxt.config.js content@212.109.195.201:/srv/santex/site
 scp -i ~/.ssh/id_rsa -r -P $PORT package.json $SERVER:/srv/$PACKNAME/site
 
-#ssh $SERVER pm2 restart 1
+ssh $SERVER pm2 reload santex_site
 
 git add .
 git commit -m 'commit'

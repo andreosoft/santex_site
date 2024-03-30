@@ -21,8 +21,8 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'shortcut icon', href: '/favicon.ico' },
-      { rel: 'apple-touch-icon', href: '/favicon.ico' }
+      { rel: 'shortcut icon', type: 'image/png', href: '/icon.png' },
+      { rel: 'apple-touch-icon', type: 'image/png', href: '/icon.png' }
       
     ]
   },
@@ -65,6 +65,9 @@ export default {
   pwa: {
     manifest: {
       lang: 'ru'
+    },
+    meta: {
+      favicon: false
     }
   },
 
