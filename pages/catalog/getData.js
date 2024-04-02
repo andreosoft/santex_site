@@ -36,9 +36,9 @@ export async function getData({ route, $axios, $config }) {
       console.error(e);
     }
 
-    if (searchInput == null && res?.data?.data?.length == 0) {
-        throw new Error("Ничего не найдено");
-    }
+    // if (searchInput == null && res?.data?.data?.length == 0) {
+    //     throw new Error("Ничего не найдено");
+    // }
 
     // if (route.params.id) Object.assign(subcatfilters, { "parent_id": category_id });
   // let resCategories;
