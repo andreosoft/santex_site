@@ -37,7 +37,7 @@ export async function getData({ route, $axios, $config }) {
     }
 
     if (searchInput == null && res?.data?.data?.length == 0) {
-        throw ({ statusCode: 404, message: 'Post not found' });
+      return this.$nuxt.error({ statusCode: 404, message: err.message });
     }
 
     // if (route.params.id) Object.assign(subcatfilters, { "parent_id": category_id });
