@@ -1,4 +1,4 @@
-export async function getData({ route, $axios, $config }) {
+export async function getData({ route, $axios, $config, error }) {
   let pager = { page: 0, count: 0, limit: 30 };
   pager.page = route.query.page ?? 0;
   let pagerPromote = { page: 0, count: 0, limit: 0 };
@@ -37,7 +37,7 @@ export async function getData({ route, $axios, $config }) {
     }
 
     if (searchInput == null && res?.data?.data?.length == 0) {
-      return this.$nuxt.error({ statusCode: 404, message: "Страница не найдена"});
+      return error({ statusCode: 404, message: "Страница не найдена"});
     }
 
     // if (route.params.id) Object.assign(subcatfilters, { "parent_id": category_id });

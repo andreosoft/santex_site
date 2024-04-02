@@ -41,15 +41,15 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
+        let p = await getData(this);
         this.loading = false;
         this.data = p.data;
         this.pager = p.pager;
       },
     }
   },
-  async asyncData({ route, $axios, $config }) {
-    return await getData({ route, $axios, $config });
+  async asyncData(params) {
+    return await getData(params);
   },
 };
 </script>
