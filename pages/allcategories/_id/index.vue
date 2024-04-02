@@ -4,9 +4,9 @@
       <common-beadcrumbs class="mb-4" :value="breadcrumbsData()" />
       <h1>{{ subcat.name ? subcat.name : 'Не указано' }}</h1>
       <v-row class="s-row d-flex justify-center mb-5 mt-5">
-        <div>
+        <div class="d-flex">
           <!-- <img v-if="categoriesData.images" :src="$config.baseImageURL + categoriesData.images[0]" alt="banner"> -->
-          <img src="/banners/banner1.png" alt="banner">
+          <img class="w-100" src="/banners/banner1.png" alt="banner">
         </div>
       </v-row>
       <v-row class="s-row">
