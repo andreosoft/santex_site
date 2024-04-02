@@ -36,7 +36,7 @@ export async function getData({ route, $axios, $config }) {
       console.error(e);
     }
 
-    if (searchInput == null && res.data.data.length == 0) {
+    if (searchInput == null && res?.data?.data?.length == 0) {
         throw new Error("Ничего не найдено");
     }
 
