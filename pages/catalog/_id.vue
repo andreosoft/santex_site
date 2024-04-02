@@ -2,10 +2,9 @@
   <v-container class="mb-10">
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-    <h1>{{ title ? title : subcat?.name }}</h1>
+    <h1>{{ title }}</h1>
     <base-catalog 
-      :data="subcat ? subcat?.content : data" 
-      :categoriesData="subcat ? subcat : {}" 
+      :data="data" 
       :loading="loading" 
       :dataFilters="dataFilters" 
       :valueFilters="valueFilters" 
@@ -21,8 +20,6 @@
 <script>
 import {getData} from "@/pages/catalog/getData";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
-import { mapGetters } from "vuex";
-
 export default {
   components: {BaseCatalog},
   data() {
@@ -30,18 +27,8 @@ export default {
       loading: true
     }
   },
-  computed: {
-    ...mapGetters ({allCategories: 'getCategories'}),
-    categories(){
-      return [{id: 'allcategories', name: 'Каталог', isparent: 0,  parent_id: 0, content: this.allCategories}, ...this.allCategories]
-    },
-    subcat(){
-      return this.categories.find(item => item.id == this.category_id)
-    }
-  },
   watch: {
     valueFilters(v) {
-      // console.log(v)
       let filters = {};
       if (v.price && v.price.length > 0) {
         filters.price = v.price;

@@ -229,22 +229,15 @@ export async function getData({ route, $axios, $config }) {
   function breadcrumbs(category_id, title, value) {
     let breadcrumbsData;
     if (category_id !== undefined) {
-      if(category_id == 'allcategories'){
-        breadcrumbsData = [
-          {
-            url: "/catalog/" + category_id,
-            title: 'Каталог',
-          },
-        ];
-      } else if(resCat){
+      if(resCat){
         if (resCat.data.data.parent_id){
           breadcrumbsData = [
             {
-              url: "/catalog/" + 'allcategories',
+              url: "/allcategories",
               title: 'Каталог',
             },
             {
-              url: "/catalog/" + resCat.data.data.parent_id,
+              url: "/allcategories/" + resCat.data.data.parent_id,
               title: resCat.data.data.parent_name,
             },
             {
@@ -255,7 +248,7 @@ export async function getData({ route, $axios, $config }) {
         } else {
           breadcrumbsData = [
             {
-              url: "/catalog/" + 'allcategories',
+              url: "/allcategories",
               title: 'Каталог',
             },
             {

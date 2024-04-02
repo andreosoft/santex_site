@@ -14,7 +14,7 @@
                   @click="$emit('input')"
                   :key="i"
                 >
-                <nuxt-link :to="'/catalog/' + el.id">
+                <nuxt-link :to="'/allcategories/' + el.id">
                   <span class="s-catalog-links-el-icon">
                     <img/>
                   </span>

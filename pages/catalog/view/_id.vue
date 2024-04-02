@@ -228,7 +228,7 @@ async function getData({ route, $axios, $config }) {
   const data = res.data.data;
   const resCat = await $axios.get($config.baseURL + '/api/site/categories/' + data.category_id);
   const dataCat = resCat.data.data;
-  console.log(dataCat);
+  // console.log(dataCat);
   const breadcrumbsData = [
     {
       url: "/catalog/" + dataCat.id,
