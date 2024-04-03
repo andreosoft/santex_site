@@ -1,13 +1,15 @@
 export async function getData({ route, $axios, $config, error }) {
   let pager = { page: 0, count: 0, limit: 30 };
   pager.page = route.query.page ?? 0;
+  // console.log(route.query);
   let pagerPromote = { page: 0, count: 0, limit: 0 };
   pagerPromote.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
   // const sortSub = route.query.sort ? JSON.parse(route.query.sort) : { key: "name", order: "ASC" };
   const category_id = route.params.id;
   const f = route.query.f ? JSON.parse(route.query.f) : {};
-  const addFilters = route.query.filters ? JSON.parse(route.query.filters) : {};
+  const addFilters = route.query.filters ? JSON.parse(route?.query?.filters) : {};
+  
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
 
@@ -22,7 +24,7 @@ export async function getData({ route, $axios, $config, error }) {
     
   let res;
     try {
-      if(route.name.match('catalog')){
+      if(route.name.match('catalog') && category_id>0){
         res = await $axios.get($config.baseURL + '/api/site/catalog', {
           params: {
             f: f,
@@ -35,8 +37,8 @@ export async function getData({ route, $axios, $config, error }) {
     } catch (e) {
       console.error(e);
     }
-
-    if (searchInput == null && res?.data?.data?.length == 0) {
+    // console.log(res?.data?.data?.length);
+    if (route.name.match('catalog') && searchInput == null && (res?.data?.data?.length == 0 || !res?.data?.data)) {
       return error({ statusCode: 404, message: "Страница не найдена"});
     }
 
@@ -70,9 +72,9 @@ export async function getData({ route, $axios, $config, error }) {
   let carouselItems = [];
   let infoPromote;
   try {
-    if (route.name.match('promote')) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', {params: {filters: {"id": category_id}}})).data.data;
+    if (route.name.match('promote') && category_id>0) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', {params: {filters: {"id": category_id}}})).data.data;
     // console.log(infoPromote);
-    carouselItems = infoPromote ? infoPromote[0].images.splice(1, 1) : [];
+    carouselItems = infoPromote?.length > 0 ? infoPromote[0].images.splice(1, 1) : [];
     // console.log(carouselItems);
   } catch (error) {
     console.error(error);
@@ -84,7 +86,7 @@ export async function getData({ route, $axios, $config, error }) {
   if (route.name.match('promote')) Object.assign(filtersPromote, { "ic.promote_id": category_id });
   let resPromote;
   try {
-    if(route.name.match('promote')){
+    if(route.name.match('promote') && category_id>0){
       resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
         params: {
           f: f,
@@ -96,6 +98,9 @@ export async function getData({ route, $axios, $config, error }) {
     }
   } catch (e) {
     console.error(e);
+  }
+  if (route.name.match('promote') && (resPromote?.data?.data?.length == 0 || !resPromote?.data?.data) || infoPromote?.length == 0) {
+    return error({ statusCode: 404, message: "Страница не найдена"});
   }
   const dataPromote = resPromote ? resPromote.data.data : '';
   // const resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
@@ -225,7 +230,6 @@ export async function getData({ route, $axios, $config, error }) {
   pager = res ? res.data.pager : '';
   pagerPromote = resPromote ? resPromote.data.pager : '';
 
-
   function breadcrumbs(category_id, title, value) {
     let breadcrumbsData;
     if (category_id !== undefined) {
@@ -281,7 +285,7 @@ export async function getData({ route, $axios, $config, error }) {
   }
   const breadcrumbsData = breadcrumbs(category_id, title, searchInput);
   let breadcrumbsDataPromote;
-  if(route.name.match('promote')) breadcrumbsDataPromote = [{
+  if(route.name.match('promote') && infoPromote?.length > 0) breadcrumbsDataPromote = [{
     url: `/promote/${category_id}`,
     title: infoPromote[0].name,
   }]

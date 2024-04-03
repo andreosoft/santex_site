@@ -2,16 +2,16 @@
     <v-container class="mb-10">
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsDataPromote" />
-        <h1 v-if="infoPromote && infoPromote[0].name">{{ infoPromote[0].name }}</h1>
+        <h1 v-if="infoPromote?.length > 0 && infoPromote[0].name">{{ infoPromote[0].name }}</h1>
         <v-divider class="mb-8" />
         <div class="d-flex">
           <img v-if="carouselItems && carouselItems.length" class="w-100" :src="$config.baseImageURL + carouselItems[carouselItems.length - 1]" alt="banner">
           <!-- <index-mainCarusel :items="carouselItems"/> -->
         </div>
         <v-divider v-if="carouselItems && carouselItems.length"  class="mb-8" />
-        <h4 v-if="infoPromote && infoPromote[0].introtext" v-html="infoPromote[0].introtext"></h4>
+        <h4 v-if="infoPromote?.length > 0 && infoPromote[0].introtext" v-html="infoPromote[0].introtext"></h4>
         <!-- <v-divider class="mb-8" /> -->
-        <div v-if="infoPromote && infoPromote[0].content" v-html="infoPromote[0].content"></div>
+        <div v-if="infoPromote?.length > 0 && infoPromote[0].content" v-html="infoPromote[0].content"></div>
         <v-divider class="mb-8" />
         <catalog-base-catalog :data="dataPromote" :loading="loading" :dataFilters="dataFiltersPromote" :valueFilters="valueFiltersPromote" :pager="pagerPromote" :sort="sort" @update-data="valueFilters = $event"/>
     <div class="text-center mt-10">
@@ -56,15 +56,15 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
+        let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error });
         this.loading = false;
         this.dataPromote = p.dataPromote;
         this.pagerPromote = p.pagerPromote;
       },
     }
   },
-  async asyncData({ route, $axios, $config }) {
-    return await getData({ route, $axios, $config });
+  async asyncData({ route, $axios, $config, error }) {
+    return await getData({ route, $axios, $config, error });
   },
 }
 </script>

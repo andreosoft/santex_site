@@ -24,8 +24,8 @@ export default {
         return {
         }
     },
-    async asyncData(params) {
-        console.log(params);
+    async asyncData({route, error}) {
+        let category_id = route.params.id;
         const leftMenu = [
             {
                 title: "О компании",
@@ -53,8 +53,10 @@ export default {
                 component: "garanty"
             }
         ]
-
-        const activeEl = leftMenu.find(el => el.url == params.route.path);
+        if(!leftMenu.find(el => el.component == category_id)){
+            return error({ statusCode: 404, message: 'Страница не найдена' });
+        }
+        const activeEl = leftMenu.find(el => el.url == route.path);
         const breadcrumbsData = [
             {
                 url: "",

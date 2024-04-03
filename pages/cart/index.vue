@@ -19,7 +19,7 @@
             <div style="font-weight: bold; font-size: 46px;">Ваша корзина пуста</div>
             <div style="font-size: 20px; margin: 5px 0 30px 0;">Перейдите в каталог</div>
             <div>
-              <v-btn dark to="/catalog/allcategories">В каталог</v-btn>
+              <v-btn dark to="/allcategories">В каталог</v-btn>
             </div>
           </div>
         <div v-show="cart.length > 0">

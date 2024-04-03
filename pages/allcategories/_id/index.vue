@@ -20,9 +20,11 @@
 <script>
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
 import { mapGetters } from "vuex";
-async function getData({route, $axios, $config}){
-
+async function getData({route, store, error}){
+  let allCategories = store.getters.getCategories;
   const category_id = route.params.id;
+  const categoryExists = allCategories.find(category => category.id == category_id);
+  if(!categoryExists) return error({ statusCode: 404, message: 'Страница не найдена' });
   const loading = false
 return {loading, category_id};
 }
@@ -34,8 +36,13 @@ export default {
   computed: {
       ...mapGetters ({allCategories: 'getCategories'}),
       subcat(){
-        return this.allCategories.find(item => item.id == this.category_id)
+        if(this.allCategories.find(item => item.id == this.category_id)){ return this.allCategories.find(item => item.id == this.category_id)}
     }
+  },
+  data () {
+      return {
+          loading: true,
+      }
   },
   methods: {
     breadcrumbsData(){
@@ -52,13 +59,8 @@ export default {
           return breadcrumbsData
     }
   },
-  data () {
-      return {
-          loading: true,
-      }
-  },
-  async asyncData({ route, $axios, $config }) {
-      return await getData({ route, $axios, $config});
+  async asyncData({ route, store, error}) {
+      return await getData({ route, store, error});
 },
 }
 </script>
