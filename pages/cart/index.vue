@@ -55,23 +55,23 @@
                                                 <span class="grey--text mr-2">Бренд:</span>
                                                 <span>{{ el.brand }}</span>
                                             </div>
-                                            <div style="font-size: 13px" v-show="el.height && el.width && el.length">
+                                            <div style="font-size: 13px" v-if="el.height && el.width && el.length">
                                                 <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
                                                 <span>{{`${el.length} x ${el.width} x ${el.height}` }}</span>
                                               </div>
-                                              <div style="font-size: 13px" v-show="!el.length && el.width && el.height">
+                                              <div style="font-size: 13px" v-else-if="!el.length && el.width && el.height">
                                                 <span class="grey--text mr-2">Габариты (Ш.В): </span>
                                                 <span>{{`${el.width} ${' x ' + el.height}` }}</span>
                                               </div>
-                                              <div style="font-size: 13px" v-show="!el.width && el.length && el.height">
+                                              <div style="font-size: 13px" v-else-if="!el.width && el.length && el.height">
                                                 <span class="grey--text mr-2">Габариты (Д.В): </span>
                                                 <span>{{`${el.length}${' x ' + el.height}` }}</span>
                                               </div>
-                                              <div style="font-size: 13px" v-show="!el.height && el.length && el.width">
+                                              <div style="font-size: 13px" v-else-if="!el.height && el.length && el.width">
                                                 <span class="grey--text mr-2">Габариты (Д.Ш): </span>
                                                 <span>{{`${el.length} x ${el.width}` }}</span>
                                               </div>
-                                              <div style="font-size: 13px" v-show="!el.length && !el.width && !el.height">
+                                              <div style="font-size: 13px" v-else>
                                                 <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
                                                 <span>Не указаны</span>
                                               </div>

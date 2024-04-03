@@ -274,13 +274,33 @@
                     <v-col cols="4">
                         <div class="mb-2"><b>Город</b></div>
                         <div>
-                            <v-text-field name="city" outlined placeholder="Ваш город" v-model="address.city" @change="updateDataClient('address', address.city, 'city')"/>
+                            <ValidationProvider name="city" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field 
+                            name="city" 
+                            required 
+                            :error-messages="errors"
+                            :success="valid"
+                            outlined 
+                            placeholder="Ваш город" 
+                            v-model="address.city" 
+                            @change="updateDataClient('address', address.city, 'city')"/>
+                            </ValidationProvider>
                         </div>
                     </v-col>
                     <v-col cols="4">
                         <div class="mb-2"><b>Улица</b></div>
                         <div>
-                            <v-text-field name="street" outlined placeholder="Укажите улицу" v-model="address.street" @change="updateDataClient('address', address.street, 'street')"/>
+                            <ValidationProvider name="street" rules="required" v-slot="{ errors, valid }">
+                            <v-text-field 
+                            name="street" 
+                            outlined 
+                            :error-messages="errors"
+                            :success="valid"
+                            required
+                            placeholder="Укажите улицу" 
+                            v-model="address.street" 
+                            @change="updateDataClient('address', address.street, 'street')"/>
+                            </ValidationProvider>
                         </div>
                     </v-col>
                 </v-row>
@@ -291,7 +311,17 @@
                                 <v-text-field name="indexHouse" outlined label="Индекс" v-model="address.indexHouse" @change="updateDataClient('address', address.indexHouse, 'indexHouse')"/>
                             </v-col>
                             <v-col cols="2">
-                                <v-text-field name="house" outlined label="Дом" v-model="address.house" @change="updateDataClient('address', address.house, 'house')"/>
+                                <ValidationProvider name="house" rules="required" v-slot="{ errors, valid }">
+                                <v-text-field 
+                                name="house" 
+                                :error-messages="errors"
+                                :success="valid"
+                                required
+                                outlined 
+                                label="Дом" 
+                                v-model="address.house" 
+                                @change="updateDataClient('address', address.house, 'house')"/>
+                                </ValidationProvider>
                             </v-col>
                             <v-col cols="2">
                                 <v-text-field name="flat" outlined label="Квартира/офис" v-model="address.flat" @change="updateDataClient('address', address.flat, 'flat')"/>
@@ -308,16 +338,32 @@
                         </v-row>
                     </v-col>
                 </v-row>
-                <div class="mb-4"><span>Стоимость доставки составит: </span><b>1 480 ₽ </b></div>
+                <div class="mb-4">
+                    <span>Стоимость доставки составит: </span>
+                    <b v-if="delivery.type == 'courier'">1 480 ₽ </b>
+                    <b v-else>0 ₽ </b>
+                </div>
                 <div class="mb-4"><a href="/" class="grey--text underlined">Подробнее о доставке</a></div>
             </div>
             <v-divider class="mb-8" />
             <div class="mb-8">
-                <h3 class="mb-4">Подробнее о доставке</h3>
+                <h3 class="mb-4">Оплата</h3>
                 <div class="d-flex">
                     <v-btn-toggle class="mr-8 orderToggle" v-model="toggleData2">
-                        <v-btn @click="updateDataClient('payment', payment.type = 'online', 'type')" class="s-btn-text" width="240px">Онлайн</v-btn>
-                        <v-btn @click="updateDataClient('payment', payment.type = 'totheCourier', 'type')" class="s-btn-text" width="240px">Курьеру при доставке</v-btn>
+                        <v-btn 
+                        @click="updateDataClient('payment', payment.type = 'online', 'type')" 
+                        class="s-btn-text" 
+                        :dark="payment.type == 'online'"
+                        width="240px">
+                        Онлайн
+                        </v-btn>
+                        <v-btn 
+                        v-if="delivery.type == 'courier'"
+                        @click="updateDataClient('payment', payment.type = 'totheCourier', 'type')" 
+                        class="s-btn-text" 
+                        width="240px">
+                        Курьеру при доставке
+                        </v-btn>
                     </v-btn-toggle>
                     
                     <!-- <v-btn class="mr-8" large><img src="/icons/order/1.png" /></v-btn>
@@ -334,11 +380,12 @@
                     </tr>
                     <tr>
                         <td>Экономия:</td>
-                        <td>{{ totalDicount }}</td>
+                        <td>{{ totalDicount ? totalDicount : 0 }} ₽</td>
                     </tr>
                     <tr>
                         <td>Доставка:</td>
-                        <td>1 480 ₽</td>
+                        <td v-if="delivery.type == 'courier'">1 480 ₽</td>
+                        <td v-else>0 ₽</td>
                     </tr>
                     <tr>
                         <td><b>Общая стоимоcть:</b>
@@ -383,7 +430,11 @@ export default {
             DataCart: 'cart/cart'
         }),
         totalCost(){
-            return this.totalPrice + 1480
+            if(this.delivery.type == 'courier'){
+                return this.totalPrice + 1480
+            } else {
+                return this.totalPrice
+            }
         },
         dataTotalPrice(){
             let price = 0;
@@ -393,16 +444,6 @@ export default {
     },
     data() {
         return {
-            // errorMessages: '',
-            // errors: [],
-            // rules: {
-            //     required: value => !!value || 'Обязательное поле.',
-            //     counter: value => value.length == 18 || 'Введите корректный номер',
-            //     email: value => {
-            //         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-            //         return pattern.test(value) || 'Некорректный адрес электронной почты'
-            //             }
-            // },
             cartData: [],
             dataOrder: {},
             toggleData: 0,
@@ -432,6 +473,16 @@ export default {
             send: false
         }
     },
+    watch: {
+      'delivery.type':{
+        handler () {
+            if(this.delivery.type == 'pickup'){
+                this.payment.type = 'online'
+            }
+        }
+      },
+      deep: true
+    },
     async asyncData(params) {
         const title = "Оформление заказа"
         const breadcrumbsData = [
@@ -451,14 +502,11 @@ export default {
     },
     methods: {
         toCatalog(){
-            this.$router.push({path: '/catalog/allcategories'})
+            this.$router.push({path: '/allcategories'})
         },
         updateDataClient(name1, value, name2){
             name2 ? this.$store.commit('cart/updateDataClient', {name1, value, name2}) : this.$store.commit('cart/updateDataClient', {name1, value});
         },
-        // updateDataClientAddress(name, value){
-        //     this.$store.commit('cart/updateDataClientAddress', {name, value});
-        // },
         async toDataBase() {
     // if(this.fullName.trim() && this.email.trim() && this.phone.trim()){
         try {
