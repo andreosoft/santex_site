@@ -1,14 +1,14 @@
 <template>
   <div>
-    <index-mainCarusel :items="carouselItems" class="mb-10" />
+    <index-mainCarusel v-if="carouselItems?.length>0" :items="carouselItems" class="mb-10" />
     <index-mainInfoBlock />
     <common-divider1 class="mb-10" />
     <index-new-items v-if="newItems" :items="newItems" class="mb-5" />
     <common-divider1 v-if="newItems" class="mb-10" />
-    <index-guide-style-items :items="dataInterior" class="mb-5" />
-    <common-divider1 class="mb-10" />
-    <index-catalog-items :items="catalogItems" class="mb-5" />
-    <common-divider1 class="mb-10" />
+    <index-guide-style-items v-if="dataInterior?.length>0" :items="dataInterior" class="mb-5" />
+    <common-divider1 v-if="dataInterior?.length>0" class="mb-10" />
+    <index-catalog-items v-if="catalogItems?.length>0" :items="catalogItems" class="mb-5" />
+    <common-divider1 v-if="catalogItems?.length>0" class="mb-10" />
     <index-salesItems v-if="salesItems" :items="salesItems" class="mb-5" />
     <common-divider1 v-if="salesItems" class="mb-10"/>
     <index-video :item="videoItem" />
@@ -98,10 +98,11 @@ let salesItems = [];
     try {
       carouselItems = (await $axios.get($config.baseURL + '/api/site/content', {
         params: {
-          filters: { parent_id: 5 },
+          filters: { parent_id: 5, status: 1 },
           sort: { "key": "sort", "order": "ASC" }
         }
       })).data.data;
+      // console.log(carouselItems);
     } catch (error) {
       console.error(error);
     }

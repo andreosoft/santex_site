@@ -21,10 +21,10 @@ export async function getData({ route, $axios, $config, error }) {
     {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
     {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
     
-    
+    // console.log(route);
   let res;
     try {
-      if(route.name.match('catalog') && category_id>0){
+      if((route.name.match('catalog') && category_id>0) || (route.name.match('catalog-search'))){
         res = await $axios.get($config.baseURL + '/api/site/catalog', {
           params: {
             f: f,

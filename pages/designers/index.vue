@@ -71,7 +71,7 @@ export default {
                 }
             })).data.data;
             data = dataDesigners.slice(0, 4);
-            console.log(data.length);
+            // console.log(data.length);
         } catch (error) {
             console.error(error)
         }
