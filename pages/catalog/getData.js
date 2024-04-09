@@ -13,7 +13,6 @@ export async function getData({ route, $axios, $config, error }) {
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
 
-  Object.assign(filters, { status: 1 });
   if (category_id) Object.assign(filters, { category_id: category_id });
   // if (searchInput) Object.assign(filters, {
   //   "OR": [
