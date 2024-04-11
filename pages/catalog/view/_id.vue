@@ -76,33 +76,33 @@
 
 
               <!-- Избранное -->
-<v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Сравнение -->
-        <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
-<!-- Корзина -->
-        <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
-  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
-    Закрыть
-  </v-btn>
-</template>
-</v-snackbar>
+              <v-snackbar v-model="snackbarFav">{{ dataResultFav }} <template v-slot:action="{ attrs }">
+                  <v-btn color="pink" text v-bind="attrs" @click="snackbarFav = false">
+                    Закрыть
+                  </v-btn>
+                </template>
+              </v-snackbar>
+              <!-- Сравнение -->
+              <v-snackbar v-model="snackbarCom">{{ dataResultCom }} <template v-slot:action="{ attrs }">
+                  <v-btn color="pink" text v-bind="attrs" @click="snackbarCom = false">
+                    Закрыть
+                  </v-btn>
+                </template>
+              </v-snackbar>
+              <!-- Корзина -->
+              <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
+                  <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
+                    Закрыть
+                  </v-btn>
+                </template>
+              </v-snackbar>
 
 
 
               <v-btn @click="toCompare" plain small><img src="/icon-similar.png" alt="compare" /></v-btn>
               <v-btn @click="toFavorite" plain small>
-                <img :class="{'favorite': !checkAvailable}" src="/icons/like-black.svg" alt="favorite-black">
-                <img :class="{'favorite': checkAvailable}" src="/icons/like.svg" alt="favorite">
+                <img :class="{ 'favorite': !checkAvailable }" src="/icons/like-black.svg" alt="favorite-black">
+                <img :class="{ 'favorite': checkAvailable }" src="/icons/like.svg" alt="favorite">
               </v-btn>
             </div>
           </div>
@@ -111,25 +111,25 @@
           <div class="mb-4">
             <v-simple-table dense>
               <tbody>
-              <tr>
-                <td>
-                  <b>Артикул</b>
-                </td>
-                <td v-if="data.inner_article">
-                  {{ data.inner_article}}
-                </td>
-                <td v-else>
-                  {{ data.factory_article}}
-                </td>
-              </tr>
-              <tr>
-                <td>
-                  <b>Бренд</b>
-                </td>
-                <td>
-                  {{data.brand}}
-                </td>
-              </tr>
+                <tr>
+                  <td>
+                    <b>Артикул</b>
+                  </td>
+                  <td v-if="data.inner_article">
+                    {{ data.inner_article }}
+                  </td>
+                  <td v-else>
+                    {{ data.factory_article }}
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    <b>Бренд</b>
+                  </td>
+                  <td>
+                    {{ data.brand }}
+                  </td>
+                </tr>
                 <tr v-for="(el, i) in data.filters.slice(0, 10)" :key="i">
                   <td>
                     <b>{{ el.name }}</b>
@@ -196,8 +196,8 @@
           <div class="d-flex mt-2">
             <div class="s-catalog-links" style="width: 360px;">
               <div v-for="(el, i) in data.with_buy_groups" :key="i" class="s-catalog-links-el" :class="{
-                active: i == activeEl_with_buy_groups
-              }" @click="activeEl_with_buy_groups = i"> <b>{{ el }}</b>
+      active: i == activeEl_with_buy_groups
+    }" @click="activeEl_with_buy_groups = i"> <b>{{ el }}</b>
               </div>
             </div>
             <div class="pl-4 ml-4" style="border-left: 1px solid #ddd;">
@@ -222,12 +222,23 @@
 <script>
 import Number from "../../../components/number.vue";
 import { mapGetters } from 'vuex';
-async function getData({ route, $axios, $config }) {
+async function getData({ route, $axios, $config, error }) {
   let id = route.params.id;
-  const res = await $axios.get($config.baseURL + '/api/site/catalog/' + id);
-  const data = res.data.data;
-  const resCat = await $axios.get($config.baseURL + '/api/site/categories/' + data.category_id);
-  const dataCat = resCat.data.data;
+  let res, resCat, data, dataCat;
+
+  try {
+    res = await $axios.get($config.baseURL + '/api/site/catalog/' + id);
+    data = res.data.data;
+    resCat = await $axios.get($config.baseURL + '/api/site/categories/' + data.category_id);
+    dataCat = resCat.data.data;
+  } catch (err) {
+    console.error(err);
+    return error({ statusCode: 404, message: "Страница не найдена" });
+  }
+
+  
+  
+
   // console.log(dataCat);
   const breadcrumbsData = [
     {
@@ -265,116 +276,116 @@ export default {
     };
   },
   computed: {
-    ...mapGetters ({
+    ...mapGetters({
       dataFav: 'favorite/favItems',
       dataResultFav: 'favorite/dataResult',
       dataResultCom: 'compare/dataResult',
       dataResultCart: 'cart/dataResult',
     }),
-    checkAvailable(){
-      const sim = this.dataFav.find((item) => {if(item.id === this.data.id){ return item }})
-        if (sim) {
-            return true;
-        } else {
-            return false;
-        }
+    checkAvailable() {
+      const sim = this.dataFav.find((item) => { if (item.id === this.data.id) { return item } })
+      if (sim) {
+        return true;
+      } else {
+        return false;
+      }
     }
   },
   methods: {
-    redirect_back(){
-      if(this.$route.hash){this.$router.go(-2)}else{this.$router.back()}
+    redirect_back() {
+      if (this.$route.hash) { this.$router.go(-2) } else { this.$router.back() }
     },
-    toCompare(){
-                let item = {
-                  id: this.data.id,
-                  category_id: this.data.category_id,
-                  name: this.data.name,
-                  image: this.data.images ? this.data.images[0] : '',
-                  price: this.data.price,
-                  old_price: this.data.price_old,
-                  brand: this.data.brand,
-                  available: 1,
-                  dataParams: {}
-                };
-                this.data.filters.forEach((element, index) => {
-                  if(index!==0){
-                    if(element.name === 'Прозводитель'){
-                      element.name = 'Бренд';
-                    }
-                    item.dataParams[element.name] = element.value
-                  }
-                });
-                // console.log(item)
-                this.$store.commit('compare/addItem', item);
-                this.snackbarFav = false;
-                this.snackbarCart = false;
-                this.snackbarCom = true;
-              },
-    toFavorite(){
-      // this.toFav ? this.toFav = false : this.toFav = true;
-      if(!this.checkAvailable){
-                let height = '';
-                let width = '';
-                let depth = '';
-                let lengthItem = '';
-                this.data.filters.forEach(item => {
-                  if(item.name === 'Высота'){
-                    height = item.value
-        } else if(item.name === 'Ширина') {
-          width = item.value
-        } else if(item.name === 'Глубина'){
-          depth = item.value
-        } else if(item.name === 'Длина'){
-          lengthItem = item.value;
-        }
-      });
-      // console.log('Высота ' + height)
-      // console.log('Ширина ' + width)
-      // console.log('Глубина ' + depth)
-      // console.log('Длина ' + lengthItem)
-      const item = {
+    toCompare() {
+      let item = {
         id: this.data.id,
+        category_id: this.data.category_id,
         name: this.data.name,
-        images: this.data.images[0],
+        image: this.data.images ? this.data.images[0] : '',
         price: this.data.price,
         old_price: this.data.price_old,
         brand: this.data.brand,
-        count: 1,
-        type: this.data.type,
-        store: this.data.available,
-        width,
-        height,
-        depth,
-        lengthItem,
-      }
-      this.$store.commit('favorite/addItem', item);
-      this.snackbarCom = false;
+        available: 1,
+        dataParams: {}
+      };
+      this.data.filters.forEach((element, index) => {
+        if (index !== 0) {
+          if (element.name === 'Прозводитель') {
+            element.name = 'Бренд';
+          }
+          item.dataParams[element.name] = element.value
+        }
+      });
+      // console.log(item)
+      this.$store.commit('compare/addItem', item);
+      this.snackbarFav = false;
       this.snackbarCart = false;
-      this.snackbarFav = true;
-    } else if(this.checkAvailable){
-      const item = {
-        id: this.data.id
+      this.snackbarCom = true;
+    },
+    toFavorite() {
+      // this.toFav ? this.toFav = false : this.toFav = true;
+      if (!this.checkAvailable) {
+        let height = '';
+        let width = '';
+        let depth = '';
+        let lengthItem = '';
+        this.data.filters.forEach(item => {
+          if (item.name === 'Высота') {
+            height = item.value
+          } else if (item.name === 'Ширина') {
+            width = item.value
+          } else if (item.name === 'Глубина') {
+            depth = item.value
+          } else if (item.name === 'Длина') {
+            lengthItem = item.value;
+          }
+        });
+        // console.log('Высота ' + height)
+        // console.log('Ширина ' + width)
+        // console.log('Глубина ' + depth)
+        // console.log('Длина ' + lengthItem)
+        const item = {
+          id: this.data.id,
+          name: this.data.name,
+          images: this.data.images[0],
+          price: this.data.price,
+          old_price: this.data.price_old,
+          brand: this.data.brand,
+          count: 1,
+          type: this.data.type,
+          store: this.data.available,
+          width,
+          height,
+          depth,
+          lengthItem,
+        }
+        this.$store.commit('favorite/addItem', item);
+        this.snackbarCom = false;
+        this.snackbarCart = false;
+        this.snackbarFav = true;
+      } else if (this.checkAvailable) {
+        const item = {
+          id: this.data.id
+        }
+        this.$store.commit('favorite/remove', item)
+        this.snackbarCom = false;
+        this.snackbarCart = false;
+        this.snackbarFav = true;
       }
-      this.$store.commit('favorite/remove', item)
-      this.snackbarCom = false;
-      this.snackbarCart = false;
-      this.snackbarFav = true;
-    }
       // this.$router.push('/favorite');
     },
-    toCart(){
+    toCart() {
       let height = '';
       let width = '';
       let depth = '';
       let lengthItem = '';
       this.data.filters.forEach(item => {
-        if(item.name === 'Высота'){
+        if (item.name === 'Высота') {
           height = item.value
-        } else if(item.name === 'Ширина') {
+        } else if (item.name === 'Ширина') {
           width = item.value
-        } else if(item.name === 'Глубина'){
+        } else if (item.name === 'Глубина') {
           depth = item.value
-        } else if(item.name === 'Длина'){
+        } else if (item.name === 'Длина') {
           lengthItem = item.value;
         }
       });
@@ -401,19 +412,19 @@ export default {
       this.snackbarFav = false;
       this.snackbarCart = true;
     },
-    Buyoneclick(){
+    Buyoneclick() {
       let height = '';
       let width = '';
       let depth = '';
       let lengthItem = '';
       this.data.filters.forEach(item => {
-        if(item.name === 'Высота'){
+        if (item.name === 'Высота') {
           height = item.value
-        } else if(item.name === 'Ширина') {
+        } else if (item.name === 'Ширина') {
           width = item.value
-        } else if(item.name === 'Глубина'){
+        } else if (item.name === 'Глубина') {
           depth = item.value
-        } else if(item.name === 'Длина'){
+        } else if (item.name === 'Длина') {
           lengthItem = item.value;
         }
       });
@@ -436,214 +447,11 @@ export default {
         lengthItem,
       }
       this.$store.commit('cart/add', item);
-      this.$router.push({ path: '/cart'});
+      this.$router.push({ path: '/cart' });
     }
   },
-  async asyncData({ route, $axios, $config }) {
-    return await getData({ route, $axios, $config });
-    Number;
-    console.log(params);
-    const data = {
-      id: 100,
-      name: "УГЛОВАЯ КОРЗИНКА ДЛЯ ДУША",
-      image: ["/img/catalog/1.png", "/img/catalog/1.png", "/img/catalog/1.png"],
-      decription: `Из 2-х частей: металлическая корзинка и вынимающаяся, небьющаяся, стойкая
-к мыльному налету и невосприимчивая к воздействию ультрафиолетовых
-лучей пластиковая вставка`,
-      fullDecription: `Из 2-х частей: металлическая корзинка и вынимающаяся, небьющаяся, стойкая
-к мыльному налету и невосприимчивая к воздействию ультрафиолетовых
-лучей пластиковая вставка`,
-      brend_logo: "/img/catalog/keuco.png",
-      code: "4554545",
-      price: 1540,
-      old_price: 8220,
-      brend_name: "Название бренда",
-      size: "44 x 75 x 20",
-      available: 1,
-      params: [
-        {
-          name: "Какой то параметр",
-          options: [{ text: "65" }, { text: "80" }, { text: "100" }],
-        },
-      ],
-      params_info: [
-        {
-          name: "Производитель:",
-          value: "Royal Bath",
-        },
-        {
-          name: "Коллекция:",
-          value: "HP",
-        },
-        {
-          name: "Код товара:",
-          value: "RB8120-HP1-M-L",
-        },
-        {
-          name: "Ширина:",
-          value: "120",
-        },
-        {
-          name: "Дина:",
-          value: "80",
-        },
-        {
-          name: "Высота:",
-          value: "217",
-        },
-        {
-          name: "Материал:",
-          value: "Аллюминий, стекло, акрил",
-        },
-        {
-          name: "Цвет:",
-          value: "Белый",
-        },
-        {
-          name: "Вес:",
-          value: "77,7",
-        },
-        {
-          name: "Стилистика дизайнера:",
-          value: "С совеременным дизайном",
-        },
-        {
-          name: "Гарантия:",
-          value: "10 лет",
-        },
-        {
-          name: "Страна:",
-          value: "Германия",
-        },
-      ],
-      complect_data: [
-        {
-          id: 100,
-          name: `Название товара на сайте в несколько строк`,
-          image: ["/img/catalog/2.png"],
-          price: 7222,
-          old_price: 8200,
-        },
-        {
-          id: 100,
-          name: `Название товара на сайте в несколько строк`,
-          image: ["/img/catalog/2.png"],
-          price: 7222,
-          old_price: 8200,
-        },
-        {
-          id: 100,
-          name: `Название товара на сайте в несколько строк`,
-          image: ["/img/catalog/3.png"],
-          price: 7222,
-          old_price: 8200,
-        },
-        {
-          id: 100,
-          name: `Название товара на сайте в несколько строк`,
-          image: ["/img/catalog/4.png"],
-          price: 7222,
-          old_price: 8200,
-        },
-      ],
-      similar_data: [
-        {
-          id: 100,
-          name: "Название товара",
-          image: ["/img/favorite/1.png"],
-          code: "4554545",
-          price: 1540,
-          old_price: 8220,
-          brend_name: "Название бренда",
-          size: "44 x 75 x 20",
-          available: 1,
-        },
-        {
-          id: 100,
-          name: "Название товара",
-          image: ["/img/favorite/2.png"],
-          code: "4554545",
-          price: 1540,
-          old_price: 8220,
-          brend_name: "Название бренда",
-          size: "44 x 75 x 20",
-          available: 1,
-        },
-        {
-          id: 100,
-          name: "Название товара",
-          image: ["/img/favorite/3.png"],
-          code: "4554545",
-          price: 1540,
-          old_price: 8220,
-          brend_name: "Название бренда",
-          size: "44 x 75 x 20",
-          available: 1,
-        },
-        {
-          id: 100,
-          name: "Название товара",
-          image: ["/img/favorite/4.png"],
-          code: "4554545",
-          price: 1540,
-          old_price: 8220,
-          brend_name: "Название бренда",
-          size: "44 x 75 x 20",
-          available: 1,
-        },
-        {
-          id: 100,
-          name: "Название товара",
-          image: ["/img/favorite/5.png"],
-          code: "4554545",
-          price: 1540,
-          old_price: 8220,
-          brend_name: "Название бренда",
-          size: "44 x 75 x 20",
-          available: 1,
-        },
-        {
-          id: 100,
-          name: "Название товара",
-          image: ["/img/favorite/1.png"],
-          code: "4554545",
-          price: 1540,
-          old_price: 8220,
-          brend_name: "Название бренда",
-          size: "44 x 75 x 20",
-          available: 1,
-        },
-        {
-          id: 100,
-          name: "Название товара",
-          image: ["/img/favorite/1.png"],
-          code: "4554545",
-          price: 1540,
-          old_price: 8220,
-          brend_name: "Название бренда",
-          size: "44 x 75 x 20",
-          available: 1,
-        },
-      ],
-      with_buy_groups: [
-        "Все", "Комплектующие", "Защита от протечек воды", "Кнопки смыва", "Унитаз", "Душ"
-      ]
-    };
-    const breadcrumbsData = [
-      {
-        url: "",
-        title: "Каталог",
-      },
-      {
-        url: "/catalog/1",
-        title: "Аксессуары",
-      },
-      {
-        url: "",
-        title: data.name,
-      },
-    ];
-    return { data, breadcrumbsData };
+  async asyncData(params) {
+    return await getData(params);
   },
 };
 </script>

@@ -9,40 +9,56 @@ export async function getData({ route, $axios, $config, error }) {
   const category_id = route.params.id;
   const f = route.query.f ? JSON.parse(route.query.f) : {};
   const addFilters = route.query.filters ? JSON.parse(route?.query?.filters) : {};
-  
+
   const searchInput = route.query.q ? route.query.q : null;
   let filters = addFilters;
 
-  Object.assign(filters, { status: 1 });
   if (category_id) Object.assign(filters, { category_id: category_id });
-  if (searchInput) Object.assign(filters, { "OR": [
-    {id: { condition: "LIKE", value: "%" + searchInput + "%" }},
-    {name: { condition: "LIKE", value: "%" + searchInput + "%" }},
-    {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
-    {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
-    
-    // console.log(route);
+  // if (searchInput) Object.assign(filters, {
+  //   "OR": [
+  //     { id: { condition: "LIKE", value: "%" + searchInput + "%" } },
+  //     { name: { condition: "LIKE", value: "%" + searchInput + "%" } },
+  //     { vendor: { condition: "LIKE", value: "%" + searchInput + "%" } },
+  //     { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
+  // });
+
+  // console.log(route);
   let res;
+
+  if (searchInput && route.name.match('catalog-search')) {
     try {
-      if((route.name.match('catalog') && category_id>0) || (route.name.match('catalog-search'))){
-        res = await $axios.get($config.baseURL + '/api/site/catalog', {
-          params: {
-            f: f,
-            filters: filters,
-            sort: sort,
-            pager: pager
-          }
-        });
-      }
+      res = await $axios.get($config.baseURL + '/api/site/catalog/search', {
+        params: {
+          q: searchInput,
+          f: f,
+          filters: filters,
+          sort: sort,
+          pager: pager
+        }
+      });
+    } catch (error) {
+      console.error(e);
+    }
+  } else if (route.name.match('catalog') && category_id > 0) {
+    try {
+      res = await $axios.get($config.baseURL + '/api/site/catalog', {
+        params: {
+          f: f,
+          filters: filters,
+          sort: sort,
+          pager: pager
+        }
+      });
     } catch (e) {
       console.error(e);
     }
-    // console.log(res?.data?.data?.length);
-    if (route.name.match('catalog') && searchInput == null && (res?.data?.data?.length == 0 || !res?.data?.data)) {
-      return error({ statusCode: 404, message: "Страница не найдена"});
-    }
+  }
+  // console.log(res?.data?.data?.length);
+  if (route.name.match('catalog') && searchInput == null && (res?.data?.data?.length == 0 || !res?.data?.data)) {
+    return error({ statusCode: 404, message: "Страница не найдена" });
+  }
 
-    // if (route.params.id) Object.assign(subcatfilters, { "parent_id": category_id });
+  // if (route.params.id) Object.assign(subcatfilters, { "parent_id": category_id });
   // let resCategories;
   //   try {
   //     if(route.name.match('catalog')){
@@ -67,12 +83,12 @@ export async function getData({ route, $axios, $config, error }) {
   //   }
   // });
   const data = res ? res.data.data : [];
-  
+
   // console.log();
   let carouselItems = [];
   let infoPromote;
   try {
-    if (route.name.match('promote') && category_id>0) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', {params: {filters: {"id": category_id}}})).data.data;
+    if (route.name.match('promote') && category_id > 0) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', { params: { filters: { "id": category_id } } })).data.data;
     // console.log(infoPromote);
     carouselItems = infoPromote?.length > 0 ? infoPromote[0].images.splice(1, 1) : [];
     // console.log(carouselItems);
@@ -80,13 +96,13 @@ export async function getData({ route, $axios, $config, error }) {
     console.error(error);
   }
 
-  let filtersPromote = {"status": 1};
+  let filtersPromote = { "status": 1 };
   Object.assign(filtersPromote, route.query.filters ? JSON.parse(route.query.filters) : {});
   // Object.assign(filtersPromote, { "ic.promote_id": 1 });
   if (route.name.match('promote')) Object.assign(filtersPromote, { "ic.promote_id": category_id });
   let resPromote;
   try {
-    if(route.name.match('promote') && category_id>0){
+    if (route.name.match('promote') && category_id > 0) {
       resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
         params: {
           f: f,
@@ -100,7 +116,7 @@ export async function getData({ route, $axios, $config, error }) {
     console.error(e);
   }
   if (route.name.match('promote') && (resPromote?.data?.data?.length == 0 || !resPromote?.data?.data) || infoPromote?.length == 0) {
-    return error({ statusCode: 404, message: "Страница не найдена"});
+    return error({ statusCode: 404, message: "Страница не найдена" });
   }
   const dataPromote = resPromote ? resPromote.data.data : '';
   // const resPromote = await $axios.get($config.baseURL + '/api/site/promote_catalog', {
@@ -112,33 +128,35 @@ export async function getData({ route, $axios, $config, error }) {
   //   }
   // });
   // const dataPromote = resPromote.data.data;
-  let filtersPromoteOnly = {"status": 1};
+  let filtersPromoteOnly = { "status": 1 };
   if (route.name.match('promote')) Object.assign(filtersPromoteOnly, { "ic.promote_id": category_id });
 
-  
-  const FiltersPromote = resPromote ? await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', {params: {filters: filtersPromoteOnly}}) : '';
+
+  const FiltersPromote = resPromote ? await $axios.get($config.baseURL + '/api/site/promote_catalog/filters', { params: { filters: filtersPromoteOnly } }) : '';
   const dataFiltersPromote = FiltersPromote ? FiltersPromote.data.data : '';
 
   let resCat;
-  try { if (category_id && category_id !== 'allcategories' && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id);} catch (e) {console.error(e)}
-  
+  try { if (category_id && category_id !== 'allcategories' && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id); } catch (e) { console.error(e) }
+
   let filtersOnly = {};
   Object.assign(filtersOnly, { status: 1 });
   if (category_id) Object.assign(filtersOnly, { category_id: category_id });
-  if (searchInput) Object.assign(filtersOnly, { "OR": [
-    {id: { condition: "LIKE", value: "%" + searchInput + "%" }},
-    {name: { condition: "LIKE", value: "%" + searchInput + "%" }},
-    {vendor: { condition: "LIKE", value: "%" + searchInput + "%" }},
-    {factory_article: { condition: "LIKE", value: "%" + searchInput + "%" }}] });
-    
+  if (searchInput) Object.assign(filtersOnly, {
+    "OR": [
+      { id: { condition: "LIKE", value: "%" + searchInput + "%" } },
+      { name: { condition: "LIKE", value: "%" + searchInput + "%" } },
+      { vendor: { condition: "LIKE", value: "%" + searchInput + "%" } },
+      { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
+  });
+
 
   let resFilters;
   try {
-    if(res) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filtersOnly } });  
+    if (res) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filtersOnly } });
   } catch (e) {
     console.error(e)
   }
-  
+
   const valueFilters = {
     f: f,
     price: filters.price,
@@ -233,8 +251,8 @@ export async function getData({ route, $axios, $config, error }) {
   function breadcrumbs(category_id, title, value) {
     let breadcrumbsData;
     if (category_id !== undefined) {
-      if(resCat){
-        if (resCat.data.data.parent_id){
+      if (resCat) {
+        if (resCat.data.data.parent_id) {
           breadcrumbsData = [
             {
               url: "/allcategories",
@@ -285,7 +303,7 @@ export async function getData({ route, $axios, $config, error }) {
   }
   const breadcrumbsData = breadcrumbs(category_id, title, searchInput);
   let breadcrumbsDataPromote;
-  if(route.name.match('promote') && infoPromote?.length > 0) breadcrumbsDataPromote = [{
+  if (route.name.match('promote') && infoPromote?.length > 0) breadcrumbsDataPromote = [{
     url: `/promote/${category_id}`,
     title: infoPromote[0].name,
   }]
@@ -293,24 +311,24 @@ export async function getData({ route, $axios, $config, error }) {
 
 
 
-  return { 
-    title, 
-    data, 
-    breadcrumbsData, 
-    sort, 
-    pager, 
-    dataFilters, 
-    filters, 
-    valueFilters, 
-    searchInput, 
-    loading, 
-    dataPromote, 
-    valueFiltersPromote, 
-    dataFiltersPromote, 
-    pagerPromote, 
-    carouselItems, 
-    category_id, 
-    infoPromote, 
-    breadcrumbsDataPromote 
+  return {
+    title,
+    data,
+    breadcrumbsData,
+    sort,
+    pager,
+    dataFilters,
+    filters,
+    valueFilters,
+    searchInput,
+    loading,
+    dataPromote,
+    valueFiltersPromote,
+    dataFiltersPromote,
+    pagerPromote,
+    carouselItems,
+    category_id,
+    infoPromote,
+    breadcrumbsDataPromote
   };
 }
