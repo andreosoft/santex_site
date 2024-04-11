@@ -85,8 +85,10 @@ export default {
       }
     },
     submitSearch() {
-      this.$router.push({ path: '/catalog/search', query: { q: this.search } })
-      this.showCatalogMenu = false;
+      if(this.search.trim()){
+        this.$router.push({ path: '/catalog/search', query: { q: this.search } })
+        this.showCatalogMenu = false;
+      }
     },
   },
   computed: {

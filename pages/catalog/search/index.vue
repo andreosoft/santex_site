@@ -47,7 +47,9 @@ export default {
   },
   methods: {
     submitSearch() {
-      this.$router.push({ path: '/catalog/search', query: { q: this.search } })
+      if(this.search.trim()){
+        this.$router.push({ path: '/catalog/search', query: { q: this.search } })
+      }
     },
     valueFiltersFinal(v) {
       let filters = {};
