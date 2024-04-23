@@ -88,9 +88,10 @@ export async function getData({ route, $axios, $config, error }) {
   let carouselItems = [];
   let infoPromote;
   try {
-    if (route.name.match('promote') && category_id > 0) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', { params: { filters: { "id": category_id } } })).data.data;
+    if (route.name.match('promote') && category_id > 0) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', 
+    { params: { filters: { "id": category_id } } })).data.data;
     // console.log(infoPromote);
-    carouselItems = infoPromote?.length > 0 ? infoPromote[0].images.splice(1, 1) : [];
+    carouselItems = infoPromote?.length > 0 && infoPromote[0].images ? infoPromote[0].images.splice(1, 1) : [];
     // console.log(carouselItems);
   } catch (error) {
     console.error(error);
@@ -136,7 +137,7 @@ export async function getData({ route, $axios, $config, error }) {
   const dataFiltersPromote = FiltersPromote ? FiltersPromote.data.data : '';
 
   let resCat;
-  try { if (category_id && category_id !== 'allcategories' && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id); } catch (e) { console.error(e) }
+  try { if (category_id && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id); } catch (e) { console.error(e) }
 
   let filtersOnly = {};
   Object.assign(filtersOnly, { status: 1 });

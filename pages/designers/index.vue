@@ -9,13 +9,14 @@
                 <div v-if="!(i % 2)">
                     <v-row>
                         <v-col cols="5">
-                            <v-img :src="$config.baseImageURL + el.images[0]" />
+                            <v-img v-if="el && el.images[0]" :src="$config.baseImageURL + el.images[0]" />
+                            <v-img v-else src="/black-square.jpg" />
                         </v-col>
                         <v-col cols="7">
                             <div class="pl-6">
                                 <v-divider />
                                 <div>
-                                    <h2 class="my-4 pt-10 text-uppercase">{{ el.name }}</h2>
+                                    <h2 class="my-4 pt-10 text-uppercase">{{ el.name ? el.name : 'Не указано' }}</h2>
                                     <div class="mb-6" v-html="el.content"></div>
                                     <div>
                                         <v-btn class="s-btn-main s-btn-text" :href="el.params ? el.params.url : ''">Перейти на сайт дизайнера</v-btn>

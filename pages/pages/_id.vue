@@ -5,9 +5,12 @@
             <common-beadcrumbs :value="breadcrumbsData" />
             <v-row class="mt-2">
                 <v-col cols="2" class="s-catalog-links">
-                    <nuxt-link v-for="(el, i) in leftMenu" :key="i" class="s-catalog-links-el" :class="{
-                        active: el.url == activeEl.url
-                    }" :to="el.url"> <b>{{ el.title }}</b>
+                    <nuxt-link v-for="(el, i) in leftMenu" :key="i" 
+                    class="s-catalog-links-el" 
+                    :class="{active: el.url == activeEl.url}" 
+                    :to="el.url"
+                    > 
+                    <b>{{ el.title }}</b>
                     </nuxt-link>
                 </v-col>
                 <v-col cols="10" class="pl-16">

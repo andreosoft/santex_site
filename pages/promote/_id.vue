@@ -13,7 +13,7 @@
         <!-- <v-divider class="mb-8" /> -->
         <div v-if="infoPromote?.length > 0 && infoPromote[0].content" v-html="infoPromote[0].content"></div>
         <v-divider class="mb-8" />
-        <catalog-base-catalog :data="dataPromote" :loading="loading" :dataFilters="dataFiltersPromote" :valueFilters="valueFiltersPromote" :pager="pagerPromote" :sort="sort" @update-data="valueFilters = $event"/>
+        <catalog-base-catalog v-if="dataPromote?.length > 0" :data="dataPromote" :loading="loading" :dataFilters="dataFiltersPromote" :valueFilters="valueFiltersPromote" :pager="pagerPromote" :sort="sort" @update-data="valueFilters = $event"/>
     <div class="text-center mt-10">
       <!-- <common-pagination :value="pager" /> -->
     </div>
@@ -24,15 +24,6 @@
 
 import {getData} from "@/pages/catalog/getData";
 export default {
-  //   async asyncData(params) {
-  //   const breadcrumbsDataPromote = [
-  //     {
-  //       url: "/promote",
-  //       title: "Акции",
-  //     }
-  //   ];
-  //   return { breadcrumbsDataPromote }
-  // },
   data() {
     return { 
       toggleOpen: false,

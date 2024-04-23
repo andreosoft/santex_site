@@ -92,13 +92,14 @@
             <div v-for="(el, i) in aboutCommand" :key="i">
                 <v-row>
                     <v-col cols="4" class="mb-16">
-                        <v-img :src="$config.baseImageURL + el.images[0]" />
+                        <v-img v-if="el.images && el.images[0]" :src="$config.baseImageURL + el.images[0]" />
+                        <v-img v-else class="w-100" src="/black-square.jpg" />
                     </v-col>
                     <v-col cols="8" class="mb-16">
-                        <h3><b>{{ el.name }}</b></h3>
+                        <h3><b>{{ el.name ? el.name : 'Не указано' }}</b></h3>
                         <div v-html="el.content" />
-                        <p class="mt-3"><b>E-mail:</b> {{ el.params.email }} </p>
-                        <p><b>Тел:</b> {{el.params.phone}}</p>
+                        <p class="mt-3"><b>E-mail:</b> {{ el?.params?.email }} </p>
+                        <p><b>Тел:</b> {{el?.params?.phone}}</p>
                         <div>
                             <v-btn dark class="s-btn-main s-btn-text" @click="showPopupConsult = true, valueManager = el.name">Заказать консультацию</v-btn>
                         </div>
@@ -123,31 +124,6 @@ export default {
             },
             aboutCommand: [],
             dataManager: []
-//                 {
-//                     content: `<h3><b>АЛЕКСЕЙ КРУТОВ</b></h3><p></p>
-//                     <p><b>TOP менеджер по работе с элитной сантехникой</b></p>
-//                     <p>Опыт работы в компании SantehKomfort Elite с 2010 года
-// Обучался на фабриках Италии и Германии, Латвии, Эстонии</p>
-// <p><b>Скомплектовал более 3000 санузлов</b></p>`,
-//                     image: ["/img/about/1.png"]
-//                 },
-//                 {
-//                     content: `<h3><b>Екатерина Буданова </b></h3><p></p>
-//                     <p><b>TOP менеджер по работе с элитной сантехникой</b></p>
-//                     <p>Опыт работы в компании SantehKomfort Elite с 2010 года
-// Обучался на фабриках Италии и Германии, Латвии, Эстонии</p>
-// <p><b>Скомплектовал более 3000 санузлов</b></p>`,
-//                     image: ["/img/about/2.png"]
-//                 },
-//                 {
-//                     content: `<h3><b>Александр Егоров </b></h3><p></p>
-//                     <p><b>TOP менеджер по работе с элитной сантехникой</b></p>
-//                     <p>Опыт работы в компании SantehKomfort Elite с 2010 года
-// Обучался на фабриках Италии и Германии, Латвии, Эстонии</p>
-// <p><b>Скомплектовал более 3000 санузлов</b></p>`,
-//                     image: ["/img/about/3.png"]
-//                 }
-//             ]
         }
     },
     async fetch() {

@@ -2,12 +2,12 @@
     <v-container class="mb-10">
         <v-divider class="mb-8" />
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
-        <h1>{{ title }}</h1>
+        <h1>{{ title ? title : 'Не указано' }}</h1>
         <div v-show="dataInterior?.data?.introtext" class="my-3">{{ dataInterior?.data?.introtext }}</div>
         <div class="mb-14">
             <v-row class="s-row">
                 <v-col cols="6" v-for="(el, i) in dataInterior?.data?.images" :key="i">
-                    <img :src="$config.baseImageURL + el" style="width: 100%;" />
+                    <img v-if="el" class="w-100" :src="$config.baseImageURL + el"/>
                 </v-col>
             </v-row>
         </div>
@@ -15,7 +15,7 @@
             <h2 class="mb-8">Товары присутсвующие на фото</h2>
             <div class="mb-14 interior-items" :class="{ close: !toggleOpen }">
                 <v-row class="s-row">
-                    <v-col cols="3" v-for="(el, i) in products.data" :key="i">
+                    <v-col cols="3" v-for="(el, i) in products?.data" :key="i">
                         <catalog-item-list :el="el" :hiddentext="true" />
                     </v-col>
                 </v-row>
@@ -54,7 +54,7 @@
         <v-divider class="mb-14" />
         <div>
             <div class="s-text-h2 mb-14 text-center">Похожие интерьеры</div>
-            <s-guide-style-items :items="randomInterior" class="mb-5" />
+            <s-guide-style-items v-if="randomInterior" :items="randomInterior" class="mb-5" />
         </div>
     </v-container>
 </template>
@@ -78,131 +78,16 @@ export default {
             }})
             Interiors = (await $axios.$get($config.baseURL + "/api/site/interior" )).data;
             for(let i = 0; i < Interiors.length; i++){
-                randomInterior.push(Interiors[Math.floor(Math.random(0, Interiors.length))]);
+                if(Interiors[i].id !== +route.params.id){
+                    randomInterior.push(Interiors[i]);
+                }
             }
-            console.log(randomInterior);
+            // console.log(randomInterior);
         } catch (error) {
             console.error(error)
         }
         const title = dataInterior.data.name;
-        const data = {
-            images: [
-                "/img/interior/1.png",
-                "/img/interior/2.png",
-            ],
-            // products: [
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/1.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/2.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/1.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/1.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/1.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/1.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/1.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            //     {
-            //         id: 100,
-            //         name: "Название товара",
-            //         image: ["/img/favorite/1.png"],
-            //         code: "4554545",
-            //         price: 1540,
-            //         old_price: 8220,
-            //         brend_name: "Название бренда",
-            //         size: "44 x 75 x 20",
-            //         available: 1,
-            //     },
-            // ],
-            styleItems: [
-                {
-                    img: "/img/guide1.png",
-                    to: "/interior/1"
-                },
-                {
-                    img: "/img/guide2.png",
-                    to: "/interior/1"
-                },
-                {
-                    img: "/img/guide3.png",
-                    to: "/interior/1"
-                },
-                {
-                    img: "/img/guide4.png",
-                    to: "/interior/1"
-                },
-                {
-                    img: "/img/guide5.png",
-                    to: "/interior/1"
-                }
-            ]
-        }
+
         const breadcrumbsData = [
             {
                 url: "",
@@ -213,7 +98,7 @@ export default {
                 title: title,
             },
         ];
-        return { title, data, breadcrumbsData, dataInterior, products, randomInterior };
+        return { title, breadcrumbsData, dataInterior, products, randomInterior };
     }
 }
 </script>
