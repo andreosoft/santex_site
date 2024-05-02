@@ -50,7 +50,7 @@
                                         </div>
                                         <div>
                                             <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
-                                            <div @click="toItem(el)" style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
+                                            <div @click="toItem(el)" style="font-size: 16px; word-break: break-word" class="mb-2 toItemblock">{{ el.name }}</div>
                                             <div style="font-size: 13px">
                                                 <span class="grey--text mr-2">Бренд:</span>
                                                 <span>{{ el.brand }}</span>

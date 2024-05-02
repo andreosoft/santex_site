@@ -5,7 +5,7 @@
     <h1 style="word-break: break-word">{{ data.name }}</h1>
     <v-row class="mt-4">
       <v-col cols="6">
-        <common-image-gallery :value="data.images" />
+        <common-image-gallery :value="data.images ? data.images : ['no_photo.jpg']" />
       </v-col>
       <v-col cols="6">
         <div class="d-flex justify-space-between">
@@ -300,7 +300,7 @@ export default {
         id: this.data.id,
         category_id: this.data.category_id,
         name: this.data.name,
-        image: this.data.images ? this.data.images[0] : '',
+        image: this.data.images && this.data.images[0] ? this.data.images[0] : 'no_photo.jpg',
         price: this.data.price,
         old_price: this.data.price_old,
         brand: this.data.brand,
@@ -346,7 +346,7 @@ export default {
         const item = {
           id: this.data.id,
           name: this.data.name,
-          images: this.data.images[0],
+          images: this.data.images && this.data.images[0] ? this.data.images[0] : 'no_photo.jpg',
           price: this.data.price,
           old_price: this.data.price_old,
           brand: this.data.brand,
@@ -396,7 +396,7 @@ export default {
       const item = {
         code: this.data.id,
         name: this.data.name,
-        img: this.data.images[0],
+        img: this.data.images && this.data.images[0] ? this.data.images[0] : 'no_photo.jpg',
         price: this.data.price,
         old_price: this.data.price_old,
         brand: this.data.brand,
@@ -435,7 +435,7 @@ export default {
       const item = {
         code: this.data.id,
         name: this.data.name,
-        img: this.data.images[0],
+        img: this.data.images && this.data.images[0] ? this.data.images[0] : 'no_photo.jpg',
         price: this.data.price,
         old_price: this.data.price_old,
         brand: this.data.brand,

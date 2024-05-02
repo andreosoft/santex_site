@@ -151,20 +151,40 @@
                                     </div>
                                     <div>
                                         <div style="font-size: 13px" class="mb-2 grey--text">Код товара: {{ el.code }}</div>
-                                        <div style="font-size: 16px" class="mb-2 toItemblock">{{ el.name }}</div>
-                                        <div v-if="el.depth !== '' " style="font-size: 13px"><span class="grey--text mr-2">Габариты
-                                                (Г.Ш.В):</span><span>{{`${el.depth} x ${el.width} x ${el.height}` }}</span></div>
-                                        <div v-else style="font-size: 13px"><span class="grey--text mr-2">Габариты
-                                                (Д.Ш.В):</span><span>{{`${el.lengthItem} x ${el.width} x ${el.height}` }}</span></div>
-                                        <div style="font-size: 13px"><span class="grey--text mr-2">Бренд:</span><span>{{
-                                                el.brand
-                                        }}</span></div>
+                                        <div @click="toItem(el)" style="font-size: 16px; word-break: break-word" class="mb-2 toItemblock">{{ el.name }}</div>
+                                        <div style="font-size: 13px">
+                                            <span class="grey--text mr-2">Бренд:</span>
+                                            <span>{{ el.brand }}</span>
+                                        </div>
+                                        <div style="font-size: 13px" v-if="el.height && el.width && el.length">
+                                            <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
+                                            <span>{{`${el.length} x ${el.width} x ${el.height}` }}</span>
+                                          </div>
+                                          <div style="font-size: 13px" v-else-if="!el.length && el.width && el.height">
+                                            <span class="grey--text mr-2">Габариты (Ш.В): </span>
+                                            <span>{{`${el.width} ${' x ' + el.height}` }}</span>
+                                          </div>
+                                          <div style="font-size: 13px" v-else-if="!el.width && el.length && el.height">
+                                            <span class="grey--text mr-2">Габариты (Д.В): </span>
+                                            <span>{{`${el.length}${' x ' + el.height}` }}</span>
+                                          </div>
+                                          <div style="font-size: 13px" v-else-if="!el.height && el.length && el.width">
+                                            <span class="grey--text mr-2">Габариты (Д.Ш): </span>
+                                            <span>{{`${el.length} x ${el.width}` }}</span>
+                                          </div>
+                                          <div style="font-size: 13px" v-else>
+                                            <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
+                                            <span>Не указаны</span>
+                                          </div>
                                     </div>
                                 </div>
                             </v-col>
                             <v-col cols="2">
-                                <div style="font-size: 22px">
+                                <div v-if="el.price" style="font-size: 22px">
                                     <b><number :value="el.price" /> ₽</b>
+                                </div>
+                                <div v-else style="font-size: 22px">
+                                    <b>Цена не указана</b>
                                 </div>
                             </v-col>
                             <v-col cols="2">
@@ -183,10 +203,13 @@
                             </v-col>
                             <v-col cols="2">
                                 <div>
-                                    <div style="font-size: 22px">
+                                    <div v-if="el.price" style="font-size: 22px">
                                         <b><number :value="el.count * el.price" /> ₽</b>
                                     </div>
-                                    <div v-if="el.old_price" style="font-size: 16px; text-decoration: line-through;"
+                                    <div v-else style="font-size: 22px">
+                                        <b>Цена не указана</b>
+                                    </div>
+                                    <div v-show="el.old_price" style="font-size: 16px; text-decoration: line-through;"
                                         class="grey--text">
                                         <b><number :value="el.count * el.old_price" /> ₽</b>
                                     </div>
@@ -531,6 +554,9 @@ export default {
         },
         updateDataClient(name1, value, name2){
             name2 ? this.$store.commit('cart/updateDataClient', {name1, value, name2}) : this.$store.commit('cart/updateDataClient', {name1, value});
+        },
+        toItem(el){
+            this.$router.push({path: '/catalog/view/' + el.code})
         },
         async toDataBase() {
     // if(this.fullName.trim() && this.email.trim() && this.phone.trim()){

@@ -3,7 +3,10 @@
     <div>
       <nuxt-link v-if="el.isparent !== 0" :to="'/catalog/view/' + el.id">
         <div style="position: relative;" class="mb-2">
-          <v-img v-if="el.images && el.images[0]" :contain="true" style="width: 400px; height: 250px" :src="$config.baseImageURL+el.images[0]+'?height=250'" />
+          <v-img 
+            :contain="true"
+            style="width: 400px; height: 250px" 
+            :src="el.images && el.images[0] ? $config.baseImageURL+el.images[0]+'?height=250' : $config.baseImageURL+'no_photo.jpg?height=250' " />
         </div>
         <div class="d-flex justify-space-between mb-2">
           <div style="margin: 3px 0; font-size: 13px">
@@ -13,7 +16,7 @@
             Код товара: {{ el.id }}
           </div>
         </div>
-        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold" :class="{ 'hidden-text': hiddentext }">{{ el.name }}</div>
+        <div class="mb-4" style="margin: 3px 0; font-size: 16px; font-weight: bold; word-break: break-word" :class="{ 'hidden-text': hiddentext }">{{ el.name }}</div>
         <div class="my-1" style="font-size: 11px">
           <div>
             <!-- <span style="color: #949494">Габариты (Д.Ш.В): </span><span>{{ el.width }}</span> -->
@@ -180,7 +183,7 @@ export default {
           id: el.id,
           category_id: el.category_id,
           name: el.name,
-          image: el.images ? el.images[0] : '',
+          image: el.images && el.images[0] ? el.images[0] : 'no_photo.jpg',
           price: el.price,
           old_price: el.price_old,
           brand: el.brand,
@@ -214,7 +217,7 @@ export default {
           const item = {
             id: el.id,
             name: el.name,
-            images: el.images[0],
+            images: el.images && el.images[0] ? el.images[0] : 'no_photo.jpg',
             price: el.price,
             old_price: el.price_old,
             brand: el.brand,
@@ -264,7 +267,7 @@ export default {
         const item = {
           code: el.id,
           name: el.name,
-          img: el.images[0],
+          img: el.images && el.images[0] ? el.images[0] : 'no_photo.jpg',
           price: el.price,
           old_price: el.price_old,
           brand: el.brand,
