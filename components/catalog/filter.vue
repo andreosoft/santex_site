@@ -4,12 +4,12 @@
     <!-- <div>
       <v-btn @click="onUpdateData()">Показать</v-btn>
     </div> -->
-    <!-- {{ dataF }}
-    {{ dataPrice }}
-    <br>
-    {{ value }} -->
-<!-- {{ filters }} -->
-    <catalog-filterResult @filterResult="onUpdateData" :locationRes="dy" :resultData="resultData"/>
+    <catalog-filterResult 
+      ref="filterResult"
+      @filterResult="onUpdateData" 
+      :locationRes="dy" 
+      :resultData="resultData"
+    />
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
         <catalog-brands
@@ -38,9 +38,9 @@
       </div>
     </div>
     <v-btn 
-    @click="toggleFunction($event)" 
-    outlined
-    class="s-btn-cart s-btn-text clearBtn w-100 mt-3">       
+      @click="toggleFunction($event)" 
+      outlined
+      class="s-btn-cart s-btn-text clearBtn w-100 mt-3">       
       Сбросить фильтр
        <img class="ml-2 el_card" src="/icons/Close catalog.svg" alt="">
      </v-btn>
@@ -63,25 +63,25 @@ export default {
       dataPrice: [],
       dy: 0,
       resultData: 0,
-      disTop: 0
+      disTop: 464
     };
   },
   created() {
     this.initValueFilters();
   },
-  mounted() {
-    // console.log(this.value);
-    function getDistanceToDocumentTop(element) {
-          let distance = 0;
-          while (element) {
-            distance += element.offsetTop;
-            element = element.offsetParent;  // Переходим к родительскому элементу для следующей итерации
-          }
-          return distance;
-        }
-        this.disTop = getDistanceToDocumentTop(document.querySelector('.parent > .s-filterResult')) + 30;
-        // console.log(this.disTop);
-  },
+  // mounted() {
+  //   this.$nextTick(() => {
+  //     // let elem = this.$refs.filterResult;
+  //     // function getDistanceToDocumentTop(element) {
+  //     //       return window.scrollY + element.getBoundingClientRect().top;
+  //     //     }
+  //     //     if(elem){
+  //     //       // console.log(elem.$el);
+  //     //       this.disTop = getDistanceToDocumentTop(elem.$el) + 30;
+  //     //       // console.log(this.disTop);
+  //     //     }
+  //   })
+  // },
   watch:{
   //   dataF: async function(){
   //     try{
@@ -118,23 +118,18 @@ export default {
       // }
     }
   },
-  computed: {
-    // onUpdateData() {
-    //   if(this.resultFilterValue){
-    //     let r = {};
-    //     for (const i in this.dataF) {
-    //       if (this.dataF[i].length > 0) {
-    //         r[i] = this.dataF[i];
-    //       }
-    //     }
-    //     this.$emit('input', { f: r, price: this.dataPrice });
-    //   }
-    // },
-    // locationRes(){
-    //     document.body.querySelector('.s-filterResult').style.left = this.dx + 'px'
-    //     document.body.querySelector('.s-filterResult').style.top = this.dy + 'px'
-    // }
-  },
+  // computed: {
+  //   getDistanceToDocumentTop(){
+  //     // let elem = this.$refs.filterResult;
+  //     //     if(elem){
+  //     //       console.log(elem.$el);
+  //     //       console.log(this.disTop);
+  //     //       return window.scrollY + elem.$el.getBoundingClientRect().top + 30;
+  //     //     } else {
+  //     //       return this.$refs.filterResult
+  //     //     }
+  //   }
+  // },
   methods: {
     toggleFunction(e){
       this.clearFilters();
@@ -280,7 +275,7 @@ export default {
         console.error(error)
       }
     }, 1000)
-  }
+  },
 };
 </script>
 

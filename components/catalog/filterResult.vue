@@ -1,7 +1,9 @@
 <template>
   <div :class="{'s-filterResult': true, 's-filterResultVisible': locationRes && visible}" :style="{top: locationRes + 'px' + '!important'}">
       <div style="display: flex; justify-content: space-between; align-items: center; ">
-        <span style="text-align: center; color: white;">Найдено товаров: {{ resultData }} </span>
+      <span style="text-align: center; color: white;">
+        Найдено товаров: {{ resultData }} 
+      </span>
         <v-btn @click="onUpdateData">Показать</v-btn>
       </div>
     </div>
@@ -11,7 +13,12 @@
   <script>
 
   export default {
-    props: {locationRes: {type: Number}, resultData: Number},
+    props: {
+      locationRes: {
+        type: Number
+      }, 
+      resultData: Number
+    },
     data(){
         return {
           scrollNum: 0,

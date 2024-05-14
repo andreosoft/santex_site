@@ -4,10 +4,10 @@
 
         <v-snackbar v-model="snackbarCart">{{ dataResultCart }} <template v-slot:action="{ attrs }">
             <v-btn color="pink" text v-bind="attrs" @click="snackbarCart = false">
-              Закрыть
+            Закрыть
             </v-btn>
-          </template>
-          </v-snackbar>
+        </template>
+        </v-snackbar>
 
         <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
         <div class="d-flex flex-row justify-space-between align-center">
@@ -19,9 +19,9 @@
             <div style="font-weight: bold; font-size: 46px;">Ваша корзина пуста</div>
             <div style="font-size: 20px; margin: 5px 0 30px 0;">Перейдите в каталог</div>
             <div>
-              <v-btn dark to="/allcategories">В каталог</v-btn>
+                <v-btn dark to="/allcategories">В каталог</v-btn>
             </div>
-          </div>
+        </div>
         <div v-show="cart.length > 0">
                     <v-row>
                         <v-col cols="5">
@@ -58,25 +58,23 @@
                                             <div style="font-size: 13px" v-if="el.height && el.width && el.length">
                                                 <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
                                                 <span>{{`${el.length} x ${el.width} x ${el.height}` }}</span>
-                                              </div>
-                                              <div style="font-size: 13px" v-else-if="!el.length && el.width && el.height">
+                                            </div>
+                                            <div style="font-size: 13px" v-else-if="!el.length && el.width && el.height">
                                                 <span class="grey--text mr-2">Габариты (Ш.В): </span>
                                                 <span>{{`${el.width} ${' x ' + el.height}` }}</span>
-                                              </div>
-                                              <div style="font-size: 13px" v-else-if="!el.width && el.length && el.height">
+                                            </div>
+                                            <div style="font-size: 13px" v-else-if="!el.width && el.length && el.height">
                                                 <span class="grey--text mr-2">Габариты (Д.В): </span>
                                                 <span>{{`${el.length}${' x ' + el.height}` }}</span>
-                                              </div>
-                                              <div style="font-size: 13px" v-else-if="!el.height && el.length && el.width">
+                                            </div>
+                                            <div style="font-size: 13px" v-else-if="!el.height && el.length && el.width">
                                                 <span class="grey--text mr-2">Габариты (Д.Ш): </span>
                                                 <span>{{`${el.length} x ${el.width}` }}</span>
-                                              </div>
-                                              <div style="font-size: 13px" v-else>
+                                            </div>
+                                            <div style="font-size: 13px" v-else>
                                                 <span class="grey--text mr-2">Габариты (Д.Ш.В): </span>
                                                 <span>Не указаны</span>
-                                              </div>
-            
-            
+                                            </div>
                                         </div>
                                     </div>
                                 </v-col>
@@ -203,10 +201,10 @@ export default {
     },
     computed: {
         ...mapGetters ({
-      totalPrice: 'cart/totalPrice',
-      totalDiscount: 'cart/totalDiscount',
-      cart: 'cart/cart',
-      dataResultCart: 'cart/dataResult',
+        totalPrice: 'cart/totalPrice',
+        totalDiscount: 'cart/totalDiscount',
+        cart: 'cart/cart',
+        dataResultCart: 'cart/dataResult',
     }),
     },
     methods: {
@@ -245,7 +243,7 @@ export default {
 <style lang="scss">
 .cart-count{
     input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
-         -webkit-appearance: none; 
+        -webkit-appearance: none; 
     }
     input[type="number"] { 
         -moz-appearance: textfield; 
