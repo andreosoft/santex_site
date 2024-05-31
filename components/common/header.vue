@@ -72,33 +72,128 @@
             </div>
           </form>
           <v-row
-          @click="[longsearch = false, search = '']"
           id="s-search-result" 
           class="d-flex flex-column ma-0 flex-nowrap"  
           :class="{'visibility-active': longsearch && search.trim()}"
           >
-          <v-col v-if="searchData?.category?.length === 0 && searchData?.brand?.length === 0 && searchData?.catalog?.length === 0">
-            <p class="mb-0">Ничего не найдено</p>
+          <v-col 
+          v-if="searchData?.category?.length === 0 && searchData?.brand?.length === 0 && searchData?.catalog?.length === 0"
+          class="d-flex flex-row align-center w-100 mb-0"
+          >
+            <v-col class="col-3">
+              <p class="mb-0">Результаты поиска</p>
+            </v-col>
+            <v-col class="ma-0">
+              <p class="mb-0">Ничего не найдено</p>
+            </v-col>
           </v-col>
-              <nuxt-link 
-              v-if="searchData?.category && searchData?.category.length > 0"
-              v-for="el in searchData?.category"
-              :key="el._id" 
-              class="d-flex flex-row align-center w-100"
-              :to="'/catalog/' + el._id"
-              >
-                <div style="margin: 10px 20px">
-                  <v-img 
-                  contain 
-                  style="width: 50px; height: 50px;"
-                  v-if="el._source.images && el._source.images[0]"
-                  :src="$config.baseImageURL + el._source.images[0]"
-                  />
-                  <v-img v-else src="/black-square.jpg" />
-                </div>
-                <p class="mb-0">{{ el._source.name }}</p>
-              </nuxt-link>
-              <nuxt-link 
+          <v-col
+            v-if="searchData?.category && searchData?.category.length > 0"
+            class="d-flex flex-row align-center w-100 mb-0"    
+          >
+            <v-col class="col-3">
+              <p class="mb-0">Категории</p>
+            </v-col>
+            <v-col class="ma-0 d-flex flex-column">
+                <v-col
+                @click="[longsearch = false, search = '']"
+                v-for="el in searchData?.category"
+                :key="el._id" 
+                class="ma-0 pa-0"
+                >
+                <nuxt-link 
+                class="d-flex flex-row align-center w-100"
+                :to="'/catalog/' + el._id">
+                  <div style="margin: 10px 20px">
+                    <v-img 
+                    contain 
+                    style="width: 50px; height: 50px;"
+                    v-if="el._source.images && el._source.images[0]"
+                    :src="$config.baseImageURL + el._source.images[0]"
+                    />
+                    <v-img 
+                    contain 
+                    style="width: 50px; height: 50px;"
+                    v-else src="/black-square.jpg" />
+                  </div>
+                  <p class="mb-0">{{ el._source.name }}</p>
+                </nuxt-link>
+                </v-col>
+            </v-col>
+          </v-col>
+          <v-col
+            v-if="searchData?.brand && searchData?.brand.length > 0"
+            class="d-flex flex-row align-center w-100"    
+          >
+            <v-col class="col-3">
+              <p class="mb-0">Бренды</p>
+            </v-col>
+            <v-col class="ma-0 d-flex flex-column">
+                <v-col
+                @click="[longsearch = false, search = '']"
+                v-for="el in searchData?.brand"
+                :key="el._id" 
+                class="ma-0 pa-0"
+                >
+                <nuxt-link 
+                class="d-flex flex-row align-center w-100"
+                :to="'/catalog/search?q=' + el._source.name">
+                  <div style="margin: 10px 20px">
+                    <v-img 
+                    contain 
+                    style="width: 50px; height: 50px;"
+                    v-if="el._source.images && el._source.images[0]"
+                    :src="$config.baseImageURL + el._source.images[0]"
+                    />
+                    <v-img 
+                    contain 
+                    style="width: 50px; height: 50px;"
+                    v-else src="/black-square.jpg" />
+                  </div>
+                  <p class="mb-0">{{ el._source.name }}</p>
+                </nuxt-link>
+                </v-col>
+            </v-col>
+          </v-col>
+          <v-col
+            v-if="searchData?.catalog && searchData?.catalog.length > 0"
+            class="d-flex flex-row align-center w-100"    
+          >
+            <v-col class="col-3">
+              <p class="mb-0">Товары</p>
+            </v-col>
+            <v-col class="ma-0 d-flex flex-column">
+                <v-col
+                @click="[longsearch = false, search = '']"
+                v-for="el in searchData?.catalog"
+                :key="el._id" 
+                class="ma-0 pa-0"
+                >
+                <nuxt-link 
+                class="d-flex flex-row align-center w-100"
+                :to="'/catalog/view/' + el._id">
+                  <div style="margin: 10px 20px">
+                    <v-img 
+                    contain 
+                    style="width: 50px; height: 50px;"
+                    v-if="el._source.images && el._source.images[0]"
+                    :src="$config.baseImageURL + el._source.images[0]"
+                    />
+                    <v-img 
+                    contain 
+                    style="width: 50px; height: 50px;"
+                    v-else src="/black-square.jpg" />
+                  </div>
+                  <p class="mr-3 mb-0 w-50">{{ el._source.name }}</p>
+                <div class="wrapper mx-auto"></div>
+                <p v-if="el._source.price" class="mr-3 mb-0">{{ el._source.price }} ₽</p>
+                <p v-else class="mr-3 mb-0">Не указано</p>
+                </nuxt-link>
+                </v-col>
+            </v-col>
+          </v-col>
+
+              <!-- <nuxt-link 
               v-if="searchData?.brand && searchData?.brand.length > 0"
               v-for="el in searchData?.brand"
               :key="el._id" 
@@ -115,8 +210,8 @@
                   <v-img v-else src="/black-square.jpg" />
                 </div>
                 <p class="mb-0">{{ el._source.name }}</p>
-              </nuxt-link>
-              <nuxt-link 
+              </nuxt-link> -->
+              <!-- <nuxt-link 
               v-if="searchData?.catalog && searchData?.catalog.length > 0"
               v-for="el in searchData?.catalog"
               :key="el._id" 
@@ -139,8 +234,10 @@
                 <div class="wrapper mx-auto"></div>
                 <p v-if="el._source.price" class="mr-3 mb-0">{{ el._source.price }} ₽</p>
                 <p v-else class="mr-3 mb-0">Не указано</p>
-              </nuxt-link>
-              <v-col v-if="searchData?.category?.length !== 0 || searchData?.brand?.length !== 0 || searchData?.catalog?.length !== 0">
+              </nuxt-link> -->
+              <v-col 
+              @click="[longsearch = false, search = '']"
+              v-if="searchData?.category?.length !== 0 || searchData?.brand?.length !== 0 || searchData?.catalog?.length !== 0">
                 <nuxt-link class="underlined" :to="'/catalog/search?q=' + search">Посмотреть все результаты</nuxt-link>
               </v-col>
           </v-row>
@@ -181,7 +278,7 @@ export default {
           // this.$router.push({ path: '/catalog/search', query: { q: this.search } })
           alldata = (await this.$axios.get(this.$config.baseURL + '/api/site/catalog/hits', { params: { q: this.search } })).data.data;
           // console.log(this.search);
-          // console.log(alldata);
+          console.log(alldata);
           this.searchData = alldata;
           this.showCatalogMenu = false;
         }
@@ -212,12 +309,12 @@ export default {
   z-index: 1000000;
   background-color: #fff;
   right: 45px;
-  width: 623px;
+  width: 830px;
   top: 222px;
   overflow: auto;
   max-height: 390px;
   border-radius: 4px;
-  &>a{
+  a{
     border-bottom: 1px solid #DBDBDB;
   }
 }
