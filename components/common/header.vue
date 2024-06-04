@@ -34,8 +34,9 @@
         <nuxt-link to="/"><img src="/icons/logo.svg" /></nuxt-link>
       </div>
       <div>
-        <div class="d-flex justify-space-between"
+        <div class="d-flex justify-space-between "
         :class="{ 's-activesearch': longsearch }"
+        style="position: relative;"
         >
           <div>
             <div class="s-header-menu-btn" @click="showCatalogMenu = !showCatalogMenu">
@@ -74,7 +75,7 @@
           <v-row
           id="s-search-result" 
           class="d-flex flex-column ma-0 flex-nowrap"  
-          :class="{'visibility-active': longsearch && search.trim()}"
+          :class="{'visibility-active': longsearch && search.trim() && search.trim().length > 3}"
           >
           <v-col 
           v-if="searchData?.category?.length === 0 && searchData?.brand?.length === 0 && searchData?.catalog?.length === 0"
@@ -236,9 +237,10 @@
                 <p v-else class="mr-3 mb-0">Не указано</p>
               </nuxt-link> -->
               <v-col 
-              @click="[longsearch = false, search = '']"
               v-if="searchData?.category?.length !== 0 || searchData?.brand?.length !== 0 || searchData?.catalog?.length !== 0">
-                <nuxt-link class="underlined" :to="'/catalog/search?q=' + search">Посмотреть все результаты</nuxt-link>
+                <nuxt-link 
+                @click.native="[longsearch = false, search = '']"
+                class="underlined" :to="'/catalog/search?q=' + search">Посмотреть все результаты</nuxt-link>
               </v-col>
           </v-row>
           <v-overlay @click="longsearch = false" :value="longsearch"></v-overlay>
@@ -274,11 +276,11 @@ export default {
     submitSearch: debounce(async function() {
       try {
         let alldata;
-        if(this.search.trim()){
+        if(this.search.trim() && this.search.trim().length > 2) {
           // this.$router.push({ path: '/catalog/search', query: { q: this.search } })
           alldata = (await this.$axios.get(this.$config.baseURL + '/api/site/catalog/hits', { params: { q: this.search } })).data.data;
           // console.log(this.search);
-          console.log(alldata);
+          // console.log(alldata);
           this.searchData = alldata;
           this.showCatalogMenu = false;
         }
@@ -308,9 +310,9 @@ export default {
   position: absolute;
   z-index: 1000000;
   background-color: #fff;
-  right: 45px;
+  right: 0 !important;
   width: 830px;
-  top: 222px;
+  top: 40px;
   overflow: auto;
   max-height: 390px;
   border-radius: 4px;
