@@ -59,7 +59,9 @@
           >
             <div class="s-header-menu-search" :class="{'s-header-menu-search-long': longsearch}" style="border-radius: 4px">
               <v-text-field
+                ref="inputSearch"
                 @input="submitSearch()" 
+                @keyup.enter="redirectSearch()"
                 v-model="search" 
                 single-line 
                 outlined 
@@ -187,7 +189,7 @@
                   </div>
                   <p class="mr-3 mb-0 w-50">{{ el._source.name }}</p>
                 <div class="wrapper mx-auto"></div>
-                <p v-if="el._source.price" class="mr-3 mb-0">{{ el._source.price }} ₽</p>
+                <p v-if="el._source.price" class="mr-3 mb-0"><number :value="el._source.price" /> ₽</p>
                 <p v-else class="mr-3 mb-0">Не указано</p>
                 </nuxt-link>
                 </v-col>
@@ -273,10 +275,20 @@ export default {
         this.showCatalogMenu = false;
       }
     },
+    redirectSearch(){
+      if(this.search.trim() && this.search.trim().length > 3) {
+        this.$router.push({ path: '/catalog/search', query: { q: this.search } });
+        this.search = '';
+        this.longsearch = false;
+        this.$refs.inputSearch.$el.querySelector('input').blur();
+      }
+    },
     submitSearch: debounce(async function() {
       try {
         let alldata;
         if(this.search.trim() && this.search.trim().length > 2) {
+          document.querySelector("#s-search-result").scrollTop = 0;
+          document.querySelector("#s-search-result").scrollLeft = 0;
           // this.$router.push({ path: '/catalog/search', query: { q: this.search } })
           alldata = (await this.$axios.get(this.$config.baseURL + '/api/site/catalog/hits', { params: { q: this.search } })).data.data;
           // console.log(this.search);
@@ -311,7 +323,7 @@ export default {
   z-index: 1000000;
   background-color: #fff;
   right: 0 !important;
-  width: 830px;
+  width: 884px;
   top: 40px;
   overflow: auto;
   max-height: 390px;
@@ -326,7 +338,7 @@ export default {
 .s-header-menu-search-long{
   background-color: #fff;
   right: 0 !important;
-  width: 240% !important;
+  width: 340% !important;
   position: absolute;
   z-index: 1000000;
   min-width: unset !important;
