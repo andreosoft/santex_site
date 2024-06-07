@@ -106,7 +106,7 @@
                 >
                 <nuxt-link 
                 class="d-flex flex-row align-center w-100"
-                :to="'/catalog/' + el._id">
+                :to="el._source.isparent == 1 ? `/allcategories/${el._id}` : `/catalog/${el._id}`">
                   <div style="margin: 10px 20px">
                     <v-img 
                     contain 
