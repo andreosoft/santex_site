@@ -1,10 +1,10 @@
 <template>
-  <div :class="{'s-filterResult': true, 's-filterResultVisible': locationRes && visible}" :style="{top: locationRes + 'px' + '!important'}">
-      <div style="display: flex; justify-content: space-between; align-items: center; ">
+  <div class="d-flex align-center justify-space-between" :class="{'s-filterResult': true, 's-filterResultVisible': locationRes && visible}" :style="{top: locationRes + 'px' + '!important'}">
+      <div class="w-100" style="display: flex; justify-content: space-between; align-items: center; ">
       <span style="text-align: center; color: white;">
         Найдено товаров: {{ resultData }} 
       </span>
-        <v-btn @click="onUpdateData">Показать</v-btn>
+        <v-btn v-if="resultData > 0 && locationRes" @click="onUpdateData">Показать</v-btn>
       </div>
     </div>
   </template>
