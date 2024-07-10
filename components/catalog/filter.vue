@@ -63,7 +63,7 @@ export default {
       dataPrice: [],
       dy: 0,
       resultData: 0,
-      disTop: 464
+      disTop: 439
     };
   },
   created() {
