@@ -9,7 +9,8 @@
             {{ $store.getters.getD }}
             <a class="s-header-phones pr-3" href="tel://88007759985">8 800 775 99 85</a>
             <a class="s-header-phones pr-3" href="tel://84952256285">8 495 225 62 85</a>
-          <a target="_blank" href="https://api.whatsapp.com/send/?phone=89672823107"><span><img src="/icons/whats_small.svg" alt="" /></span></a>
+            <a target="_blank" href="https://api.whatsapp.com/send/?phone=89672823107"><span><img
+                  src="/icons/whats_small.svg" alt="" /></span></a>
           </div>
           <div class="s-header-actions-block" @click="disableMenu($event)">
             <nuxt-link class="s-main-link" to="/"><img src="/icons/profile.svg" alt="" /></nuxt-link>
@@ -22,10 +23,10 @@
               <div v-show="countItemsCom !== 0" class="cartIcon">{{ countItemsCom }}</div>
             </nuxt-link>
             <!-- <div style="width: 70px;" class="ml-6 d-inline-block"> -->
-              <nuxt-link class="ml-6 s-main-link" to="/cart">
-                  <img src="/icons/basket.svg" alt="compare" />
-                  <div v-show="countItems !== 0" class="cartIcon">{{ countItems }}</div>
-              </nuxt-link>
+            <nuxt-link class="ml-6 s-main-link" to="/cart">
+              <img src="/icons/basket.svg" alt="compare" />
+              <div v-show="countItems !== 0" class="cartIcon">{{ countItems }}</div>
+            </nuxt-link>
             <!-- </div> -->
           </div>
         </div>
@@ -34,10 +35,8 @@
         <nuxt-link to="/"><img src="/icons/logo.svg" /></nuxt-link>
       </div>
       <div>
-        <div class="d-flex justify-space-between "
-        :class="{ 's-activesearch': longsearch }"
-        style="position: relative;"
-        >
+        <div class="d-flex justify-space-between " :class="{ 's-activesearch': longsearch }"
+          style="position: relative;">
           <div>
             <div class="s-header-menu-btn" @click="showCatalogMenu = !showCatalogMenu">
               <i v-if="showCatalogMenu" class="fa fa-times pr-2"></i>
@@ -50,153 +49,96 @@
             <nuxt-link class="s-main-link" to="/blog">Блог</nuxt-link>
             <nuxt-link class="s-main-link" to="/designers">Наши дизайнеры</nuxt-link>
             <nuxt-link class="s-main-link" to="/consulting">Запись на консультацию</nuxt-link>
-            <nuxt-link class="s-main-link" to="/promote/1"><img src="/icon-discont.png" class="pr-1" />Распродажа</nuxt-link>
+            <nuxt-link class="s-main-link" to="/promote/1"><img src="/icon-discont.png"
+                class="pr-1" />Распродажа</nuxt-link>
           </div>
-          <form 
-          @click="longsearch = true"
-          @submit.prevent="submitSearch()"
-          class="s-form-search"
-          >
-            <div class="s-header-menu-search" :class="{'s-header-menu-search-long': longsearch}" style="border-radius: 4px">
-              <v-text-field
-                ref="inputSearch"
-                @input="submitSearch()" 
-                @keyup.enter="redirectSearch()"
-                v-model="search" 
-                single-line 
-                outlined 
-                dense 
-                hide-details
-                label="Я хочу найти">
+          <form @click="longsearch = true" @submit.prevent="submitSearch()" class="s-form-search">
+            <div class="s-header-menu-search" :class="{ 's-header-menu-search-long': longsearch }"
+              style="border-radius: 4px">
+              <v-text-field ref="inputSearch" @input="submitSearch()" @keyup.enter="redirectSearch()" v-model="search"
+                single-line outlined dense hide-details label="Я хочу найти">
                 <template v-slot:append>
                   <img style="cursor: pointer" @click="submitSearch()" src="/icons/Search.svg" />
                 </template>
               </v-text-field>
             </div>
           </form>
-          <v-row
-          id="s-search-result" 
-          class="d-flex flex-column ma-0 flex-nowrap"  
-          :class="{'visibility-active': longsearch && search.trim() && search.trim().length > 3}"
-          >
-          <v-col 
-          v-if="searchData?.category?.length === 0 && searchData?.brand?.length === 0 && searchData?.catalog?.length === 0"
-          class="d-flex flex-row align-center w-100 mb-0"
-          >
-            <v-col class="col-3">
-              <p class="mb-0">Результаты поиска</p>
+          <v-row id="s-search-result" class="d-flex flex-column ma-0 flex-nowrap"
+            :class="{ 'visibility-active': longsearch && search.trim() && search.trim().length > 3 }">
+            <v-col
+              v-if="searchData?.category?.length === 0 && searchData?.brand?.length === 0 && searchData?.catalog?.length === 0"
+              class="d-flex flex-row align-center w-100 mb-0">
+              <v-col class="col-3">
+                <p class="mb-0">Результаты поиска</p>
+              </v-col>
+              <v-col class="ma-0">
+                <p class="mb-0">Ничего не найдено</p>
+              </v-col>
             </v-col>
-            <v-col class="ma-0">
-              <p class="mb-0">Ничего не найдено</p>
-            </v-col>
-          </v-col>
-          <v-col
-            v-if="searchData?.category && searchData?.category.length > 0"
-            class="d-flex flex-row align-center w-100 mb-0"    
-          >
-            <v-col class="col-3">
-              <p class="mb-0">Категории</p>
-            </v-col>
-            <v-col class="ma-0 d-flex flex-column">
-                <v-col
-                @click="[longsearch = false, search = '']"
-                v-for="el in searchData?.category"
-                :key="el._id" 
-                class="ma-0 pa-0"
-                >
-                <nuxt-link 
-                class="d-flex flex-row align-center w-100"
-                :to="el._source.isparent == 1 ? `/allcategories/${el._id}` : `/catalog/${el._id}`">
-                  <div style="margin: 10px 20px">
-                    <v-img 
-                    contain 
-                    style="width: 50px; height: 50px;"
-                    v-if="el._source.images && el._source.images[0]"
-                    :src="$config.baseImageURL + el._source.images[0]"
-                    />
-                    <v-img 
-                    contain 
-                    style="width: 50px; height: 50px;"
-                    v-else src="/black-square.jpg" />
-                  </div>
-                  <p class="mb-0">{{ el._source.name }}</p>
-                </nuxt-link>
+            <v-col v-if="searchData?.category && searchData?.category.length > 0"
+              class="d-flex flex-row align-center w-100 mb-0">
+              <v-col class="" style="flex: 0 0 11%;">
+                <p class="mb-0">Категории</p>
+              </v-col>
+              <v-col class="ma-0 d-flex flex-column">
+                <v-col @click="[longsearch = false, search = '']" v-for="el in searchData?.category" :key="el._id"
+                  class="ma-0 pa-0">
+                  <nuxt-link class="d-flex flex-row align-center w-100"
+                    :to="el._source.isparent == 1 ? `/allcategories/${el._id}` : `/catalog/${el._id}`">
+                    <div style="margin: 10px 20px">
+                      <v-img contain style="width: 50px; height: 50px;" v-if="el._source.images && el._source.images[0]"
+                        :src="$config.baseImageURL + el._source.images[0]" />
+                      <v-img contain style="width: 50px; height: 50px;" v-else src="/black-square.jpg" />
+                    </div>
+                    <p class="mb-0">{{ el._source.name }}</p>
+                  </nuxt-link>
                 </v-col>
+              </v-col>
             </v-col>
-          </v-col>
-          <v-col
-            v-if="searchData?.brand && searchData?.brand.length > 0"
-            class="d-flex flex-row align-center w-100"    
-          >
-            <v-col class="col-3">
-              <p class="mb-0">Бренды</p>
-            </v-col>
-            <v-col class="ma-0 d-flex flex-column">
-                <v-col
-                @click="[longsearch = false, search = '']"
-                v-for="el in searchData?.brand"
-                :key="el._id" 
-                class="ma-0 pa-0"
-                >
-                <nuxt-link 
-                class="d-flex flex-row align-center w-100"
-                :to="'/catalog/search?q=' + el._source.name">
-                  <div style="margin: 10px 20px">
-                    <v-img 
-                    contain 
-                    style="width: 50px; height: 50px;"
-                    v-if="el._source.images && el._source.images[0]"
-                    :src="$config.baseImageURL + el._source.images[0]"
-                    />
-                    <v-img 
-                    contain 
-                    style="width: 50px; height: 50px;"
-                    v-else src="/black-square.jpg" />
-                  </div>
-                  <p class="mb-0">{{ el._source.name }}</p>
-                </nuxt-link>
+            <v-col v-if="searchData?.brand && searchData?.brand.length > 0" class="d-flex flex-row align-center w-100">
+              <v-col class="" style="flex: 0 0 11%;">
+                <p class="mb-0">Бренды</p>
+              </v-col>
+              <v-col class="ma-0 d-flex flex-column">
+                <v-col @click="[longsearch = false, search = '']" v-for="el in searchData?.brand" :key="el._id"
+                  class="ma-0 pa-0">
+                  <nuxt-link class="d-flex flex-row align-center w-100" :to="'/catalog/search?q=' + el._source.name">
+                    <div style="margin: 10px 20px">
+                      <v-img contain style="width: 50px; height: 50px;" v-if="el._source.images && el._source.images[0]"
+                        :src="$config.baseImageURL + el._source.images[0]" />
+                      <v-img contain style="width: 50px; height: 50px;" v-else src="/black-square.jpg" />
+                    </div>
+                    <p class="mb-0">{{ el._source.name }}</p>
+                  </nuxt-link>
                 </v-col>
+              </v-col>
             </v-col>
-          </v-col>
-          <v-col
-            v-if="searchData?.catalog && searchData?.catalog.length > 0"
-            class="d-flex flex-row align-center w-100"    
-          >
-            <v-col class="col-3">
-              <p class="mb-0">Товары</p>
-            </v-col>
-            <v-col class="ma-0 d-flex flex-column">
-                <v-col
-                @click="[longsearch = false, search = '']"
-                v-for="el in searchData?.catalog"
-                :key="el._id" 
-                class="ma-0 pa-0"
-                >
-                <nuxt-link 
-                class="d-flex flex-row align-center w-100"
-                :to="'/catalog/view/' + el._id">
-                  <div style="margin: 10px 20px">
-                    <v-img 
-                    contain 
-                    style="width: 50px; height: 50px;"
-                    v-if="el._source.images && el._source.images[0]"
-                    :src="$config.baseImageURL + el._source.images[0]"
-                    />
-                    <v-img 
-                    contain 
-                    style="width: 50px; height: 50px;"
-                    v-else src="/black-square.jpg" />
-                  </div>
-                  <p class="mr-3 mb-0 w-50">{{ el._source.name }}</p>
-                <div class="wrapper mx-auto"></div>
-                <p v-if="el._source.price" class="mr-3 mb-0"><number :value="el._source.price" /> ₽</p>
-                <p v-else class="mr-3 mb-0">Не указано</p>
-                </nuxt-link>
+            <v-col v-if="searchData?.catalog && searchData?.catalog.length > 0"
+              class="d-flex flex-row align-center w-100">
+              <v-col class="" style="flex: 0 0 11%;">
+                <p class="mb-0">Товары</p>
+              </v-col>
+              <v-col class="ma-0 d-flex flex-column">
+                <v-col @click="[longsearch = false, search = '']" v-for="el in searchData?.catalog" :key="el._id"
+                  class="ma-0 pa-0">
+                  <nuxt-link class="d-flex flex-row align-center w-100" :to="'/catalog/view/' + el._id">
+                    <div style="margin: 10px 20px">
+                      <v-img contain style="width: 50px; height: 50px;" v-if="el._source.images && el._source.images[0]"
+                        :src="$config.baseImageURL + el._source.images[0]" />
+                      <v-img contain style="width: 50px; height: 50px;" v-else src="/black-square.jpg" />
+                    </div>
+                    <p class="mr-3 mb-0 w-50">{{ el._source.name }}</p>
+                    <div class="wrapper mx-auto"></div>
+                    <p v-if="el._source.price" class="mr-3 mb-0">
+                      <number :value="el._source.price" /> ₽
+                    </p>
+                    <p v-else class="mr-3 mb-0">Не указано</p>
+                  </nuxt-link>
                 </v-col>
+              </v-col>
             </v-col>
-          </v-col>
 
-              <!-- <nuxt-link 
+            <!-- <nuxt-link 
               v-if="searchData?.brand && searchData?.brand.length > 0"
               v-for="el in searchData?.brand"
               :key="el._id" 
@@ -214,7 +156,7 @@
                 </div>
                 <p class="mb-0">{{ el._source.name }}</p>
               </nuxt-link> -->
-              <!-- <nuxt-link 
+            <!-- <nuxt-link 
               v-if="searchData?.catalog && searchData?.catalog.length > 0"
               v-for="el in searchData?.catalog"
               :key="el._id" 
@@ -238,12 +180,11 @@
                 <p v-if="el._source.price" class="mr-3 mb-0">{{ el._source.price }} ₽</p>
                 <p v-else class="mr-3 mb-0">Не указано</p>
               </nuxt-link> -->
-              <v-col 
+            <v-col
               v-if="searchData?.category?.length !== 0 || searchData?.brand?.length !== 0 || searchData?.catalog?.length !== 0">
-                <nuxt-link 
-                @click.native="[longsearch = false, search = '']"
-                class="underlined" :to="'/catalog/search?q=' + search">Посмотреть все результаты</nuxt-link>
-              </v-col>
+              <nuxt-link @click.native="[longsearch = false, search = '']" class="underlined"
+                :to="'/catalog/search?q=' + search">Посмотреть все результаты</nuxt-link>
+            </v-col>
           </v-row>
           <v-overlay @click="longsearch = false" :value="longsearch"></v-overlay>
         </div>
@@ -270,23 +211,23 @@ export default {
     }
   },
   methods: {
-    disableMenu(e){
-      if(e.target.classList.contains('s-main-link') || e.target.closest('.s-main-link')){
+    disableMenu(e) {
+      if (e.target.classList.contains('s-main-link') || e.target.closest('.s-main-link')) {
         this.showCatalogMenu = false;
       }
     },
-    redirectSearch(){
-      if(this.search.trim() && this.search.trim().length > 3) {
+    redirectSearch() {
+      if (this.search.trim() && this.search.trim().length > 3) {
         this.$router.push({ path: '/catalog/search', query: { q: this.search } });
         this.search = '';
         this.longsearch = false;
         this.$refs.inputSearch.$el.querySelector('input').blur();
       }
     },
-    submitSearch: debounce(async function() {
+    submitSearch: debounce(async function () {
       try {
         let alldata;
-        if(this.search.trim() && this.search.trim().length > 2) {
+        if (this.search.trim() && this.search.trim().length > 2) {
           document.querySelector("#s-search-result").scrollTop = 0;
           document.querySelector("#s-search-result").scrollLeft = 0;
           // this.$router.push({ path: '/catalog/search', query: { q: this.search } })
@@ -302,7 +243,7 @@ export default {
     }, 800),
   },
   computed: {
-    ...mapGetters ({
+    ...mapGetters({
       countItems: 'cart/countItems',
       countItemsFav: 'favorite/countItems',
       countItemsCom: 'compare/countItems'
@@ -314,10 +255,11 @@ export default {
 
 
 <style lang="scss">
-.w-50{
+.w-50 {
   width: 50% !important;
 }
-#s-search-result{
+
+#s-search-result {
   visibility: hidden;
   position: absolute;
   z-index: 1000000;
@@ -328,14 +270,17 @@ export default {
   overflow: auto;
   max-height: 390px;
   border-radius: 4px;
-  a{
+
+  a {
     border-bottom: 1px solid #DBDBDB;
   }
 }
-.visibility-active{
+
+.visibility-active {
   visibility: visible !important;
 }
-.s-header-menu-search-long{
+
+.s-header-menu-search-long {
   background-color: #fff;
   right: 0 !important;
   width: 340% !important;
@@ -343,10 +288,12 @@ export default {
   z-index: 1000000;
   min-width: unset !important;
 }
+
 .s-form-search {
   position: relative;
   min-width: 260px;
 }
+
 .s-header-main-logo {
   height: 0;
   top: -66px;
@@ -395,7 +342,7 @@ export default {
   }
 }
 
-.cartIcon{
+.cartIcon {
   background-color: black;
   border-radius: 50px;
   color: white;
