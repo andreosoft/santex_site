@@ -39,6 +39,9 @@ export default {
       if (v.brand && v.brand.length > 0) {
         filters.brand = v.brand;
       }
+      if (v.collection && v.collection.length > 0) {
+        filters.collection = v.collection;
+      }
       if (v.category_id && v.category_id.length > 0) {
         filters.category_id = v.category_id;
       }

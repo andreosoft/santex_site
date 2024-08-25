@@ -1,13 +1,13 @@
 <template>
     <div v-if="images">
+        <common-openImage v-if="fullimg" :value="images" :index="galleryModel" @closeFullImg="fullimg = false" />
         <v-window v-model="galleryModel">
             <v-window-item v-for="(el, i) in images" :key="i">
-                <v-card class="ma-2">
+                <v-card @click="fullimg = true" class="ma-2">
                     <v-img :src="$config.baseImageURL + el "  height="600" contain/>
                 </v-card>
             </v-window-item>
         </v-window>
-
         <div>
 <!--    <div class="d-flex overfow-auto img-cover">      -->
             <div class="d-flex flex-wrap img-cover">
@@ -35,7 +35,17 @@ export default {
     },
     data() {
         return {
-            galleryModel: 0
+            galleryModel: 0,
+            fullimg: false
+        }
+    },
+    watch: {
+        fullimg() {
+            if (this.fullimg) {
+                document.querySelector('html').style.overflow = 'hidden';
+            } else {
+                document.querySelector('html').style.overflow = 'auto';
+            }
         }
     },
     computed: {

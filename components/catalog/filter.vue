@@ -1,9 +1,5 @@
 <template>
   <div class="parent">
-    <!-- <p>filter {{ value }}</p> -->
-    <!-- <div>
-      <v-btn @click="onUpdateData()">Показать</v-btn>
-    </div> -->
     <catalog-filterResult 
       ref="filterResult"
       @filterResult="onUpdateData" 
@@ -11,28 +7,69 @@
       :resultData="resultData"
     />
     <div class="space-check">
-      <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice" :max="filters.price.max_price" :min="filters.price.min_price" />
+      <catalog-price 
+      @location="locationResult" 
+      title="Цена, руб." 
+      v-model="dataPrice" 
+      :max="activeFilters && activeFilters?.price ? activeFilters?.price?.max_price : filters?.price?.max_price" 
+      :min="activeFilters && activeFilters?.price ? activeFilters?.price?.min_price : filters?.price?.min_price"
+      />
+
         <catalog-brands
         v-if="filters.brands && filters.brands.length>1"
         @location="locationResult"
         :params="filters.brands"
         v-model="dataF.brand"
+        :activeParams="activeFilters.brands"
+        :dataF="dataF"
         />
+        <v-divider v-if="filters.brands && filters.brands.length>1" class="my-4" />
+        <catalog-collections
+        class="mt-4"
+        v-if="filters.collections && filters.collections.length>1"
+        @location="locationResult"
+        :params="filters.collections"
+        :activeParams="activeFilters.collections"
+        v-model="dataF.collection"
+        :dataF="dataF"
+        />
+        <v-divider v-if="filters.collections && filters.collections.length>1" class="my-4" />
         <catalog-categories class="mt-4"
         v-if="filters.categories && filters.categories.length>1"
         @location="locationResult"
         :params="filters.categories"
+        :activeParams="activeFilters.categories"
         v-model="dataF.category_id"
+        :dataF="dataF"
         />
-      <v-divider class="my-4" />
+      <v-divider  v-if="filters.categories && filters.categories.length>1" class="my-4" />
     </div>
     <div v-for="(el, i) in filters.filters" :key="i">
       <div>
         <div v-if="el.type == 2" class="space-check">
-          <catalog-ranges v-if="el.numFilters.length > 1" @location="locationResult" :title="el.name" v-model="dataF[el.filters_id]" :params="el.numFilters" :min="el.min" :max="el.max" />
+          <catalog-ranges 
+          v-if="el.numFilters.length > 1" 
+          @location="locationResult" 
+          :title="el.name" 
+          v-model="dataF[el.filters_id]" 
+          :params="el.numFilters" 
+          :activeParams="activeFilters.filters"
+          :minV="el.min" 
+          :maxV="el.max" 
+          />
         </div>
         <div v-else class="space-check">
-          <catalog-check1 v-if="el.filters.length > 1" @location="locationResult" :title="el.name" v-model="dataF[el.filters_id]" :params="el.filters" />
+          <catalog-check1 
+          v-if="el.filters.length > 1" 
+          v-model="dataF[el.filters_id]" 
+          @location="locationResult" 
+          :idFilters="el.filters_id"
+          :title="el.name" 
+          :params="el.filters" 
+          :activeParams="activeFilters.filters"
+          :filters_data="el.filters_data" 
+          :dataF="dataF"
+          />
           <v-divider v-if="el.filters.length > 1" class="my-4" />
         </div>
       </div>
@@ -48,27 +85,31 @@
 </template>
 
 <script>
-import {debounce} from "lodash"
+import {debounce} from "lodash";
 export default {
   props: {
     value: Object,
     filters: Object,
+    activeFilters: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
       dataF: {
         brand: [],
         category_id: [],
+        collection: []
       },
       dataPrice: [],
       dy: 0,
       resultData: 0,
-      disTop: 400
+      disTop: 400,
+      timeFilter: 0
     };
   },
-  created() {
-    this.initValueFilters();
-  },
+  created() { this.initValueFilters(); },
   // mounted() {
   //   this.$nextTick(() => {
   //     // let elem = this.$refs.filterResult;
@@ -83,39 +124,17 @@ export default {
   //   })
   // },
   watch:{
-  //   dataF: async function(){
-  //     try{
-  //       let r = {};
-  //       for (const i in this.dataF) {
-  //         if (this.dataF[i].length > 0) {
-  //           r[i] = this.dataF[i];
-  //         }
-  //       }
-  //     }
-  //     catch (error){
-  //       console.error(error)
-  //     }
-  //   },
-    filters: function(){
-        //  try {
-           this.initValueFilters();
-          //  console.log('filters function')
-        //  }
-        //  catch (error){
-        //    console.error(error)
-        //  }
+    activeFilters: function(){
+      if(this.activeFilters) {
+        this.timeFilter = 1000
+      }
     },
+    filters: function(){this.initValueFilters();},
     value: function(){
-      // try {
-        // console.log('value function')
         this.initValueFilters();
         this.value.brand ? this.dataF.brand = this.value.brand : this.dataF.brand = [];
+        this.value.collection ? this.dataF.collection = this.value.collection : this.dataF.collection = [];
         this.value.category_id ? this.dataF.category_id = this.value.category_id : this.dataF.category_id = [];
-        // console.log("Инициализировано")
-      // }
-      // catch (error){
-      //   console.error(error)
-      // }
     }
   },
   // computed: {
@@ -139,6 +158,7 @@ export default {
       this.dataF = {
         brand: [],
         category_id: [],
+        collection: []
       };
       this.dataPrice = [];
       for (const key in this.filters.filters) {
@@ -154,6 +174,7 @@ export default {
     initValueFilters() {
       this.dataF = {
         brand: this.value.brand ? this.value.brand : [],
+        collection: this.value.collection ? this.value.collection : [],
         category_id: this.value.category_id ? this.value.category_id : [],
       };
       this.dataPrice = this.value.price ? this.value.price : [];
@@ -176,105 +197,105 @@ export default {
     onUpdateData() {
       let r = {};
       for (const i in this.dataF) {
-        if (this.dataF[i].length > 0 && i !== "brand" && i !== "category_id") {
+        if (this.dataF[i].length > 0 && i !== "brand" && i !== "collection" && i !== "category_id") {
           r[i] = this.dataF[i];
         }
       }
 
-      // console.log(r);
-      // console.log(this.dataF.brand);
-      this.$emit('input', { f: r, price: this.dataPrice, brand: this.dataF.brand.length !== 0 ? this.dataF.brand : [], category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : []  });
+
+      // Подгрузка товаров
+      this.$emit('input', { 
+        f: r,
+        price: this.dataPrice, 
+        brand: this.dataF.brand.length !== 0 ? this.dataF.brand : [], 
+        category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : [],
+        collection: this.dataF.collection.length !== 0 ? this.dataF.collection : []
+      });
 
       this.dy = 0;
       window.scrollTo(0, 0);
     },
     locationResult: debounce(async function(v){
       try {
-        // console.log(v);
-        let rect = v.getBoundingClientRect();
-        // console.log(rect);
-        // console.log(rect);
-        // let scrolltop = document.body.querySelector('.parent').getBoundingClientRect().top + scrollY;
-        // console.log(scrolltop);
-        let scrolltop = window.scrollY + rect.top;
-        const middleY = scrolltop + rect.height / 2;
-        this.dy = middleY - this.disTop;
-        // let elem = document.body.querySelector('.parent');
-        // let rectElem = elem.getBoundingClientRect();
-        // let scrollTopElem = window.pageYOffset || document.documentElement.scrollTop;
-        // let parentTop = rectElem.top + scrollTopElem;
-        // console.log(scrolltop)
-        // if(this.$route.name.match('promote')){
-          // this.dy = middleY - this.disTop;
-        // } else{
-        // }
+        // let rect = v.getBoundingClientRect();
+        // let scrolltop = window.scrollY + rect.top;
+        // const middleY = scrolltop + rect.height / 2;
+        // this.dy = middleY - this.disTop;
+
 
         let r = {};
         for (const i in this.dataF) {
-          if (this.dataF[i].length > 0 && i !== "brand" && i !== "category_id") {
+          if (this.dataF[i].length > 0 && i !== "brand" && i !== "collection" && i !== "category_id") {
             r[i] = this.dataF[i];
           }
         }
-        let filtersCount = {
-          category_id: this.$route.params.id ? this.$route.params.id : '',
-          brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
-          // category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
-          price: this.dataPrice.length !== 0 ? this.dataPrice : {},
-          status: 1
-        }
 
-        if (this.$route.query.q) Object.assign(filtersCount, { "OR": [
-            {id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
-            {name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
-            {vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
-            {factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }}] });
 
-            let res, resPromote;
-            if(this.$route.name.match('catalog')){
-              res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
-          params: {
-            f: r, 
-            filters: filtersCount,
-            // sort: {
-            //   price: 'asc',
-            //   order: 'asc'
-            // },
-            // pager: {
-            //   count: 0,
-            //   limit: 30,
-            //   page: "0"
-            // },
-          }
-        });
-            }
-        if(this.$route.name.match('promote')){
-          resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/count', { 
-            params: {
-              f: r, 
-              filters: {
-                "ic.promote_id": this.$route.params.id,
-                brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
-                price: this.dataPrice.length !== 0 ? this.dataPrice : {},
-                category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
-                status: 1
-              },
-              // sort: {
-              //   price: 'asc',
-              //   order: 'asc'
-              // },
-              // pager: {
-              //   count: 0,
-              //   limit: 30,
-              //   page: "0"
-              // },
-            }
-          });
-        }
-        this.resultData = res ? res.data.data : resPromote.data.data
+        this.onUpdateData();
+
+
+        // let filtersCount = {
+        //   category_id: this.$route.params.id ? this.$route.params.id : '',
+        //   brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
+        //   collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
+        //   // category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
+        //   price: this.dataPrice.length !== 0 ? this.dataPrice : {},
+        //   status: 1
+        // }
+
+        // if (this.$route.query.q) Object.assign(filtersCount, { "OR": [
+        //     {id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+        //     {name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+        //     {vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+        //     {factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }}] });
+
+        //     let res, resPromote;
+        //     if(this.$route.name.match('catalog')){
+        //       res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
+        //   params: {
+        //     f: r, 
+        //     filters: filtersCount,
+        //     // sort: {
+        //     //   price: 'asc',
+        //     //   order: 'asc'
+        //     // },
+        //     // pager: {
+        //     //   count: 0,
+        //     //   limit: 30,
+        //     //   page: "0"
+        //     // },
+        //   }
+        // });
+        //     }
+        // if(this.$route.name.match('promote')){
+        //   resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/count', { 
+        //     params: {
+        //       f: r, 
+        //       filters: {
+        //         "ic.promote_id": this.$route.params.id,
+        //         brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
+        //         collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
+        //         price: this.dataPrice.length !== 0 ? this.dataPrice : {},
+        //         category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
+        //         status: 1
+        //       },
+        //       // sort: {
+        //       //   price: 'asc',
+        //       //   order: 'asc'
+        //       // },
+        //       // pager: {
+        //       //   count: 0,
+        //       //   limit: 30,
+        //       //   page: "0"
+        //       // },
+        //     }
+        //   });
+        // }
+        // this.resultData = res ? res.data.data : resPromote.data.data
       } catch (error) {
         console.error(error)
       }
-    }, 1000)
+    }, 0)
   },
 };
 </script>

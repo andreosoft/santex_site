@@ -1,18 +1,21 @@
 <template>
-  <div>
-    <!-- {{ params }} -->
+  <div v-if="activeData()">
     <b> {{ title }} </b>
-    <!-- {{ v }} -->
-    <!-- <v-row class="my-1">
-      <v-col cols="6">
-        <v-text-field outlined hide-details dense v-model="min" />
-      </v-col>
-      <v-col cols="6">
-        <v-text-field outlined hide-details dense v-model="max"/>
-      </v-col>
-    </v-row> -->
-    <catalog-numberRange :range="v" :max="max" :min="min" @location="$emit('location', $event)" @dataNumberRange="dataNumberRange = $event"/>
-    <v-range-slider v-model="v" @click="$emit('location', $event.target)" hide-details class="align-center" :min="min" :max="max">
+    <catalog-numberRange 
+      :range="v" 
+      :min="min" 
+      :max="max" 
+      @location="$emit('location', $event)" 
+      @dataNumberRange="dataNumberRange = $event"
+    />
+    <v-range-slider 
+      v-model="v" 
+      @click="$emit('location', $event.target)" 
+      hide-details 
+      class="align-center" 
+      :min="min" 
+      :max="max"
+    >
     </v-range-slider>
   </div>
 </template>
@@ -23,55 +26,31 @@ export default {
   props: {
     title: String,
     params: Array,
-    min: Number,
-    max: Number,
+    minV: Number,
+    maxV: Number,
     value: Array,
+    activeParams: Array
   },
   data() {
     return {
-      dataNumberRange: []
-    }
-  },
-  computed: {
-    v: {
-      get() {
-        let d = [this.min, this.max];
-        // if(this.dataNumberRange){
-        //   for(let i = 0; i < this.params.length; i++){
-        //     this.params[i]
-        //   }
-        // }
-        if (this.value && Array.isArray(this.value) && this.value.length > 0) {
-          let maxVal;
-          let minVal;
-          for (let i = 0; i < this.value.length; i++) {
-            const n = this.value[i];
-            if (i == 0) {
-              maxVal = n;
-              minVal = n;
-            }
-            if (n <= minVal) minVal = n;
-            else if (n >= maxVal) maxVal = n;
-          }
-          if (minVal) d[0] = Math.floor(minVal);
-          if (maxVal) d[1] = Math.ceil(maxVal);
-        }
-        return d;
-      },
-      set(v) {
-        let r = [];
-        if (v[0] == this.min && v[1] == this.max) return this.$emit('input', []);
-        for (let i = 0; i < this.params.length; i++) {
-          const n = this.params[i];
-          if (Math.floor(n) >= v[0] && Math.ceil(n) <= v[1]) r.push(n);
-        }
-        return this.$emit('input', r);
-          // location: $event.target);
-      }
+      dataNumberRange: [],
+      min: this.minV,
+      max: this.maxV,
     }
   },
   watch: {
-    dataNumberRange: async function() {
+    activeParams(){
+        let filt;
+        if(this.activeParams) {
+          filt = this.activeParams.find(item => item.name == this.title);
+          if(filt){
+            // console.log(filt);
+            this.min = filt.min
+            this.max = filt.max
+          }
+        }
+      },
+      dataNumberRange: async function() {
       try {
         if(this.dataNumberRange){
           // let closestLeft;
@@ -103,6 +82,53 @@ export default {
          catch (error){
            console.error(error)
          }
+    }
+    },
+  methods: {
+    activeData(){
+      if(this.activeParams){
+        if(this.activeParams.find(item => item.name == this.title)){
+          return true
+        } else {
+          return false
+        }
+      } else {
+        return true
+      }
+      }
+    },
+  computed: {
+    v: {
+      get() {
+        let d;
+          d = [this.min, this.max]
+        if (this.value && Array.isArray(this.value) && this.value.length > 0) {
+          let maxVal;
+          let minVal;
+          for (let i = 0; i < this.value.length; i++) {
+            const n = this.value[i];
+            if (i == 0) {
+              maxVal = n;
+              minVal = n;
+            }
+            if (n <= minVal) minVal = n;
+            else if (n >= maxVal) maxVal = n;
+          }
+          if (minVal) d[0] = Math.floor(minVal);
+          if (maxVal) d[1] = Math.ceil(maxVal);
+        }
+        return d;
+      },
+      set(v) {
+        let r = [];
+        if (v[0] == this.min && v[1] == this.max) return this.$emit('input', []);
+        for (let i = 0; i < this.params.length; i++) {
+          const n = this.params[i];
+          if (Math.floor(n) >= v[0] && Math.ceil(n) <= v[1]) r.push(n);
+        }
+        return this.$emit('input', r);
+          // location: $event.target);
+      }
     }
   }
 }

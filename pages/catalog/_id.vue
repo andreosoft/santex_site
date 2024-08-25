@@ -8,7 +8,8 @@
       :loading="loading" 
       :dataFilters="dataFilters" 
       :valueFilters="valueFilters" 
-      :pager="pager" 
+      :activeFilters ="activeFilters"
+      :pager="pager"
       :sort="sort" 
       @update-data="valueFilters = $event"/>
     <div class="text-center mt-10 ">
@@ -24,8 +25,11 @@ export default {
   components: {BaseCatalog},
   data() {
     return { 
-      loading: true
+      loading: true,
     }
+  },
+  async asyncData({route, $axios, $config, error}) {
+    return await getData({route, $axios, $config, error});
   },
   watch: {
     valueFilters(v) {
@@ -36,6 +40,9 @@ export default {
       if (v.brand && v.brand.length > 0) {
         filters.brand = v.brand;
       }
+      if (v.collection && v.collection.length > 0) {
+        filters.collection = v.collection;
+      }
       this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
     },
     "$route": {
@@ -44,12 +51,10 @@ export default {
         let p = await getData({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error});
         this.loading = false;
         this.data = p.data;
+        this.activeFilters = p.activeFilters;
         this.pager = p.pager;
       },
     }
-  },
-  async asyncData({route, $axios, $config, error}) {
-    return await getData({route, $axios, $config, error});
   },
 };
 </script>

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: 
+Host: santehkomfort.ru
+Sitemap: http://santehkomfort.ru/sitemap.xml

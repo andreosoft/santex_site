@@ -24,7 +24,12 @@
     <v-row class="s-row">
       <v-col cols="3">
         <div>
-          <catalog-filter :value="valueFilters" :filters="dataFilters" @input="$emit('update-data', $event);" />
+          <catalog-filter 
+          :activeFilters="activeFilters"
+          :value="valueFilters" 
+          :filters="dataFilters" 
+          @input="$emit('update-data', $event);" 
+          />
         </div>
       </v-col>
       <v-col cols="9">
@@ -48,7 +53,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex';
 export default {
   props: {
     data: Array,
@@ -60,7 +65,11 @@ export default {
       type: Boolean,
       default: false
     },
-    categoriesData: Object
+    categoriesData: Object,
+    activeFilters: {
+      type: Object,
+      default: () => ({})
+    }
   },
   data() {
     return {
