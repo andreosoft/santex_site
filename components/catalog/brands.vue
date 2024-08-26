@@ -60,16 +60,20 @@
           }
         }
       } 
-      let g;
+      let g, s;
       g = this.v.find(item => item == brand);
-      // console.log(this.v);
+      s = this.activeParams && this.activeParams.find(item => item.brand == brand)
+      // console.log(r)
+      // console.log(s)
       if(r) {
-        if(this.activeParams && this.activeParams.find(item => item.brand == brand) && g){
+        if(s){
           return false
-        } else if(this.activeParams && !this.activeParams.find(item => item.brand == brand) && !g) {
-          return true
         } else {
-          return false
+          if(g){
+            return false
+          } else{
+            return true
+          }
         }
       } else {
         return false

@@ -14,7 +14,7 @@
             </v-col>
                 <v-col class="d-flex flex-row justify-space-between middle-menu">
                     <v-col class="w-100 pa-0 ma-0">
-                        <v-btn @click="galleryModel--" class="left-btn" style="z-index: 1000">
+                        <v-btn @click="galleryModel == 0 ? galleryModel = images.length - 1 : galleryModel--" class="left-btn" style="z-index: 1000">
                             <img src="/icons/arrow_left.svg" alt="">
                         </v-btn>
                         <v-window  
@@ -58,7 +58,7 @@ export default {
 methods: {
     toggleArrows(e){
         if(e.key == 'ArrowLeft') {
-            this.galleryModel--
+            this.galleryModel == 0 ? this.galleryModel = this.images.length - 1 : this.galleryModel--
         } else if(e.key == 'ArrowRight') {
             this.galleryModel++
         } else if(e.key == 'Escape') {

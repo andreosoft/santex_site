@@ -70,14 +70,16 @@ export default {
       let g, s;
       g = this.v.find(item => item == coll);
       s = this.activeParams?.find(item => item.filters_id == this.idFilters);
-      // console.log(s);
+
       if(r) {
-        if(s && s.filters_data.find(item => item.value == coll) && g){
+        if(s?.filters_data.find(item => item.value == coll)){
           return false
-        } else if(s && !s.filters_data.find(item => item.value == coll) && !g) {
-          return true
         } else {
-          return false
+          if(g){
+            return false
+          } else{
+            return true
+          }
         }
       } else {
         return false

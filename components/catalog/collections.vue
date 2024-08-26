@@ -60,16 +60,18 @@
           }
         }
       } 
-      let g;
+      let g, s;
       g = this.v.find(item => item == coll);
-      // console.log(this.v);
+      s = this.activeParams && this.activeParams.find(item => item.collection == coll)
       if(r) {
-        if(this.activeParams && this.activeParams.find(item => item.collection == coll) && g){
+        if(s){
           return false
-        } else if(this.activeParams && !this.activeParams.find(item => item.collection == coll) && !g) {
-          return true
         } else {
-          return false
+          if(g){
+            return false
+          } else{
+            return true
+          }
         }
       } else {
         return false

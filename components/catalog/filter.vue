@@ -4,7 +4,7 @@
       ref="filterResult"
       @filterResult="onUpdateData" 
       :locationRes="dy" 
-      :resultData="resultData"
+      :resultData="resultData.count"
     />
     <div class="space-check">
       <catalog-price 
@@ -14,13 +14,12 @@
       :max="activeFilters && activeFilters?.price ? activeFilters?.price?.max_price : filters?.price?.max_price" 
       :min="activeFilters && activeFilters?.price ? activeFilters?.price?.min_price : filters?.price?.min_price"
       />
-
         <catalog-brands
         v-if="filters.brands && filters.brands.length>1"
         @location="locationResult"
         :params="filters.brands"
         v-model="dataF.brand"
-        :activeParams="activeFilters.brands"
+        :activeParams="resultData && resultData?.brands ? resultData?.brands : activeFilters?.brands"
         :dataF="dataF"
         />
         <v-divider v-if="filters.brands && filters.brands.length>1" class="my-4" />
@@ -29,7 +28,7 @@
         v-if="filters.collections && filters.collections.length>1"
         @location="locationResult"
         :params="filters.collections"
-        :activeParams="activeFilters.collections"
+        :activeParams="resultData && resultData?.collections ? resultData?.collections : activeFilters?.collections"
         v-model="dataF.collection"
         :dataF="dataF"
         />
@@ -38,7 +37,7 @@
         v-if="filters.categories && filters.categories.length>1"
         @location="locationResult"
         :params="filters.categories"
-        :activeParams="activeFilters.categories"
+        :activeParams="resultData && resultData?.categories ? resultData?.categories : activeFilters?.categories"
         v-model="dataF.category_id"
         :dataF="dataF"
         />
@@ -53,7 +52,7 @@
           :title="el.name" 
           v-model="dataF[el.filters_id]" 
           :params="el.numFilters" 
-          :activeParams="activeFilters.filters"
+          :activeParams="activeFilters?.filters"
           :minV="el.min" 
           :maxV="el.max" 
           />
@@ -66,7 +65,7 @@
           :idFilters="el.filters_id"
           :title="el.name" 
           :params="el.filters" 
-          :activeParams="activeFilters.filters"
+          :activeParams="resultData && resultData?.filters ? resultData?.filters : activeFilters?.filters"
           :filters_data="el.filters_data" 
           :dataF="dataF"
           />
@@ -104,7 +103,7 @@ export default {
       },
       dataPrice: [],
       dy: 0,
-      resultData: 0,
+      resultData: {},
       disTop: 400,
       timeFilter: 0
     };
@@ -169,7 +168,7 @@ export default {
         // console.log(this.filters.filters[key]["filters_id"], f);
         this.$set(this.dataF, this.filters.filters[key]["filters_id"], []);
       }
-      this.resultData = 0;
+      this.resultData = {};
     },
     initValueFilters() {
       this.dataF = {
@@ -217,10 +216,10 @@ export default {
     },
     locationResult: debounce(async function(v){
       try {
-        // let rect = v.getBoundingClientRect();
-        // let scrolltop = window.scrollY + rect.top;
-        // const middleY = scrolltop + rect.height / 2;
-        // this.dy = middleY - this.disTop;
+        let rect = v.getBoundingClientRect();
+        let scrolltop = window.scrollY + rect.top;
+        const middleY = scrolltop + rect.height / 2;
+        this.dy = middleY - this.disTop;
 
 
         let r = {};
@@ -230,68 +229,49 @@ export default {
           }
         }
 
+        // console.log(r);
+        // this.onUpdateData();
 
-        this.onUpdateData();
 
+        let filtersCount = {
+          category_id: this.$route.params.id ? this.$route.params.id : '',
+          brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
+          collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
+          // category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
+          price: this.dataPrice.length !== 0 ? this.dataPrice : {}
+        }
 
-        // let filtersCount = {
-        //   category_id: this.$route.params.id ? this.$route.params.id : '',
-        //   brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
-        //   collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
-        //   // category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
-        //   price: this.dataPrice.length !== 0 ? this.dataPrice : {},
-        //   status: 1
-        // }
+        if (this.$route.query.q) Object.assign(filtersCount, { "OR": [
+            {id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+            {name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+            {vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
+            {factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }}] });
 
-        // if (this.$route.query.q) Object.assign(filtersCount, { "OR": [
-        //     {id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
-        //     {name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
-        //     {vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }},
-        //     {factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" }}] });
-
-        //     let res, resPromote;
-        //     if(this.$route.name.match('catalog')){
-        //       res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/count', { 
-        //   params: {
-        //     f: r, 
-        //     filters: filtersCount,
-        //     // sort: {
-        //     //   price: 'asc',
-        //     //   order: 'asc'
-        //     // },
-        //     // pager: {
-        //     //   count: 0,
-        //     //   limit: 30,
-        //     //   page: "0"
-        //     // },
-        //   }
-        // });
-        //     }
-        // if(this.$route.name.match('promote')){
-        //   resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/count', { 
-        //     params: {
-        //       f: r, 
-        //       filters: {
-        //         "ic.promote_id": this.$route.params.id,
-        //         brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
-        //         collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
-        //         price: this.dataPrice.length !== 0 ? this.dataPrice : {},
-        //         category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
-        //         status: 1
-        //       },
-        //       // sort: {
-        //       //   price: 'asc',
-        //       //   order: 'asc'
-        //       // },
-        //       // pager: {
-        //       //   count: 0,
-        //       //   limit: 30,
-        //       //   page: "0"
-        //       // },
-        //     }
-        //   });
-        // }
-        // this.resultData = res ? res.data.data : resPromote.data.data
+            let res, resPromote;
+            if(this.$route.name.match('catalog')){
+              res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/filters', { 
+          params: {
+            f: r, 
+            filters: filtersCount,
+          }
+        });
+            }
+        if(this.$route.name.match('promote')){
+          resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/filters', { 
+            params: {
+              f: r, 
+              filters: {
+                "ic.promote_id": this.$route.params.id,
+                brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
+                collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
+                price: this.dataPrice.length !== 0 ? this.dataPrice : {},
+                category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {}
+              },
+            }
+          });
+        }
+        this.resultData = res ? res.data.data : resPromote.data.data
+        // console.log(this.resultData);
       } catch (error) {
         console.error(error)
       }
