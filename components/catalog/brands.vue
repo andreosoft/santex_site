@@ -5,7 +5,7 @@
         <div v-for="(el, i) of params" :key="i">
           <v-checkbox 
           v-if="el.brand" 
-          :disabled="check(el.brand)"
+          :disabled="el.disabled"
           class="ms-2" 
           dense 
           hide-details 
@@ -28,7 +28,6 @@
       params: Array,
       value: Array,
       activeParams: Array,
-      dataF: Object
     },
     data() {
       return {
@@ -49,37 +48,37 @@
         return false;
       }
     },
-    methods: {
-      check(brand){
-        let r = false;
-        if(this.dataF) {
-        for (const key in this.dataF) {
-          if (this.dataF[key] && this.dataF[key].length > 0 && key !== "brand") {
-            r = true;
-            // console.log(this.dataF[key]);
-          }
-        }
-      } 
-      let g, s;
-      g = this.v.find(item => item == brand);
-      s = this.activeParams && this.activeParams.find(item => item.brand == brand)
-      // console.log(r)
-      // console.log(s)
-      if(r) {
-        if(s){
-          return false
-        } else {
-          if(g){
-            return false
-          } else{
-            return true
-          }
-        }
-      } else {
-        return false
-      }
-    }
-    }
+    // methods: {
+    //   check(brand){
+    //     let r = false;
+    //     if(this.dataF) {
+        // for (const key in this.dataF) {
+        //   if (this.dataF[key] && this.dataF[key].length > 0 && key !== "brand") {
+        //     r = true;
+        //     // console.log(this.dataF[key]);
+        //   }
+        // }
+      // } 
+    //   let g, s;
+    //   g = this.v.find(item => item == brand);
+    //   s = this.activeParams && this.activeParams.find(item => item.brand == brand)
+    //   // console.log(r)
+    //   // console.log(s)
+    //   if(r) {
+    //     if(s){
+    //       return false
+    //     } else {
+    //       if(g){
+    //         return false
+    //       } else{
+    //         return true
+    //       }
+    //     }
+    //   } else {
+    //     return false
+    //   }
+    // }
+    // }
   };
   </script>
   

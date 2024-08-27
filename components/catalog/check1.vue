@@ -20,21 +20,32 @@ export default {
     params: Array,
     value: Array,
     activeParams: Array,
-    dataF: Object,
-    idFilters: Number,
   },
   data() {
     return {
       toggleOpen: false,
     }
   },
+  // watch: {
+  //   params(){
+  //     if(this.params){
+  //       this.params.forEach(element => {
+  //           if(element.disabled == true){
+  //             if(this.v.includes(element.value)) {
+  //               v = v.filter(item => item !== element.value);
+  //             }
+  //           }
+  //         });
+  //     }
+  //     }
+  // },
   computed: {
     v: {
       get() {
         return this.value;
       },
       set(v) {
-        this.$emit('input', v);
+          this.$emit('input', v);
       }
     },
     needExpand() {
