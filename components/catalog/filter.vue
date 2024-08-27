@@ -27,8 +27,8 @@
         </div>
         <div v-else class="space-check">
           <catalog-check1 v-if="el.filters.length > 1" v-model="dataF[el.filters_id]" @location="locationResult"
-            :idFilters="el.filters_id" :title="el.name" :params="el.filters" :activeParams="activeFilters.filters"
-            :filters_data="el.filters_data" :dataF="dataF" />
+            :idFilters="el.filters_id" :title="el.name" :params="el.filters_data" :activeParams="activeFilters.filters"
+            :dataF="dataF" />
           <v-divider v-if="el.filters.length > 1" class="my-4" />
         </div>
       </div>
@@ -214,6 +214,7 @@ export default {
               filters: filtersCount,
             }
           });
+          this.updateFiltersData(res.data.data);
         }
         if (this.$route.name.match('promote')) {
           resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/filters', {
@@ -234,7 +235,30 @@ export default {
       } catch (error) {
         console.error(error)
       }
-    }, 0)
+    }, 0),
+    updateFiltersData(data) {
+      const updatedData = data.filters;
+      console.log(updatedData);
+      for (const el of this.filters.filters) {
+        if (el.type == 1) {
+          const updatedFilter = updatedData.find(e => e.filters_id == el.filters_id);
+          if (updatedFilter) {
+            for (const filterEl of el.filters_data) {
+              if (updatedFilter.filters_data.find(e => e.value == filterEl.value)) {
+                filterEl.disabled = false;
+              } else {
+                filterEl.disabled = true;
+              }
+            }
+          } else {
+            for (const filterEl of el.filters_data) {
+              filterEl.disabled = true;
+            }
+          }
+        }
+        console.log(el);
+      }
+    }
   },
 };
 </script>

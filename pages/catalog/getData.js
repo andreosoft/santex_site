@@ -85,8 +85,8 @@ export async function getData({ route, $axios, $config, error }) {
   let carouselItems = [];
   let infoPromote;
   try {
-    if (route.name.match('promote') && category_id > 0) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/', 
-    { params: { filters: { "id": category_id } } })).data.data;
+    if (route.name.match('promote') && category_id > 0) infoPromote = (await $axios.get($config.baseURL + '/api/site/promote/',
+      { params: { filters: { "id": category_id } } })).data.data;
     // console.log(infoPromote);
     carouselItems = infoPromote?.length > 0 && infoPromote[0].images ? infoPromote[0].images.splice(1, 1) : [];
     // console.log(carouselItems);
@@ -135,7 +135,7 @@ export async function getData({ route, $axios, $config, error }) {
 
 
 
-// Получение данных для каталога
+  // Получение данных для каталога
   let resCat;
   try { if (category_id && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id); } catch (e) { console.error(e) }
 
@@ -158,30 +158,30 @@ export async function getData({ route, $axios, $config, error }) {
       { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
   });
   if (addFilters) Object.assign(activeFiltersOnly, addFilters);
-  
-  
- 
-// Активные фильтры в каталоге
+
+
+
+  // Активные фильтры в каталоге
   let resActiveFilters;
   try {
-    if (res && ((addFilters && Object.keys(addFilters).length>0) || (f && Object.keys(f).length>0))) resActiveFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { 
-      params: { 
+    if (res && ((addFilters && Object.keys(addFilters).length > 0) || (f && Object.keys(f).length > 0))) resActiveFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', {
+      params: {
         f: f,
-        filters: activeFiltersOnly 
-      } 
+        filters: activeFiltersOnly
+      }
     });
   } catch (e) {
     console.error(e)
   }
-  
+
   let activeFilters = resActiveFilters ? resActiveFilters.data.data : {};
 
   // console.log(addFilters)
   // console.log(activeFiltersOnly)
   // console.log(activeFilters)
-  
-  
-  
+
+
+
   let filtersOnly = {};
   if (category_id) Object.assign(filtersOnly, { category_id: category_id });
   if (searchInput) Object.assign(filtersOnly, {
@@ -190,16 +190,16 @@ export async function getData({ route, $axios, $config, error }) {
       { name: { condition: "LIKE", value: "%" + searchInput + "%" } },
       { vendor: { condition: "LIKE", value: "%" + searchInput + "%" } },
       { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
-    });
-    
+  });
+
   let resFilters;
   try {
     if (res) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filtersOnly } });
   } catch (e) {
     console.error(e)
   }
-  
-  
+
+
   const valueFiltersPromote = {
     f: f,
     price: filtersPromote.price,
@@ -209,9 +209,9 @@ export async function getData({ route, $axios, $config, error }) {
   }
   let dataFilters = resFilters ? resFilters.data.data : {};
 
-  
 
-// Все фильтры
+
+  // Все фильтры
   let conutI = 0;
   const maxI = 5;
   for (let key in dataFilters.filters) {
@@ -245,6 +245,10 @@ export async function getData({ route, $axios, $config, error }) {
         // console.log(dataFilters.filters[key]);
       }
 
+    } else if (dataFilters.filters[key].type === 1) {
+      for (const el of dataFilters.filters[key].filters_data) {
+        el.disabled = false;
+      }
     }
   }
 
