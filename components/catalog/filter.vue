@@ -22,8 +22,8 @@
       <div>
         <div v-if="el.type == 2" class="space-check">
 
-          <catalog-price @location="locationResult" :title="el.name" v-model="dataF[el.filters_id]" :max="el.max"
-            :min="el.min" />
+          <catalog-price v-if="el.max != el.min" @location="locationResult" :title="el.name"
+            v-model="dataF[el.filters_id]" :max="el.max" :min="el.min" />
           <!-- <catalog-ranges v-if="el.max != el.min" @location="locationResult" :title="el.name"
             v-model="dataF[el.filters_id]" :activeParams="activeFilters.filters" :minV="el.min" :maxV="el.max" /> -->
         </div>
