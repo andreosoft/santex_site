@@ -22,8 +22,8 @@ export default {
 
 <style>
 .catalog-btn {
-  span {
+  /* span {
     width: 100%;
-  }
+  } */
 }
 </style>

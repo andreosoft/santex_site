@@ -184,13 +184,13 @@ export async function getData({ route, $axios, $config, error }) {
 
   let filtersOnly = {};
   if (category_id) Object.assign(filtersOnly, { category_id: category_id });
-  if (searchInput) Object.assign(filtersOnly, {
-    "OR": [
-      { id: { condition: "LIKE", value: "%" + searchInput + "%" } },
-      { name: { condition: "LIKE", value: "%" + searchInput + "%" } },
-      { vendor: { condition: "LIKE", value: "%" + searchInput + "%" } },
-      { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
-  });
+  // if (searchInput) Object.assign(filtersOnly, {
+  //   "OR": [
+  //     { id: { condition: "LIKE", value: "%" + searchInput + "%" } },
+  //     { name: { condition: "LIKE", value: "%" + searchInput + "%" } },
+  //     { vendor: { condition: "LIKE", value: "%" + searchInput + "%" } },
+  //     { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
+  // });
 
   let resFilters;
   try {
@@ -210,120 +210,119 @@ export async function getData({ route, $axios, $config, error }) {
   let dataFilters = resFilters ? resFilters.data.data : {};
 
 
-
   // Все фильтры
   let conutI = 0;
   const maxI = 5;
-  for (let key in dataFilters.filters) {
-    if (dataFilters.filters[key].type === 2) {
-      conutI++;
-      if (conutI > maxI) {
-        dataFilters.filters[key].type = 1;
-        continue;
-      }
-      let maxVal;
-      let minVal;
-      dataFilters.filters[key].numFilters = [];
-      for (let i = 0; i < dataFilters.filters[key].filters.length; i++) {
-        const item = dataFilters.filters[key].filters[i];
-        let n = item;
-        if (n == NaN) continue;
-        if (i == 0) { // инициализация
-          maxVal = n;
-          minVal = n;
-        }
-        if (n < minVal) minVal = n;
-        else if (n > maxVal) maxVal = n;
-        dataFilters.filters[key].numFilters.push(n);
-      }
-      if (minVal == NaN || maxVal == NaN) {
-        dataFilters.filters[key].type = 1;
-      } else {
-        dataFilters.filters[key].min = Math.floor(minVal);
-        dataFilters.filters[key].max = Math.ceil(maxVal);
+  // for (let key in dataFilters.filters) {
+  //   if (dataFilters.filters[key].type === 2) {
+  //     conutI++;
+  //     if (conutI > maxI) {
+  //       dataFilters.filters[key].type = 1;
+  //       continue;
+  //     }
+  //     let maxVal;
+  //     let minVal;
+  //     dataFilters.filters[key].numFilters = [];
+  //     for (let i = 0; i < dataFilters.filters[key].filters.length; i++) {
+  //       const item = dataFilters.filters[key].filters[i];
+  //       let n = item;
+  //       if (n == NaN) continue;
+  //       if (i == 0) { // инициализация
+  //         maxVal = n;
+  //         minVal = n;
+  //       }
+  //       if (n < minVal) minVal = n;
+  //       else if (n > maxVal) maxVal = n;
+  //       dataFilters.filters[key].numFilters.push(n);
+  //     }
+  //     if (minVal == NaN || maxVal == NaN) {
+  //       dataFilters.filters[key].type = 1;
+  //     } else {
+  //       dataFilters.filters[key].min = Math.floor(minVal);
+  //       dataFilters.filters[key].max = Math.ceil(maxVal);
 
-        // console.log(dataFilters.filters[key]);
-      }
+  //       // console.log(dataFilters.filters[key]);
+  //     }
 
-    } else if (dataFilters.filters[key].type === 1) {
-      for (const el of dataFilters.filters[key].filters_data) {
-        el.disabled = false;
-      }
-    }
-  }
+  //   } else if (dataFilters.filters[key].type === 1) {
+  //     for (const el of dataFilters.filters[key].filters_data) {
+  //       el.disabled = false;
+  //     }
+  //   }
+  // }
 
   // Активные фильтры
   let conutIactive = 0;
   const maxIactive = 5;
-  for (let key in activeFilters.filters) {
-    if (activeFilters.filters[key].type === 2) {
-      conutIactive++;
-      if (conutIactive > maxIactive) {
-        activeFilters.filters[key].type = 1;
-        continue;
-      }
-      let maxVal;
-      let minVal;
-      activeFilters.filters[key].numFilters = [];
-      for (let i = 0; i < activeFilters.filters[key].filters.length; i++) {
-        const item = activeFilters.filters[key].filters[i];
-        let n = item;
-        if (n == NaN) continue;
-        if (i == 0) { // инициализация
-          maxVal = n;
-          minVal = n;
-        }
-        if (n < minVal) minVal = n;
-        else if (n > maxVal) maxVal = n;
-        activeFilters.filters[key].numFilters.push(n);
-      }
-      if (minVal == NaN || maxVal == NaN) {
-        activeFilters.filters[key].type = 1;
-      } else {
-        activeFilters.filters[key].min = Math.floor(minVal);
-        activeFilters.filters[key].max = Math.ceil(maxVal);
+  // for (let key in activeFilters.filters) {
+  //   if (activeFilters.filters[key].type === 2) {
+  //     conutIactive++;
+  //     if (conutIactive > maxIactive) {
+  //       activeFilters.filters[key].type = 1;
+  //       continue;
+  //     }
+  //     let maxVal;
+  //     let minVal;
+  //     activeFilters.filters[key].numFilters = [];
+  //     for (let i = 0; i < activeFilters.filters[key].filters.length; i++) {
+  //       const item = activeFilters.filters[key].filters[i];
+  //       let n = item;
+  //       if (n == NaN) continue;
+  //       if (i == 0) { // инициализация
+  //         maxVal = n;
+  //         minVal = n;
+  //       }
+  //       if (n < minVal) minVal = n;
+  //       else if (n > maxVal) maxVal = n;
+  //       activeFilters.filters[key].numFilters.push(n);
+  //     }
+  //     if (minVal == NaN || maxVal == NaN) {
+  //       activeFilters.filters[key].type = 1;
+  //     } else {
+  //       activeFilters.filters[key].min = Math.floor(minVal);
+  //       activeFilters.filters[key].max = Math.ceil(maxVal);
 
-        // console.log(activeFilters.filters[key]);
-      }
+  //       // console.log(activeFilters.filters[key]);
+  //     }
 
-    }
-  }
+  //   }
+  // }
   // Promote page
   let conutIPromote = 0;
   const maxIPromote = 5;
-  for (let key in dataFiltersPromote.filters) {
-    if (dataFiltersPromote.filters[key].type === 2) {
-      conutIPromote++;
-      if (conutIPromote > maxIPromote) {
-        dataFiltersPromote.filters[key].type = 1;
-        continue;
-      }
-      let maxVal;
-      let minVal;
-      dataFiltersPromote.filters[key].numFilters = [];
-      for (let i = 0; i < dataFiltersPromote.filters[key].filters.length; i++) {
-        const item = dataFiltersPromote.filters[key].filters[i];
-        let n = item;
-        if (n == NaN) continue;
-        if (i == 0) { // инициализация
-          maxVal = n;
-          minVal = n;
-        }
-        if (n < minVal) minVal = n;
-        else if (n > maxVal) maxVal = n;
-        dataFiltersPromote.filters[key].numFilters.push(n);
-      }
-      if (minVal == NaN || maxVal == NaN) {
-        dataFiltersPromote.filters[key].type = 1;
-      } else {
-        dataFiltersPromote.filters[key].min = Math.floor(minVal);
-        dataFiltersPromote.filters[key].max = Math.ceil(maxVal);
+  // for (let key in dataFiltersPromote.filters) {
+  //   if (dataFiltersPromote.filters[key].type === 2) {
+  //     conutIPromote++;
+  //     if (conutIPromote > maxIPromote) {
+  //       dataFiltersPromote.filters[key].type = 1;
+  //       continue;
+  //     }
+  //     let maxVal;
+  //     let minVal;
+  //     dataFiltersPromote.filters[key].numFilters = [];
+  //     for (let i = 0; i < dataFiltersPromote.filters[key].filters.length; i++) {
+  //       const item = dataFiltersPromote.filters[key].filters[i];
+  //       let n = item;
+  //       if (n == NaN) continue;
+  //       if (i == 0) { // инициализация
+  //         maxVal = n;
+  //         minVal = n;
+  //       }
+  //       if (n < minVal) minVal = n;
+  //       else if (n > maxVal) maxVal = n;
+  //       dataFiltersPromote.filters[key].numFilters.push(n);
+  //     }
+  //     if (minVal == NaN || maxVal == NaN) {
+  //       dataFiltersPromote.filters[key].type = 1;
+  //     } else {
+  //       dataFiltersPromote.filters[key].min = Math.floor(minVal);
+  //       dataFiltersPromote.filters[key].max = Math.ceil(maxVal);
 
-        // console.log(dataFiltersPromote.filters[key]);
-      }
+  //       // console.log(dataFiltersPromote.filters[key]);
+  //     }
 
-    }
-  }
+  //   }
+  // }
 
   const title = resCat ? resCat.data.data.name : '';
   pager = res ? res.data.pager : '';

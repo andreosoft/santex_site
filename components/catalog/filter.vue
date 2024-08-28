@@ -6,41 +6,31 @@
         :max="activeFilters && activeFilters?.price ? activeFilters?.price?.max_price : filters?.price?.max_price"
         :min="activeFilters && activeFilters?.price ? activeFilters?.price?.min_price : filters?.price?.min_price" />
 
-      <catalog-brands 
-      v-if="filters.brands && filters.brands.length > 1" 
-      @location="locationResult"
-      :params="filters.brands" 
-      v-model="dataF.brand" 
-      :activeParams="activeFilters.brands" 
-      :key="filtersKeyBrand"
-         />
+      <catalog-brands v-if="filters.brands && filters.brands.length > 1" @location="locationResult"
+        :params="filters.brands" v-model="dataF.brand" :activeParams="activeFilters.brands" :key="filtersKeyBrand" />
       <v-divider v-if="filters.brands && filters.brands.length > 1" class="my-4" />
       <catalog-collections class="mt-4" v-if="filters.collections && filters.collections.length > 1"
-        @location="locationResult" :key="filtersKeyColl" :params="filters.collections" :activeParams="activeFilters.collections"
-        v-model="dataF.collection" />
+        @location="locationResult" :key="filtersKeyColl" :params="filters.collections"
+        :activeParams="activeFilters.collections" v-model="dataF.collection" />
       <v-divider v-if="filters.collections && filters.collections.length > 1" class="my-4" />
       <catalog-categories class="mt-4" v-if="filters.categories && filters.categories.length > 1"
-        @location="locationResult" :key="filtersKeyCat" :params="filters.categories" :activeParams="activeFilters.categories"
-        v-model="dataF.category_id" />
+        @location="locationResult" :key="filtersKeyCat" :params="filters.categories"
+        :activeParams="activeFilters.categories" v-model="dataF.category_id" />
       <v-divider v-if="filters.categories && filters.categories.length > 1" class="my-4" />
     </div>
     <div v-for="(el, i) in filters.filters" :key="i">
       <div>
         <div v-if="el.type == 2" class="space-check">
-          <catalog-ranges v-if="el.numFilters.length > 1" @location="locationResult" :title="el.name"
-            v-model="dataF[el.filters_id]" :params="el.numFilters" :activeParams="activeFilters.filters" :minV="el.min"
-            :maxV="el.max" />
+
+          <catalog-price @location="locationResult" :title="el.name" v-model="dataF[el.filters_id]" :max="el.max"
+            :min="el.min" />
+          <!-- <catalog-ranges v-if="el.max != el.min" @location="locationResult" :title="el.name"
+            v-model="dataF[el.filters_id]" :activeParams="activeFilters.filters" :minV="el.min" :maxV="el.max" /> -->
         </div>
         <div v-else class="space-check">
-          <catalog-check1 
-            v-if="el.filters.length > 1" 
-            v-model="dataF[el.filters_id]" 
-            @location="locationResult"
-            :title="el.name" 
-            :params="el.filters_data" 
-            :activeParams="activeFilters.filters"
-          />
-          <v-divider v-if="el.filters.length > 1" class="my-4" />
+          <catalog-check1 v-if="el.filters_data.length > 1" v-model="dataF[el.filters_id]" @location="locationResult"
+            :title="el.name" :params="el.filters_data" :activeParams="activeFilters.filters" />
+          <v-divider v-if="el.filters_data.length > 1" class="my-4" />
         </div>
       </div>
     </div>
@@ -81,20 +71,20 @@ export default {
   },
   created() { this.initValueFilters(); },
   mounted() {
-    if(this.activeFilters && Object.keys(this.activeFilters).length > 0){
+    if (this.activeFilters && Object.keys(this.activeFilters).length > 0) {
       this.updateFiltersData(this.activeFilters);
     }
-  //   this.$nextTick(() => {
-  //     // let elem = this.$refs.filterResult;
-  //     // function getDistanceToDocumentTop(element) {
-  //     //       return window.scrollY + element.getBoundingClientRect().top;
-  //     //     }
-  //     //     if(elem){
-  //     //       // console.log(elem.$el);
-  //     //       this.disTop = getDistanceToDocumentTop(elem.$el) + 30;
-  //     //       // console.log(this.disTop);
-  //     //     }
-  //   })
+    //   this.$nextTick(() => {
+    //     // let elem = this.$refs.filterResult;
+    //     // function getDistanceToDocumentTop(element) {
+    //     //       return window.scrollY + element.getBoundingClientRect().top;
+    //     //     }
+    //     //     if(elem){
+    //     //       // console.log(elem.$el);
+    //     //       this.disTop = getDistanceToDocumentTop(elem.$el) + 30;
+    //     //       // console.log(this.disTop);
+    //     //     }
+    //   })
   },
   watch: {
     activeFilters: function () {
@@ -234,7 +224,7 @@ export default {
           this.updateFiltersData(res.data.data);
         }
         if (this.$route.name.match('promote')) {
-          resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/filters', {
+          resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/filters/count', {
             params: {
               f: r,
               filters: {
@@ -268,9 +258,9 @@ export default {
               } else {
                 let r;
                 // console.log(el.filters_id)
-                  for (const key in this.dataF) {
-                    // console.log(el.filters_id)
-                    if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
+                for (const key in this.dataF) {
+                  // console.log(el.filters_id)
+                  if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
                     r = true
                     // console.log(+key == +el.filters_id ? [key, el.filters_id] : false)
                     // console.log(this.dataF[key]);
@@ -287,75 +277,75 @@ export default {
             for (const filterEl of el.filters_data) {
               // console.log(this.dataF.hasOwnProperty(el.filters_id));
               // console.log(this.dataF[el.filters_id].find(item => item == filterEl.value));
-              if(this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].find(item => item == filterEl.value)){
+              if (this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].find(item => item == filterEl.value)) {
                 // console.log('Элемент есть в фильтре');
                 el.disabled = false;
               } else {
                 let r;
-                    for (const key in this.dataF) {
-                    if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
-                      r = true
-                      // console.log(this.dataF[key]);
-                      break;
-                    } else {
-                      r = false
-                    }
-                    // console.log(r);
+                for (const key in this.dataF) {
+                  if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
+                    r = true
+                    // console.log(this.dataF[key]);
+                    break;
+                  } else {
+                    r = false
                   }
-                  // console.log('"Элемента ваще нигде нет"' + filterEl);
-                  r ? filterEl.disabled = true : filterEl.disabled = false
-            } 
+                  // console.log(r);
+                }
+                // console.log('"Элемента ваще нигде нет"' + filterEl);
+                r ? filterEl.disabled = true : filterEl.disabled = false
+              }
             }
           }
         }
       }
-      
+
       for (const el of this.filters.brands) {
-          const a = data.brands.find(e => e.brand == el.brand);
-          if (a) {
+        const a = data.brands.find(e => e.brand == el.brand);
+        if (a) {
+          el.disabled = false;
+        } else {
+          if (this.dataF.brand.find(item => item == el.brand)) {
             el.disabled = false;
           } else {
-            if(this.dataF.brand.find(item => item == el.brand)){
-              el.disabled = false;
-            } else {
-              let r;
-                  for (const key in this.dataF) {
-                  if (this.dataF[key] && this.dataF[key].length > 0 && key !== "brand") {
-                    r = true
-                    // console.log(this.dataF[key]);
-                    break;
-                  } else {
-                    r = false
-                  }
-                  // console.log(r);
-                }
-                r ? el.disabled = true : el.disabled = false
+            let r;
+            for (const key in this.dataF) {
+              if (this.dataF[key] && this.dataF[key].length > 0 && key !== "brand") {
+                r = true
+                // console.log(this.dataF[key]);
+                break;
+              } else {
+                r = false
+              }
+              // console.log(r);
             }
+            r ? el.disabled = true : el.disabled = false
           }
+        }
       }
-      
+
       for (const el of this.filters.collections) {
-          const b = data.collections.find(e => e.collection == el.collection);
-          if (b) {
+        const b = data.collections.find(e => e.collection == el.collection);
+        if (b) {
+          el.disabled = false;
+        } else {
+          if (this.dataF.collection.find(item => item == el.collection)) {
             el.disabled = false;
           } else {
-            if(this.dataF.collection.find(item => item == el.collection)){
-              el.disabled = false;
-            } else {
-              let r;
-                  for (const key in this.dataF) {
-                  if (this.dataF[key] && this.dataF[key].length > 0 && key !== "collection") {
-                    r = true
-                    // console.log(this.dataF[key]);
-                    break;
-                  } else {
-                    r = false
-                  }
-                  // console.log(r);
-                }
-                r ? el.disabled = true : el.disabled = false
+            let r;
+            for (const key in this.dataF) {
+              if (this.dataF[key] && this.dataF[key].length > 0 && key !== "collection") {
+                r = true
+                // console.log(this.dataF[key]);
+                break;
+              } else {
+                r = false
+              }
+              // console.log(r);
             }
+            r ? el.disabled = true : el.disabled = false
           }
+        }
       }
       this.filtersKeyBrand++;
       this.filtersKeyColl++;

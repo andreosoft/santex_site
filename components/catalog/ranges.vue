@@ -1,21 +1,10 @@
 <template>
   <div v-if="activeData()">
     <b> {{ title }} </b>
-    <catalog-numberRange 
-      :range="v" 
-      :min="min" 
-      :max="max" 
-      @location="$emit('location', $event)" 
-      @dataNumberRange="dataNumberRange = $event"
-    />
-    <v-range-slider 
-      v-model="v" 
-      @click="$emit('location', $event.target)" 
-      hide-details 
-      class="align-center" 
-      :min="min" 
-      :max="max"
-    >
+    <catalog-numberRange :range="v" :min="min" :max="max" @location="$emit('location', $event)"
+      @dataNumberRange="dataNumberRange = $event" />
+    <v-range-slider v-model="v" @click="$emit('location', $event.target)" hide-details class="align-center" :min="min"
+      :max="max">
     </v-range-slider>
   </div>
 </template>
@@ -25,11 +14,11 @@
 export default {
   props: {
     title: String,
-    params: Array,
+    // params: Array,
     minV: Number,
     maxV: Number,
     value: Array,
-    activeParams: Array
+    // activeParams: Array
   },
   data() {
     return {
@@ -39,23 +28,23 @@ export default {
     }
   },
   watch: {
-    activeParams(){
-        let filt;
-        if(this.activeParams) {
-          filt = this.activeParams.find(item => item.name == this.title);
-          if(filt){
-            // console.log(filt);
-            this.min = filt.min
-            this.max = filt.max
-          }
+    activeParams() {
+      let filt;
+      if (this.activeParams) {
+        filt = this.activeParams.find(item => item.name == this.title);
+        if (filt) {
+          // console.log(filt);
+          this.min = filt.min
+          this.max = filt.max
         }
-      },
-      dataNumberRange: async function() {
+      }
+    },
+    dataNumberRange: async function () {
       try {
-        if(this.dataNumberRange){
+        if (this.dataNumberRange) {
           // let closestLeft;
           // let closestRight;
-          for(let i = 0; i < this.dataNumberRange.length; i++){
+          for (let i = 0; i < this.dataNumberRange.length; i++) {
             this.dataNumberRange[i] = +this.dataNumberRange[i];
             // if(!this.params.find(v => v == this.dataNumberRange[i])){
             //   closestLeft = +Math.max(...this.params.filter(v => v < this.dataNumberRange[i])).toFixed();
@@ -78,16 +67,16 @@ export default {
           }
           this.v = this.dataNumberRange
         }
-         }
-         catch (error){
-           console.error(error)
-         }
+      }
+      catch (error) {
+        console.error(error)
+      }
     }
-    },
+  },
   methods: {
-    activeData(){
-      if(this.activeParams){
-        if(this.activeParams.find(item => item.name == this.title)){
+    activeData() {
+      if (this.activeParams) {
+        if (this.activeParams.find(item => item.name == this.title)) {
           return true
         } else {
           return false
@@ -95,13 +84,13 @@ export default {
       } else {
         return true
       }
-      }
-    },
+    }
+  },
   computed: {
     v: {
       get() {
         let d;
-          d = [this.min, this.max]
+        d = [this.min, this.max]
         if (this.value && Array.isArray(this.value) && this.value.length > 0) {
           let maxVal;
           let minVal;
@@ -122,12 +111,12 @@ export default {
       set(v) {
         let r = [];
         if (v[0] == this.min && v[1] == this.max) return this.$emit('input', []);
-        for (let i = 0; i < this.params.length; i++) {
-          const n = this.params[i];
-          if (Math.floor(n) >= v[0] && Math.ceil(n) <= v[1]) r.push(n);
-        }
+        // for (let i = 0; i < this.params.length; i++) {
+        //   const n = this.params[i];
+        //   if (Math.floor(n) >= v[0] && Math.ceil(n) <= v[1]) r.push(n);
+        // }
         return this.$emit('input', r);
-          // location: $event.target);
+        // location: $event.target);
       }
     }
   }
