@@ -1,6 +1,7 @@
 <template>
   <div class="parent">
-    <catalog-filterResult ref="filterResult" @filterResult="onUpdateData" :locationRes="dy" :resultData="resultData" />
+    <catalog-filterResult ref="filterResult" :loading="loading" @filterResult="onUpdateData" :locationRes="dy"
+      :resultData="resultData" />
     <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice"
         :max="activeFilters && activeFilters?.price ? activeFilters?.price?.max_price : filters?.price?.max_price"
@@ -54,6 +55,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       dataF: {
         brand: [],
         category_id: [],
@@ -215,27 +217,39 @@ export default {
 
         let res, resPromote;
         if (this.$route.name.match('catalog')) {
-          res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/filters', {
-            params: {
-              f: r,
-              filters: filtersCount,
-            }
-          });
-          this.updateFiltersData(res.data.data);
+          this.loading = true;
+          try {
+            res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/filters/count', {
+              params: {
+                f: r,
+                filters: filtersCount,
+              }
+            });
+            this.updateFiltersData(res.data.data);
+          } catch (error) {
+            console.error(error);
+          }
+          this.loading = false;
         }
         if (this.$route.name.match('promote')) {
-          resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/filters/count', {
-            params: {
-              f: r,
-              filters: {
-                "ic.promote_id": this.$route.params.id,
-                brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
-                collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
-                price: this.dataPrice.length !== 0 ? this.dataPrice : {},
-                category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {}
-              },
-            }
-          });
+          this.loading = true;
+          try {
+            resPromote = await this.$axios.get(this.$config.baseURL + '/api/site/promote_catalog/filters', {
+              params: {
+                f: r,
+                filters: {
+                  "ic.promote_id": this.$route.params.id,
+                  brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
+                  collection: this.dataF.collection.length !== 0 ? this.dataF.collection : {},
+                  price: this.dataPrice.length !== 0 ? this.dataPrice : {},
+                  category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {}
+                },
+              }
+            });
+          } catch (error) {
+            console.error(error);
+          }
+          this.loading = false;
         }
         this.resultData = res ? res.data.data : resPromote.data.data
         // console.log(this.resultData);

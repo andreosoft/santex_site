@@ -4,9 +4,9 @@
     :style="{ top: locationRes + 'px' + '!important' }">
     <div class="w-100" style="display: flex; justify-content: space-between; align-items: center; ">
       <span style="text-align: center; color: white;">
-        Найдено товаров: {{ resultData.count }}
+        <span v-if="!loading">Найдено товаров: {{ resultData.count }}</span>
       </span>
-      <v-btn v-if="resultData.count > 0 && locationRes" @click="onUpdateData">Показать</v-btn>
+      <v-btn v-if="resultData.count > 0 && locationRes" :loading="loading" @click="onUpdateData">Показать</v-btn>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@
 
 export default {
   props: {
+    loading: Boolean,
     locationRes: {
       type: Number
     },
