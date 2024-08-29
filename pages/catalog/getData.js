@@ -11,15 +11,8 @@ export async function getData({ route, $axios, $config, error }) {
   let filters = route.query.filters ? JSON.parse(route?.query?.filters) : {};
 
   if (category_id) Object.assign(filters, { category_id: category_id });
-  // if (searchInput) Object.assign(filters, {
-  //   "OR": [
-  //     { id: { condition: "LIKE", value: "%" + searchInput + "%" } },
-  //     { name: { condition: "LIKE", value: "%" + searchInput + "%" } },
-  //     { vendor: { condition: "LIKE", value: "%" + searchInput + "%" } },
-  //     { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
-  // });
 
-  // console.log(route);
+
   let res;
 
   if (searchInput && route.name.match('catalog-search')) {
@@ -36,7 +29,7 @@ export async function getData({ route, $axios, $config, error }) {
     } catch (error) {
       console.error(e);
     }
-  } else if (route.name.match('catalog') && category_id > 0) {
+  } else if (route.name.match('catalog')) {
     try {
       res = await $axios.get($config.baseURL + '/api/site/catalog', {
         params: {
@@ -55,33 +48,8 @@ export async function getData({ route, $axios, $config, error }) {
     return error({ statusCode: 404, message: "Страница не найдена" });
   }
 
-  // if (route.params.id) Object.assign(subcatfilters, { "parent_id": category_id });
-  // let resCategories;
-  //   try {
-  //     if(route.name.match('catalog')){
-  //       resCategories = await $axios.get($config.baseURL + '/api/site/categories', {
-  //         params: {
-  //           f: f,
-  //           filters: subcatfilters,
-  //           sort: sortSub,
-  //           pager: pager
-  //         }
-  //       });
-  //     }
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // res = await $axios.get($config.baseURL + '/api/site/catalog', {
-  //   params: {
-  //     f: f,
-  //     filters: filters,
-  //     sort: sort,
-  //     pager: pager
-  //   }
-  // });
   const data = res ? res.data.data : [];
 
-  // console.log();
   let carouselItems = [];
   let infoPromote;
   try {
@@ -96,7 +64,7 @@ export async function getData({ route, $axios, $config, error }) {
 
   let filtersPromote = { "status": 1 };
   Object.assign(filtersPromote, route.query.filters ? JSON.parse(route.query.filters) : {});
-  // Object.assign(filtersPromote, { "ic.promote_id": 1 });
+
   if (route.name.match('promote')) Object.assign(filtersPromote, { "ic.promote_id": category_id });
   let resPromote;
   try {
@@ -135,7 +103,7 @@ export async function getData({ route, $axios, $config, error }) {
 
 
 
-  // Получение данных для каталога
+
   let resCat;
   try { if (category_id && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id); } catch (e) { console.error(e) }
 
@@ -150,13 +118,6 @@ export async function getData({ route, $axios, $config, error }) {
 
   let activeFiltersOnly = {};
   if (category_id) Object.assign(activeFiltersOnly, { category_id: category_id });
-  if (searchInput) Object.assign(activeFiltersOnly, {
-    "OR": [
-      { id: { condition: "LIKE", value: "%" + searchInput + "%" } },
-      { name: { condition: "LIKE", value: "%" + searchInput + "%" } },
-      { vendor: { condition: "LIKE", value: "%" + searchInput + "%" } },
-      { factory_article: { condition: "LIKE", value: "%" + searchInput + "%" } }]
-  });
   if (addFilters) Object.assign(activeFiltersOnly, addFilters);
 
 
@@ -164,21 +125,20 @@ export async function getData({ route, $axios, $config, error }) {
   // Активные фильтры в каталоге
   let resActiveFilters;
   try {
-    if (res && ((addFilters && Object.keys(addFilters).length > 0) || (f && Object.keys(f).length > 0))) resActiveFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', {
-      params: {
-        f: f,
-        filters: activeFiltersOnly
-      }
-    });
+    if (res && ((addFilters && Object.keys(addFilters).length > 0) || (f && Object.keys(f).length > 0))){
+      resActiveFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', {
+        params: {
+          q: searchInput ? searchInput : '',
+          f: f,
+          filters: activeFiltersOnly
+        }
+      });
+    } 
   } catch (e) {
     console.error(e)
   }
 
   let activeFilters = resActiveFilters ? resActiveFilters.data.data : {};
-
-  // console.log(addFilters)
-  // console.log(activeFiltersOnly)
-  // console.log(activeFilters)
 
 
 
@@ -194,7 +154,10 @@ export async function getData({ route, $axios, $config, error }) {
 
   let resFilters;
   try {
-    if (res) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { filters: filtersOnly } });
+    if (res) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { 
+      q: searchInput ? searchInput : '',
+      filters: filtersOnly
+     } });
   } catch (e) {
     console.error(e)
   }
@@ -214,12 +177,6 @@ export async function getData({ route, $axios, $config, error }) {
   let conutI = 0;
   const maxI = 5;
   // for (let key in dataFilters.filters) {
-  //   if (dataFilters.filters[key].type === 2) {
-  //     conutI++;
-  //     if (conutI > maxI) {
-  //       dataFilters.filters[key].type = 1;
-  //       continue;
-  //     }
   //     let maxVal;
   //     let minVal;
   //     dataFilters.filters[key].numFilters = [];
@@ -252,78 +209,7 @@ export async function getData({ route, $axios, $config, error }) {
   // }
 
   // Активные фильтры
-  let conutIactive = 0;
-  const maxIactive = 5;
-  // for (let key in activeFilters.filters) {
-  //   if (activeFilters.filters[key].type === 2) {
-  //     conutIactive++;
-  //     if (conutIactive > maxIactive) {
-  //       activeFilters.filters[key].type = 1;
-  //       continue;
-  //     }
-  //     let maxVal;
-  //     let minVal;
-  //     activeFilters.filters[key].numFilters = [];
-  //     for (let i = 0; i < activeFilters.filters[key].filters.length; i++) {
-  //       const item = activeFilters.filters[key].filters[i];
-  //       let n = item;
-  //       if (n == NaN) continue;
-  //       if (i == 0) { // инициализация
-  //         maxVal = n;
-  //         minVal = n;
-  //       }
-  //       if (n < minVal) minVal = n;
-  //       else if (n > maxVal) maxVal = n;
-  //       activeFilters.filters[key].numFilters.push(n);
-  //     }
-  //     if (minVal == NaN || maxVal == NaN) {
-  //       activeFilters.filters[key].type = 1;
-  //     } else {
-  //       activeFilters.filters[key].min = Math.floor(minVal);
-  //       activeFilters.filters[key].max = Math.ceil(maxVal);
-
-  //       // console.log(activeFilters.filters[key]);
-  //     }
-
-  //   }
-  // }
-  // Promote page
-  let conutIPromote = 0;
-  const maxIPromote = 5;
-  // for (let key in dataFiltersPromote.filters) {
-  //   if (dataFiltersPromote.filters[key].type === 2) {
-  //     conutIPromote++;
-  //     if (conutIPromote > maxIPromote) {
-  //       dataFiltersPromote.filters[key].type = 1;
-  //       continue;
-  //     }
-  //     let maxVal;
-  //     let minVal;
-  //     dataFiltersPromote.filters[key].numFilters = [];
-  //     for (let i = 0; i < dataFiltersPromote.filters[key].filters.length; i++) {
-  //       const item = dataFiltersPromote.filters[key].filters[i];
-  //       let n = item;
-  //       if (n == NaN) continue;
-  //       if (i == 0) { // инициализация
-  //         maxVal = n;
-  //         minVal = n;
-  //       }
-  //       if (n < minVal) minVal = n;
-  //       else if (n > maxVal) maxVal = n;
-  //       dataFiltersPromote.filters[key].numFilters.push(n);
-  //     }
-  //     if (minVal == NaN || maxVal == NaN) {
-  //       dataFiltersPromote.filters[key].type = 1;
-  //     } else {
-  //       dataFiltersPromote.filters[key].min = Math.floor(minVal);
-  //       dataFiltersPromote.filters[key].max = Math.ceil(maxVal);
-
-  //       // console.log(dataFiltersPromote.filters[key]);
-  //     }
-
-  //   }
-  // }
-
+  
   const title = resCat ? resCat.data.data.name : '';
   pager = res ? res.data.pager : '';
   pagerPromote = resPromote ? resPromote.data.pager : '';

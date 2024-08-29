@@ -8,7 +8,7 @@
       :loading="loading" 
       :dataFilters="dataFilters" 
       :valueFilters="valueFilters" 
-      :activeFilters ="activeFilters"
+      :activeFilters="activeFilters"
       :pager="pager"
       :sort="sort" 
       @update-data="valueFilters = $event"/>

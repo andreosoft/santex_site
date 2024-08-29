@@ -27,11 +27,11 @@
     props: {
       params: Array,
       value: Array,
-      activeParams: Array,
+      activeParams: Array
     },
     data() {
       return {
-        toggleOpen: false
+        toggleOpen: false,
       }
     },
     computed: {
@@ -46,39 +46,8 @@
       needExpand() {
         if (this.params.length > 4) return true;
         return false;
-      }
-    },
-    // methods: {
-    //   check(brand){
-    //     let r = false;
-    //     if(this.dataF) {
-        // for (const key in this.dataF) {
-        //   if (this.dataF[key] && this.dataF[key].length > 0 && key !== "brand") {
-        //     r = true;
-        //     // console.log(this.dataF[key]);
-        //   }
-        // }
-      // } 
-    //   let g, s;
-    //   g = this.v.find(item => item == brand);
-    //   s = this.activeParams && this.activeParams.find(item => item.brand == brand)
-    //   // console.log(r)
-    //   // console.log(s)
-    //   if(r) {
-    //     if(s){
-    //       return false
-    //     } else {
-    //       if(g){
-    //         return false
-    //       } else{
-    //         return true
-    //       }
-    //     }
-    //   } else {
-    //     return false
-    //   }
-    // }
-    // }
+      },
+    }
   };
   </script>
   

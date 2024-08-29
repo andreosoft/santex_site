@@ -129,9 +129,10 @@
                   <td>
                     <nuxt-link 
                     class="underlined pointer" 
-                    :to="'/catalog/search?q=' + data.brand">
+                    :to="`/catalog?filters=%7B%22brand%22%3A%5B%22${data.brand}%22%5D%7D&f=%7B%7D&page=0`"
+                    >
                       {{ data.brand }}
-                    </nuxt-link>
+                  </nuxt-link>
                   </td>
                 </tr>
                 <tr v-if="data.collection">
@@ -141,7 +142,7 @@
                   <td>
                     <nuxt-link 
                     class="underlined pointer" 
-                    :to="`/catalog/${data.category_id}?filters=%7B%22price%22%3A%5B%7B%22condition%22%3A%22%3C%3D%22,%22value%22%3A6686324%7D%5D,%22brand%22%3A%5B%22${data.brand}%22%5D,%22collection%22%3A%5B%22${data.collection}%22%5D%7D&f=%7B%7D&page=0`">
+                    :to="`/catalog?filters=%7B%22price%22%3A%5B%7B%22condition%22%3A%22%3C%3D%22,%22value%22%3A6686324%7D%5D,%22brand%22%3A%5B%22${data.brand}%22%5D,%22collection%22%3A%5B%22${data.collection}%22%5D%7D&f=%7B%7D&page=0`">
                       {{ data.collection }}
                     </nuxt-link>
                   </td>

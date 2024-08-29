@@ -6,23 +6,28 @@
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice"
         :max="activeFilters && activeFilters?.price ? activeFilters?.price?.max_price : filters?.price?.max_price"
         :min="activeFilters && activeFilters?.price ? activeFilters?.price?.min_price : filters?.price?.min_price" />
-
-      <catalog-brands v-if="filters.brands && filters.brands.length > 1" @location="locationResult"
-        :params="filters.brands" v-model="dataF.brand" :activeParams="activeFilters.brands" :key="filtersKeyBrand" />
+      <catalog-brands 
+        v-if="filters.brands && filters.brands.length > 1" 
+        @location="locationResult"
+        :params="filters.brands" 
+        :key="keyBrand"
+        v-model="dataF.brand" 
+        :activeParams="activeFilters.brands" 
+      />
       <v-divider v-if="filters.brands && filters.brands.length > 1" class="my-4" />
       <catalog-collections class="mt-4" v-if="filters.collections && filters.collections.length > 1"
-        @location="locationResult" :key="filtersKeyColl" :params="filters.collections"
+        @location="locationResult" :params="filters.collections" :key="keyColl"
         :activeParams="activeFilters.collections" v-model="dataF.collection" />
       <v-divider v-if="filters.collections && filters.collections.length > 1" class="my-4" />
       <catalog-categories class="mt-4" v-if="filters.categories && filters.categories.length > 1"
-        @location="locationResult" :key="filtersKeyCat" :params="filters.categories"
+        @location="locationResult" :params="filters.categories"
         :activeParams="activeFilters.categories" v-model="dataF.category_id" />
       <v-divider v-if="filters.categories && filters.categories.length > 1" class="my-4" />
     </div>
+    
     <div v-for="(el, i) in filters.filters" :key="i">
       <div>
         <div v-if="el.type == 2" class="space-check">
-
           <catalog-price v-if="el.max != el.min" @location="locationResult" :title="el.name"
             v-model="dataF[el.filters_id]" :max="el.max" :min="el.min" />
           <!-- <catalog-ranges v-if="el.max != el.min" @location="locationResult" :title="el.name"
@@ -62,13 +67,12 @@ export default {
         collection: []
       },
       dataPrice: [],
-      filtersKeyBrand: 0,
-      filtersKeyColl: 1,
-      filtersKeyCat: 2,
       dy: 0,
       resultData: {},
       disTop: 400,
-      timeFilter: 0
+      timeFilter: 0,
+      keyBrand: 0,
+      keyColl: 1
     };
   },
   created() { this.initValueFilters(); },
@@ -186,6 +190,9 @@ export default {
         let scrolltop = window.scrollY + rect.top;
         const middleY = scrolltop + rect.height / 2;
         this.dy = middleY - this.disTop;
+        if (this.$route.name.match('catalog-search')) {
+          this.dy = this.dy - 112;
+        }
 
 
         let r = {};
@@ -207,13 +214,13 @@ export default {
           price: this.dataPrice.length !== 0 ? this.dataPrice : {}
         }
 
-        if (this.$route.query.q) Object.assign(filtersCount, {
-          "OR": [
-            { id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
-            { name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
-            { vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
-            { factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } }]
-        });
+        // if (this.$route.query.q) Object.assign(filtersCount, {
+        //   "OR": [
+        //     { id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
+        //     { name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
+        //     { vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
+        //     { factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } }]
+        // });
 
         let res, resPromote;
         if (this.$route.name.match('catalog')) {
@@ -221,6 +228,7 @@ export default {
           try {
             res = await this.$axios.get(this.$config.baseURL + '/api/site/catalog/filters/count', {
               params: {
+                q: this.$route.query.q ? this.$route.query.q : '',
                 f: r,
                 filters: filtersCount,
               }
@@ -361,9 +369,8 @@ export default {
           }
         }
       }
-      this.filtersKeyBrand++;
-      this.filtersKeyColl++;
-      this.filtersKeyCat++;
+      this.keyBrand++;
+      this.keyColl++;
     }
   },
 }

@@ -26,7 +26,6 @@ import {getData} from "@/pages/catalog/getData";
 export default {
   data() {
     return { 
-      toggleOpen: false,
       loading: true
     }
   },
@@ -52,6 +51,7 @@ export default {
         this.loading = true;
         let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error });
         this.loading = false;
+        this.activeFilters = p.activeFilters;
         this.dataPromote = p.dataPromote;
         this.pagerPromote = p.pagerPromote;
       },
