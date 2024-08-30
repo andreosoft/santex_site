@@ -27,11 +27,15 @@
     props: {
       params: Array,
       value: Array,
-      activeParams: Array,
     },
     data() {
       return {
         toggleOpen: false
+      }
+    },
+    watch: {
+      "$route"() {
+        this.toggleOpen = false
       }
     },
     computed: {

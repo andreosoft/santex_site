@@ -19,12 +19,16 @@ export default {
     title: String,
     params: Array,
     value: Array,
-    activeParams: Array,
   },
   data() {
     return {
       toggleOpen: false,
     }
+  },
+  watch: {
+      "$route"() {
+        this.toggleOpen = false
+      }
   },
   // watch: {
   //   params(){
@@ -52,41 +56,6 @@ export default {
       if (this.params.length > 8) return true;
       return false;
     }
-  },
-  methods: {
-    // check(coll){
-    //   let r;
-    //   if(this.dataF) {
-    //   for (const key in this.dataF) {
-    //     if (this.dataF[key] && this.dataF[key].length > 0) {
-    //       if(key == this.idFilters){
-    //         r = false
-    //       } else if(key !== this.idFilters) {
-    //         r = true
-    //       }
-    //     }
-    //   }
-    // } 
-
-    // // console.log(r);
-    // let g, s;
-    // g = this.v.find(item => item == coll);
-    // s = this.activeParams?.find(item => item.filters_id == this.idFilters);
-
-    // if(r) {
-    //   if(s?.filters_data.find(item => item.value == coll)){
-    //     return false
-    //   } else {
-    //     if(g){
-    //       return false
-    //     } else{
-    //       return true
-    //     }
-    //   }
-    // } else {
-    //   return false
-    // }
-    // }
   }
 };
 </script>

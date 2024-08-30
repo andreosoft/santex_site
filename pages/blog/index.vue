@@ -10,10 +10,10 @@
 
     <v-divider class="my-10 pa-0" />
     <h2>Обзор квартир и домов</h2>
-    <blog-carusel  v-if="blogData2?.length>0" :items="blogData2" :type="3" />
-    <v-divider  v-if="blogData2?.length>0" class="my-10 pa-0" />
+    <blog-carusel v-if="blogData2?.length>0" :items="blogData2" :type="3" />
+    <v-divider v-if="blogData2?.length>0" class="my-10 pa-0" />
     <h2>Новинки в сфере дизайна интерьера</h2>
-    <blog-carusel  v-if="blogData3?.length>0" :items="blogData3" :type="3" />
+    <blog-carusel v-if="blogData3?.length>0" :items="blogData3" :type="3" />
     <v-divider v-if="blogData3?.length>0" class="my-10 pa-0" />
     <h2>Прогуляемся по европейским производствам</h2>
     <blog-carusel v-if="blogData4?.length>0" :items="blogData4" :type="3" />

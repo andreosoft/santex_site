@@ -2,29 +2,22 @@
   <div class="parent">
     <catalog-filterResult ref="filterResult" :loading="loading" @filterResult="onUpdateData" :locationRes="dy"
       :resultData="resultData" />
-    <div class="space-check">
+      <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice"
         :max="activeFilters && activeFilters?.price ? activeFilters?.price?.max_price : filters?.price?.max_price"
         :min="activeFilters && activeFilters?.price ? activeFilters?.price?.min_price : filters?.price?.min_price" />
       <catalog-brands 
-        v-if="filters.brands && filters.brands.length > 1" 
-        @location="locationResult"
-        :params="filters.brands" 
-        :key="keyBrand"
-        v-model="dataF.brand" 
-        :activeParams="activeFilters.brands" 
-      />
+        v-if="filters.brands && filters.brands.length > 1" @location="locationResult" :params="filterBrand" 
+        v-model="dataF.brand"  />
       <v-divider v-if="filters.brands && filters.brands.length > 1" class="my-4" />
       <catalog-collections class="mt-4" v-if="filters.collections && filters.collections.length > 1"
-        @location="locationResult" :params="filters.collections" :key="keyColl"
-        :activeParams="activeFilters.collections" v-model="dataF.collection" />
+        @location="locationResult" :params="filterColl" v-model="dataF.collection" />
       <v-divider v-if="filters.collections && filters.collections.length > 1" class="my-4" />
       <catalog-categories class="mt-4" v-if="filters.categories && filters.categories.length > 1"
         @location="locationResult" :params="filters.categories"
-        :activeParams="activeFilters.categories" v-model="dataF.category_id" />
+        v-model="dataF.category_id" />
       <v-divider v-if="filters.categories && filters.categories.length > 1" class="my-4" />
     </div>
-    
     <div v-for="(el, i) in filters.filters" :key="i">
       <div>
         <div v-if="el.type == 2" class="space-check">
@@ -35,7 +28,7 @@
         </div>
         <div v-else class="space-check">
           <catalog-check1 v-if="el.filters_data.length > 1" v-model="dataF[el.filters_id]" @location="locationResult"
-            :title="el.name" :params="el.filters_data" :activeParams="activeFilters.filters" />
+            :title="el.name" :params="el.filters_data" />
           <v-divider v-if="el.filters_data.length > 1" class="my-4" />
         </div>
       </div>
@@ -71,13 +64,23 @@ export default {
       resultData: {},
       disTop: 400,
       timeFilter: 0,
-      keyBrand: 0,
-      keyColl: 1
+      // keyBrand: 0,
+      // keyColl: 1
     };
+  },
+  computed: {
+    filterBrand(){
+      return this.filters.brands
+    },
+    filterColl(){
+      return this.filters.collections
+    }
   },
   created() { this.initValueFilters(); },
   mounted() {
     if (this.activeFilters && Object.keys(this.activeFilters).length > 0) {
+      this.keyBrand++;
+      this.keyColl++;
       this.updateFiltersData(this.activeFilters);
     }
     //   this.$nextTick(() => {
@@ -93,12 +96,14 @@ export default {
     //   })
   },
   watch: {
-    activeFilters: function () {
-      if (this.activeFilters) {
-        this.timeFilter = 1000
-      }
+    // activeFilters: function () {
+    //   if (this.activeFilters) {
+    //     this.timeFilter = 1000
+    //   }
+    // },
+    filters: function () { 
+      this.initValueFilters(); 
     },
-    filters: function () { this.initValueFilters(); },
     value: function () {
       this.initValueFilters();
       this.value.brand ? this.dataF.brand = this.value.brand : this.dataF.brand = [];
@@ -275,6 +280,7 @@ export default {
           const updatedFilter = updatedData.find(e => e.filters_id == el.filters_id);
           if (updatedFilter) {
             for (const filterEl of el.filters_data) {
+              // console.log(filterEl.value)
               if (updatedFilter.filters_data.find(e => e.value == filterEl.value)) {
                 filterEl.disabled = false;
               } else {
@@ -283,10 +289,14 @@ export default {
                 for (const key in this.dataF) {
                   // console.log(el.filters_id)
                   if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
-                    r = true
+                    if(this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].find(item => item == filterEl.value)){
+                      r = false
+                    } else {
+                      r = true
+                      break;
+                    }
                     // console.log(+key == +el.filters_id ? [key, el.filters_id] : false)
                     // console.log(this.dataF[key]);
-                    break;
                   } else {
                     r = false
                   }
@@ -297,12 +307,6 @@ export default {
             }
           } else {
             for (const filterEl of el.filters_data) {
-              // console.log(this.dataF.hasOwnProperty(el.filters_id));
-              // console.log(this.dataF[el.filters_id].find(item => item == filterEl.value));
-              if (this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].find(item => item == filterEl.value)) {
-                // console.log('Элемент есть в фильтре');
-                el.disabled = false;
-              } else {
                 let r;
                 for (const key in this.dataF) {
                   if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
@@ -316,7 +320,6 @@ export default {
                 }
                 // console.log('"Элемента ваще нигде нет"' + filterEl);
                 r ? filterEl.disabled = true : filterEl.disabled = false
-              }
             }
           }
         }
@@ -327,7 +330,10 @@ export default {
         if (a) {
           el.disabled = false;
         } else {
+          // console.log(this.dataF.brand.find(item => item == el.brand));
+          // console.log(this.dataF.brand);
           if (this.dataF.brand.find(item => item == el.brand)) {
+            // console.log(el.brand)
             el.disabled = false;
           } else {
             let r;
@@ -369,8 +375,8 @@ export default {
           }
         }
       }
-      this.keyBrand++;
-      this.keyColl++;
+      // this.keyBrand++;
+      // this.keyColl++;
     }
   },
 }

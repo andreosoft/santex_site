@@ -23,6 +23,7 @@
     :data="data"
     :dataFilters="dataFilters"
     :valueFilters="valueFilters"
+    :activeFilters="activeFilters"
     :pager="pager"
     :sort="sort"
     @update-filters="dataFilters = $event" 
@@ -45,6 +46,9 @@ export default {
       search: ''
     };
   },
+  async asyncData({ route, $axios, $config, error }) {
+    return await getData({ route, $axios, $config, error });
+  },
   methods: {
     submitSearch() {
       if(this.search.trim()){
@@ -59,8 +63,10 @@ export default {
       if (v.brand && v.brand.length > 0) {
         filters.brand = v.brand;
       }
-  
-      if(typeof v.price == 'object' || typeof v.brand == 'object' || v.f[0]) { 
+      if (v.collection && v.collection.length > 0) {
+        filters.collection = v.collection;
+      }
+      if(typeof v.price == 'object' || typeof v.brand == 'object' || v.f[0] || typeof v.collection == 'object') {
         this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
       }
     },
@@ -69,19 +75,17 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config });
+        let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error });
         this.loading = false;
         this.data = p.data;
-        this.dataFilters = p.dataFilters;
-        this.valueFilters = p.valueFilters;
+        // this.dataFilters = p.dataFilters;
+        // this.valueFilters = p.valueFilters;
+        this.activeFilters = p.activeFilters;
         this.pager = p.pager;
         this.searchInput = p.searchInput;
         this.search = '';
       },
     },
-  },
-  async asyncData({ route, $axios, $config }) {
-    return await getData({ route, $axios, $config });
-  },
+  }
 }
 </script>

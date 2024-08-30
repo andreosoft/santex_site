@@ -3,7 +3,7 @@
     <b> {{ title }} </b>
     <catalog-numberRange :range="v" :min="min" :max="max" @location="$emit('location', $event)"
       @dataNumberRange="dataNumberRange = $event" />
-    <v-range-slider v-model="v" @click="$emit('location', $event.target)" hide-details class="align-center" :min="min"
+    <v-range-slider v-model="v" @mouseup="$emit('location', $event.target)" hide-details class="align-center" :min="min"
       :max="max">
     </v-range-slider>
   </div>

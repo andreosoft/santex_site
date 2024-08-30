@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b>Бренды</b>
+      <b>Бренды</b>
       <div class="a-catalog-check1" :class="{ close: !toggleOpen }">
         <div v-for="(el, i) of params" :key="i">
           <v-checkbox 
@@ -26,12 +26,16 @@
   export default {
     props: {
       params: Array,
-      value: Array,
-      activeParams: Array
+      value: Array
     },
     data() {
       return {
         toggleOpen: false,
+      }
+    },
+    watch: {
+      "$route"() {
+        this.toggleOpen = false
       }
     },
     computed: {
@@ -40,13 +44,13 @@
           return this.value;
         },
         set(v) {
-            this.$emit('input', v);
+          this.$emit('input', v);
         }
       },
       needExpand() {
         if (this.params.length > 4) return true;
         return false;
-      },
+      }
     }
   };
   </script>
