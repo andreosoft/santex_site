@@ -25,11 +25,6 @@ export default {
       toggleOpen: false,
     }
   },
-  watch: {
-      "$route"() {
-        this.toggleOpen = false
-      }
-  },
   // watch: {
   //   params(){
   //     if(this.params){

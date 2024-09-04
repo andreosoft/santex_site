@@ -2,13 +2,20 @@
   <div class="parent">
     <catalog-filterResult ref="filterResult" :loading="loading" @filterResult="onUpdateData" :locationRes="dy"
       :resultData="resultData" />
+      <!-- <br>
+      {{ value }}
+      <br>
+      {{ dataPrice }}
+      {{ [minPrice, maxPrice] }}
+      <br>
+      {{ [activeFilters?.price?.min_price, activeFilters?.price?.max_price] }} -->
       <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice"
-        :max="activeFilters && activeFilters?.price ? activeFilters?.price?.max_price : filters?.price?.max_price"
-        :min="activeFilters && activeFilters?.price ? activeFilters?.price?.min_price : filters?.price?.min_price" />
+        :max="maxPrice" 
+        :min="minPrice" />
       <catalog-brands 
-        v-if="filters.brands && filters.brands.length > 1" @location="locationResult" :params="filterBrand" 
-        v-model="dataF.brand"  />
+        v-if="filters.brands && filters.brands.length > 1" @location="locationResult" 
+        :params="filterBrand" v-model="dataF.brand"  />
       <v-divider v-if="filters.brands && filters.brands.length > 1" class="my-4" />
       <catalog-collections class="mt-4" v-if="filters.collections && filters.collections.length > 1"
         @location="locationResult" :params="filterColl" v-model="dataF.collection" />
@@ -59,13 +66,13 @@ export default {
         category_id: [],
         collection: []
       },
+      minPrice: this.filters?.price?.min_price,
+      maxPrice: this.filters?.price?.max_price,
       dataPrice: [],
       dy: 0,
       resultData: {},
       disTop: 400,
       timeFilter: 0,
-      // keyBrand: 0,
-      // keyColl: 1
     };
   },
   computed: {
@@ -74,15 +81,27 @@ export default {
     },
     filterColl(){
       return this.filters.collections
-    }
+    },
+    // getDistanceToDocumentTop(){
+    //   let elem = this.$refs.filterResult;
+    //       if(elem){
+    //         console.log(elem.$el);
+    //         console.log(this.disTop);
+    //         return window.scrollY + elem.$el.getBoundingClientRect().top + 30;
+    //       } else {
+    //         return this.$refs.filterResult
+    //       }
+    // }
   },
   created() { this.initValueFilters(); },
   mounted() {
     if (this.activeFilters && Object.keys(this.activeFilters).length > 0) {
-      this.keyBrand++;
-      this.keyColl++;
+      // console.log('Restart');
+      this.maxPrice = this.activeFilters?.price?.max_price;
+      this.minPrice = this.activeFilters?.price?.min_price;
       this.updateFiltersData(this.activeFilters);
     }
+    this.value?.price ? this.dataPrice = this.value?.price : this.dataPrice = [];
     //   this.$nextTick(() => {
     //     // let elem = this.$refs.filterResult;
     //     // function getDistanceToDocumentTop(element) {
@@ -96,51 +115,71 @@ export default {
     //   })
   },
   watch: {
-    // activeFilters: function () {
-    //   if (this.activeFilters) {
-    //     this.timeFilter = 1000
-    //   }
-    // },
+    activeFilters() {
+      if (this.activeFilters && Object.keys(this.activeFilters).length > 0) {
+        for(const key in this.value){
+                if(key == 'f'){
+                  if(Object.values(this.value[key]).length > 0){
+                    // if(this.value?.price.length == 0){
+                      this.minPrice = this.activeFilters?.price?.min_price;
+                      this.maxPrice = this.activeFilters?.price?.max_price;
+                    // }
+                    // update = true;
+                  }
+                } else if(key !== 'price') {
+                  if(Array.isArray(this.value[key]) && this.value[key].length > 0){
+                    // console.log(this.activeFilters?.price?.min_price);
+                    // console.log(this.activeFilters?.price?.max_price);
+                    // if(this.value?.price.length == 0){
+                      this.minPrice = this.activeFilters?.price?.min_price;
+                      this.maxPrice = this.activeFilters?.price?.max_price;
+                    // }
+                    // update = true;
+                  }
+                }
+              }
+      }
+    },
     filters: function () { 
-      this.initValueFilters(); 
+      this.initValueFilters();
     },
     value: function () {
       this.initValueFilters();
       this.value.brand ? this.dataF.brand = this.value.brand : this.dataF.brand = [];
       this.value.collection ? this.dataF.collection = this.value.collection : this.dataF.collection = [];
       this.value.category_id ? this.dataF.category_id = this.value.category_id : this.dataF.category_id = [];
+      // console.log('value updated');
+      // let update;
+          
+      // this.minPrice = this.activeFilters?.price?.min_price;
+      // this.maxPrice = this.activeFilters?.price?.max_price;
+    },
+    "value.price"() {
+      // console.log(this.value.price ? this.value.price : this.dataPrice);
+      this.value.price ? this.dataPrice = this.value.price : this.dataPrice = [];
     }
   },
-  // computed: {
-  //   getDistanceToDocumentTop(){
-  //     // let elem = this.$refs.filterResult;
-  //     //     if(elem){
-  //     //       console.log(elem.$el);
-  //     //       console.log(this.disTop);
-  //     //       return window.scrollY + elem.$el.getBoundingClientRect().top + 30;
-  //     //     } else {
-  //     //       return this.$refs.filterResult
-  //     //     }
-  //   }
-  // },
   methods: {
     toggleFunction(e) {
       this.clearFilters();
       this.locationResult(e.target);
     },
     clearFilters() {
-      this.dataF = {
-        brand: [],
-        category_id: [],
-        collection: []
-      };
+      if(this.$route.name.match('catalog-brands')){
+            this.dataF.category_id = []
+            this.dataF.collection = []
+      } else if(this.$route.name.match('catalog-collections')){
+            this.dataF.category_id = [] 
+      } else {
+            this.dataF = {
+            brand: [],
+            category_id: [],
+            collection: []
+          };
+      }
+
       this.dataPrice = [];
       for (const key in this.filters.filters) {
-        // let f = [];
-        // if (this.value?.f[this.filters.filters[key]["filters_id"]]){
-        //   f = this.value.f[this.filters.filters[key]["filters_id"]];
-        // } 
-        // console.log(this.filters.filters[key]["filters_id"], f);
         this.$set(this.dataF, this.filters.filters[key]["filters_id"], []);
       }
       this.resultData = {};
@@ -151,22 +190,15 @@ export default {
         collection: this.value.collection ? this.value.collection : [],
         category_id: this.value.category_id ? this.value.category_id : [],
       };
-      this.dataPrice = this.value.price ? this.value.price : [];
+      // console.log('initvalue ' + !this.value?.price)
+      this.dataPrice = this.value?.price ? this.value?.price : [];
       for (const key in this.filters.filters) {
         let f = [];
         if (this.value?.f[this.filters.filters[key]["filters_id"]]) {
           f = this.value.f[this.filters.filters[key]["filters_id"]];
         }
-        // console.log(this.filters.filters[key]["filters_id"], f);
         this.$set(this.dataF, this.filters.filters[key]["filters_id"], f);
       }
-      // for (const key in this.filters.brands) {
-      //   if(this.filters.brands[key].brand){
-      //     let f = [];
-      //     if (this.value?.f[this.filters.brands[key].brand]) f = this.value.f[this.filters.brands[key].brand];
-      //     this.$set(this.dataF["brands"], this.filters.brands[key].brand, f);
-      //   }
-      // }
     },
     onUpdateData() {
       let r = {};
@@ -175,7 +207,6 @@ export default {
           r[i] = this.dataF[i];
         }
       }
-
 
       // Подгрузка товаров
       this.$emit('input', {
@@ -206,11 +237,7 @@ export default {
             r[i] = this.dataF[i];
           }
         }
-
-        // console.log(r);
-        // this.onUpdateData();
-
-
+        // this.value?.price ? this.dataPrice = this.value?.price : this.dataPrice = [];
         let filtersCount = {
           category_id: this.$route.params.id ? this.$route.params.id : '',
           brand: this.dataF.brand.length !== 0 ? this.dataF.brand : {},
@@ -218,14 +245,6 @@ export default {
           // category_id: this.dataF.category_id.length !== 0 ? this.dataF.category_id : {},
           price: this.dataPrice.length !== 0 ? this.dataPrice : {}
         }
-
-        // if (this.$route.query.q) Object.assign(filtersCount, {
-        //   "OR": [
-        //     { id: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
-        //     { name: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
-        //     { vendor: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } },
-        //     { factory_article: { condition: "LIKE", value: "%" + this.$route.query.q + "%" } }]
-        // });
 
         let res, resPromote;
         if (this.$route.name.match('catalog')) {
@@ -242,8 +261,11 @@ export default {
           } catch (error) {
             console.error(error);
           }
+          
           this.loading = false;
         }
+
+
         if (this.$route.name.match('promote')) {
           this.loading = true;
           try {
@@ -259,6 +281,7 @@ export default {
                 },
               }
             });
+            this.updateFiltersData(resPromote.data.data);
           } catch (error) {
             console.error(error);
           }
@@ -272,9 +295,9 @@ export default {
     }, 0),
     updateFiltersData(data) {
       const updatedData = data.filters;
-      // console.log('updatedData' + data);
+      // console.log(data);
       // console.log(this.filters);
-      // console.log(data)
+      // console.log(data);
       for (const el of this.filters.filters) {
         if (el.type == 1) {
           const updatedFilter = updatedData.find(e => e.filters_id == el.filters_id);
@@ -298,7 +321,11 @@ export default {
                     // console.log(+key == +el.filters_id ? [key, el.filters_id] : false)
                     // console.log(this.dataF[key]);
                   } else {
-                    r = false
+                    if(Object.values(this.dataF).find(item => item.length > 0)){
+                  r = false
+                } else {             
+                  r = true
+                }
                   }
                   // console.log(r);
                 }
@@ -310,11 +337,20 @@ export default {
                 let r;
                 for (const key in this.dataF) {
                   if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
-                    r = true
+                    if(this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].find(item => item == filterEl.value)){
+                      r = false
+                    } else {
+                      r = true
+                      break;
+                    }
                     // console.log(this.dataF[key]);
-                    break;
+
                   } else {
-                    r = false
+                    if(Object.values(this.dataF).find(item => item.length > 0)){
+                      r = false
+                    } else {             
+                      r = true
+                    }
                   }
                   // console.log(r);
                 }
@@ -339,11 +375,20 @@ export default {
             let r;
             for (const key in this.dataF) {
               if (this.dataF[key] && this.dataF[key].length > 0 && key !== "brand") {
-                r = true
+                if(this.dataF.brand.find(item => item == el.brand)){
+                      r = false
+                    } else {
+                      r = true
+                      break;
+                    }
                 // console.log(this.dataF[key]);
-                break;
+
               } else {
-                r = false
+                if(Object.values(this.dataF).find(item => item.length > 0)){
+                  r = false
+                } else {             
+                  r = true
+                }
               }
               // console.log(r);
             }
@@ -363,11 +408,20 @@ export default {
             let r;
             for (const key in this.dataF) {
               if (this.dataF[key] && this.dataF[key].length > 0 && key !== "collection") {
-                r = true
+                if(this.dataF.collection.find(item => item == el.collection)){
+                      r = false
+                    } else {
+                      r = true
+                      break;
+                    }
                 // console.log(this.dataF[key]);
-                break;
+
               } else {
-                r = false
+                if(Object.values(this.dataF).find(item => item.length > 0)){
+                  r = false
+                } else {             
+                  r = true
+                }
               }
               // console.log(r);
             }

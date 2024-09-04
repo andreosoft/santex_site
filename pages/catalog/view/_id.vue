@@ -129,7 +129,7 @@
                   <td>
                     <nuxt-link 
                     class="underlined pointer" 
-                    :to="`/catalog?filters=%7B%22brand%22%3A%5B%22${data.brand}%22%5D%7D&f=%7B%7D&page=0`"
+                    :to="`/catalog/brands?filters=%7B%22brand%22%3A%5B%22${data.brand}%22%5D%7D&f=%7B%7D&page=0`"
                     >
                       {{ data.brand }}
                   </nuxt-link>
@@ -142,7 +142,7 @@
                   <td>
                     <nuxt-link 
                     class="underlined pointer" 
-                    :to="`/catalog?filters=%7B%22brand%22%3A%5B%22${data.brand}%22%5D,%22collection%22%3A%5B%22${data.collection}%22%5D%7D&f=%7B%7D&page=0`">
+                    :to="`/catalog/collections?filters=%7B%22brand%22%3A%5B%22${data.brand}%22%5D,%22collection%22%3A%5B%22${data.collection}%22%5D%7D&f=%7B%7D&page=0`">
                       {{ data.collection }}
                     </nuxt-link>
                   </td>

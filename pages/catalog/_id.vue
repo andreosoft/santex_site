@@ -6,9 +6,9 @@
     <base-catalog 
       :data="data" 
       :loading="loading" 
-      :dataFilters="dataFilters" 
+      :dataFilters="$route.params.id ? dataFilters : activeFilters" 
       :valueFilters="valueFilters" 
-      :activeFilters="activeFilters"
+      :activeFilters="$route.params.id ? activeFilters : {}"
       :pager="pager"
       :sort="sort" 
       @update-data="valueFilters = $event"/>
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import {getData} from "@/pages/catalog/getData";
+import { getDataCatalog } from "@/pages/catalog/getDataCatalog";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
 export default {
   components: {BaseCatalog},
@@ -29,7 +29,7 @@ export default {
     }
   },
   async asyncData({route, $axios, $config, error}) {
-    return await getData({route, $axios, $config, error});
+    return await getDataCatalog({route, $axios, $config, error});
   },
   watch: {
     valueFilters(v) {
@@ -48,7 +48,7 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getData({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error});
+        let p = await getDataCatalog({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error});
         this.loading = false;
         this.data = p.data;
         this.activeFilters = p.activeFilters;

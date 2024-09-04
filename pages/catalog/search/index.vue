@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import { getData } from "@/pages/catalog/getData";
+import { getDataSearch } from "@/pages/catalog/search/getDataSearch";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
 
 export default {
@@ -47,7 +47,7 @@ export default {
     };
   },
   async asyncData({ route, $axios, $config, error }) {
-    return await getData({ route, $axios, $config, error });
+    return await getDataSearch({ route, $axios, $config, error })
   },
   methods: {
     submitSearch() {
@@ -75,7 +75,7 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getData({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error });
+        let p = await getDataSearch({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error });
         this.loading = false;
         this.data = p.data;
         // this.dataFilters = p.dataFilters;

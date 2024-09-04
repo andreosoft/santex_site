@@ -31,11 +31,6 @@
         toggleOpen: false
       }
     },
-    watch: {
-      "$route"() {
-        this.toggleOpen = false
-      }
-    },
     computed: {
       v: {
         get() {
