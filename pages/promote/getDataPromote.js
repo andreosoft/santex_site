@@ -92,7 +92,7 @@ export async function getDataPromote({ route, $axios, $config, error }) {
     }]
     const loading = false;
   
-  console.log(activeFilters);
+  // console.log(activeFilters);
   
     return {
       sort,
