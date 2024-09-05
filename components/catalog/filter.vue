@@ -222,6 +222,9 @@ export default {
         if (this.$route.name.match('catalog-search')) {
           this.dy = this.dy - 112;
         }
+        if(this.$route.name.match('promote')){
+          this.dy = this.dy - 96;
+        }
 
 
         let r = {};

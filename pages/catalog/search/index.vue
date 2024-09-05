@@ -78,8 +78,23 @@ export default {
         let p = await getDataSearch({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error });
         this.loading = false;
         this.data = p.data;
-        // this.dataFilters = p.dataFilters;
-        // this.valueFilters = p.valueFilters;
+
+        
+        for(const key in this.dataFilters) {
+          if(key == 'f') {
+            if(Object.values(this.dataFilters[key]).length > 0) {
+              break;
+            }
+          } else if (this.dataFilters[key].length > 0) {
+            break;  
+          } else {
+            this.dataFilters = p.dataFilters
+          }
+        }
+        window.scrollTo(0,0);
+
+
+
         this.activeFilters = p.activeFilters;
         this.pager = p.pager;
         this.searchInput = p.searchInput;
