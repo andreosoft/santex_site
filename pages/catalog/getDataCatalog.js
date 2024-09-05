@@ -1,5 +1,6 @@
 import { breadcrumbs } from '@/pages/catalog/modules/breadcrumbs';
-export async function getDataCatalog({ route, $axios, $config, error }) {
+export async function getDataCatalog({ route, $axios, $config, error, $store }) {
+  // console.log($store);
   let pager = { page: 0, count: 0, limit: 30 };
   pager.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
@@ -76,7 +77,7 @@ export async function getDataCatalog({ route, $axios, $config, error }) {
 
   let resFilters;
   try {
-    if (res && category_id) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { 
+    if (res && category_id && !$store) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { 
       filters: filtersOnly
      } });
   } catch (e) {

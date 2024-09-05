@@ -3,12 +3,13 @@
     <v-divider class="mb-8" />
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
+    <!-- {{ getFiltersPages }} -->
     <base-catalog 
       :data="data" 
       :loading="loading" 
-      :dataFilters="$route.params.id ? dataFilters : activeFilters" 
+      :dataFilters="dataFilters" 
       :valueFilters="valueFilters" 
-      :activeFilters="$route.params.id ? activeFilters : {}"
+      :activeFilters="activeFilters"
       :pager="pager"
       :sort="sort" 
       @update-data="valueFilters = $event"/>
@@ -21,6 +22,7 @@
 <script>
 import { getDataCatalog } from "@/pages/catalog/getDataCatalog";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
+import { mapGetters } from 'vuex';
 export default {
   components: {BaseCatalog},
   data() {
@@ -28,8 +30,18 @@ export default {
       loading: true,
     }
   },
-  async asyncData({route, $axios, $config, error}) {
-    return await getDataCatalog({route, $axios, $config, error});
+  computed: {
+    ...mapGetters({ getFiltersPages: 'catalog/getFiltersPages'}),
+  },
+  async asyncData({route, $axios, $config, error, $store}) {
+    return await getDataCatalog({route, $axios, $config, error, $store});
+  },
+  mounted() {
+    let obj = Object.assign({}, this.dataFilters);
+    if(Object.keys(this.getFiltersPages).length == 0) {
+      // console.log('qwewqewqeqweqweqweqwe')
+      // this.$store.commit('catalog/updateFilters', obj);
+    }
   },
   watch: {
     valueFilters(v) {
@@ -48,7 +60,7 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getDataCatalog({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error});
+        let p = await getDataCatalog({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error,});
         this.loading = false;
         this.data = p.data;
         this.activeFilters = p.activeFilters;

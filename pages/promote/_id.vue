@@ -57,7 +57,7 @@ export default {
       if (v.category_id && v.category_id.length > 0) {
         filters.category_id = v.category_id;
       }
-      console.log(v);
+      // console.log(v);
       this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
     },
     "$route": {

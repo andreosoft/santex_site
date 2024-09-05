@@ -1,18 +1,11 @@
 <template>
   <div class="parent">
-    <catalog-filterResult ref="filterResult" :loading="loading" @filterResult="onUpdateData" :locationRes="dy"
-      :resultData="resultData" />
-      <!-- <br>
-      {{ value }}
-      <br>
-      {{ dataPrice }}
-      {{ [minPrice, maxPrice] }}
-      <br>
-      {{ [activeFilters?.price?.min_price, activeFilters?.price?.max_price] }} -->
+    <catalog-filterResult ref="filterResult" :loading="loading" @filterResult="onUpdateData" 
+      :locationRes="dy" :resultData="resultData" />
       <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice"
-        :max="maxPrice" 
-        :min="minPrice" />
+        :max="filters?.price?.max_price" 
+        :min="filters?.price?.min_price" />
       <catalog-brands 
         v-if="filters.brands && filters.brands.length > 1" @location="locationResult" 
         :params="filterBrand" v-model="dataF.brand"  />
@@ -66,8 +59,8 @@ export default {
         category_id: [],
         collection: []
       },
-      minPrice: this.filters?.price?.min_price,
-      maxPrice: this.filters?.price?.max_price,
+      // minPrice: this.filters?.price?.min_price,
+      // maxPrice: this.filters?.price?.max_price,
       dataPrice: [],
       dy: 0,
       resultData: {},
@@ -97,8 +90,8 @@ export default {
   mounted() {
     if (this.activeFilters && Object.keys(this.activeFilters).length > 0) {
       // console.log('Restart');
-      this.maxPrice = this.activeFilters?.price?.max_price;
-      this.minPrice = this.activeFilters?.price?.min_price;
+      // this.maxPrice = this.activeFilters?.price?.max_price;
+      // this.minPrice = this.activeFilters?.price?.min_price;
       this.updateFiltersData(this.activeFilters);
     }
     this.value?.price ? this.dataPrice = this.value?.price : this.dataPrice = [];
@@ -115,31 +108,31 @@ export default {
     //   })
   },
   watch: {
-    activeFilters() {
-      if (this.activeFilters && Object.keys(this.activeFilters).length > 0) {
-        for(const key in this.value){
-                if(key == 'f'){
-                  if(Object.values(this.value[key]).length > 0){
-                    // if(this.value?.price.length == 0){
-                      this.minPrice = this.activeFilters?.price?.min_price;
-                      this.maxPrice = this.activeFilters?.price?.max_price;
-                    // }
-                    // update = true;
-                  }
-                } else if(key !== 'price') {
-                  if(Array.isArray(this.value[key]) && this.value[key].length > 0){
-                    // console.log(this.activeFilters?.price?.min_price);
-                    // console.log(this.activeFilters?.price?.max_price);
-                    // if(this.value?.price.length == 0){
-                      this.minPrice = this.activeFilters?.price?.min_price;
-                      this.maxPrice = this.activeFilters?.price?.max_price;
-                    // }
-                    // update = true;
-                  }
-                }
-              }
-      }
-    },
+    // activeFilters() {
+    //   if (this.activeFilters && Object.keys(this.activeFilters).length > 0) {
+    //     for(const key in this.value){
+    //             if(key == 'f'){
+    //               if(Object.values(this.value[key]).length > 0){
+    //                 // if(this.value?.price.length == 0){
+    //                   this.minPrice = this.activeFilters?.price?.min_price;
+    //                   this.maxPrice = this.activeFilters?.price?.max_price;
+    //                 // }
+    //                 // update = true;
+    //               }
+    //             } else if(key !== 'price') {
+    //               if(Array.isArray(this.value[key]) && this.value[key].length > 0){
+    //                 // console.log(this.activeFilters?.price?.min_price);
+    //                 // console.log(this.activeFilters?.price?.max_price);
+    //                 // if(this.value?.price.length == 0){
+    //                   this.minPrice = this.activeFilters?.price?.min_price;
+    //                   this.maxPrice = this.activeFilters?.price?.max_price;
+    //                 // }
+    //                 // update = true;
+    //               }
+    //             }
+    //           }
+    //   }
+    // },
     filters: function () { 
       this.initValueFilters();
     },

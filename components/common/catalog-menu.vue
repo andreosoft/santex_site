@@ -54,7 +54,7 @@
                       >
                         <nuxt-link 
                         class="underlined" 
-                        :to="`/catalog?filters=%7B%22brand%22%3A%5B%22${el}%22%5D%7D&f=%7B%7D&page=0`"
+                        :to="`/catalog/brands?filters=%7B%22brand%22%3A%5B%22${encodeURIComponent(el)}%22%5D%7D&f=%7B%7D&page=0`"
                         >{{ el }}
                         </nuxt-link>
                       </v-col>
