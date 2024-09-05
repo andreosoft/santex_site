@@ -1,6 +1,6 @@
 import { breadcrumbs } from '@/pages/catalog/modules/breadcrumbs';
-export async function getDataCatalog({ route, $axios, $config, error, $store }) {
-  // console.log($store);
+export async function getDataCatalog({ route, $axios, $config, error, store }) {
+
   let pager = { page: 0, count: 0, limit: 30 };
   pager.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
@@ -14,28 +14,28 @@ export async function getDataCatalog({ route, $axios, $config, error, $store }) 
 
   let res;
 
-    try {
-      res = await $axios.get($config.baseURL + '/api/site/catalog', {
-        params: {
-          f: f,
-          filters: filters,
-          sort: sort,
-          pager: pager
-        }
-      });
-    } catch (e) {
-      console.error(e);
-      return error({ statusCode: 404, message: "Страница не найдена" });
-    }
+  try {
+    res = await $axios.get($config.baseURL + '/api/site/catalog', {
+      params: {
+        f: f,
+        filters: filters,
+        sort: sort,
+        pager: pager
+      }
+    });
+  } catch (e) {
+    console.error(e);
+    return error({ statusCode: 404, message: "Страница не найдена" });
+  }
   // console.log(res?.data?.data?.length);
   if (res?.data?.data?.length == 0 || !res?.data?.data) {
     return error({ statusCode: 404, message: "Страница не найдена" });
   }
 
   const data = res ? res.data.data : [];
-  
+
   let resCat;
-  try { if (category_id && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id); } catch (e) { console.error(e);  }
+  try { if (category_id && res) resCat = await $axios.get($config.baseURL + '/api/site/categories/' + category_id); } catch (e) { console.error(e); }
 
 
   const valueFilters = {
@@ -55,14 +55,14 @@ export async function getDataCatalog({ route, $axios, $config, error, $store }) 
   // Активные фильтры в каталоге
   let resActiveFilters;
   try {
-    if (res && ((addFilters && Object.keys(addFilters).length > 0) || (f && Object.keys(f).length > 0))){
+    if (res && ((addFilters && Object.keys(addFilters).length > 0) || (f && Object.keys(f).length > 0))) {
       resActiveFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', {
         params: {
           f: f,
           filters: activeFiltersOnly
         }
       });
-    } 
+    }
   } catch (e) {
     console.error(e)
     return error({ statusCode: 404, message: "Страница не найдена" });
@@ -77,9 +77,11 @@ export async function getDataCatalog({ route, $axios, $config, error, $store }) 
 
   let resFilters;
   try {
-    if (res && category_id && !$store) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', { params: { 
-      filters: filtersOnly
-     } });
+    if (res && category_id) resFilters = await $axios.get($config.baseURL + '/api/site/catalog/filters', {
+      params: {
+        filters: filtersOnly
+      }
+    });
   } catch (e) {
     console.error(e)
     return error({ statusCode: 404, message: "Страница не найдена" });

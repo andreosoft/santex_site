@@ -4,15 +4,8 @@
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
     <!-- {{ getFiltersPages }} -->
-    <base-catalog 
-      :data="data" 
-      :loading="loading" 
-      :dataFilters="dataFilters" 
-      :valueFilters="valueFilters" 
-      :activeFilters="activeFilters"
-      :pager="pager"
-      :sort="sort" 
-      @update-data="valueFilters = $event"/>
+    <base-catalog :data="data" :loading="loading" :dataFilters="dataFilters" :valueFilters="valueFilters"
+      :activeFilters="activeFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event" />
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -24,21 +17,22 @@ import { getDataCatalog } from "@/pages/catalog/getDataCatalog";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
 import { mapGetters } from 'vuex';
 export default {
-  components: {BaseCatalog},
+  components: { BaseCatalog },
   data() {
-    return { 
+    return {
       loading: true,
     }
   },
   computed: {
-    ...mapGetters({ getFiltersPages: 'catalog/getFiltersPages'}),
+    ...mapGetters({ getFiltersPages: 'catalog/getFiltersPages' }),
   },
-  async asyncData({route, $axios, $config, error, $store}) {
-    return await getDataCatalog({route, $axios, $config, error, $store});
+  async asyncData(params) {
+    console.log(params);
+    return await getDataCatalog(params);
   },
   mounted() {
     let obj = Object.assign({}, this.dataFilters);
-    if(Object.keys(this.getFiltersPages).length == 0) {
+    if (Object.keys(this.getFiltersPages).length == 0) {
       // console.log('qwewqewqeqweqweqweqwe')
       // this.$store.commit('catalog/updateFilters', obj);
     }
@@ -60,7 +54,7 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getDataCatalog({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error,});
+        let p = await getDataCatalog({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error, });
         this.loading = false;
         this.data = p.data;
         this.activeFilters = p.activeFilters;
