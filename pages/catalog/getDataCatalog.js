@@ -1,6 +1,6 @@
 import { breadcrumbs } from '@/pages/catalog/modules/breadcrumbs';
 export async function getDataCatalog({ route, $axios, $config, error, store }) {
-
+  // console.log(store.getters['catalog/getFiltersPages']);
   let pager = { page: 0, count: 0, limit: 30 };
   pager.page = route.query.page ?? 0;
   const sort = route.query.sort ? JSON.parse(route.query.sort) : { key: "price", order: "ASC" };
@@ -89,6 +89,10 @@ export async function getDataCatalog({ route, $axios, $config, error, store }) {
 
   let dataFilters = resFilters ? resFilters.data.data : {};
 
+  // if (Object.keys(store.getters['catalog/getFiltersPages'].filters).length == 0) {
+  //   console.log('GetData update')
+  //   store.commit('catalog/updateFilters', {id: category_id, type: 'catalog', filters: dataFilters});
+  // }
   const title = resCat ? resCat.data.data.name : '';
   pager = res ? res.data.pager : '';
 

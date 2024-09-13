@@ -25,7 +25,7 @@
       <div v-if="view == 0">
         <div class="d-flex flex-wrap">
           <div class="d-flex justify-center align-center pa-4 s-plate-brend" style="" v-for="(el, i) in activeData" :key="i">
-            <nuxt-link style="max-width: 100%;" :to="'/catalog/search?q=' + el.name">
+            <nuxt-link style="max-width: 100%;" :to="`/catalog/brands?filters=%7B%22brand%22%3A%5B%22${encodeURIComponent(el.name)}%22%5D%7D&f=%7B%7D&page=0`">
               <v-img v-if="el.images && el.images[0]" contain :src="$config.baseImageURL + el.images[0]"/>
               <v-img v-else contain :src="'/black-square.jpg'"/>
               <div class="s-plate-brend-btn" style="">
@@ -38,7 +38,7 @@
       <div v-else>
         <div class="d-flex flex-wrap">
           <div class="mb-4" style="width: 250px;" v-for="(el, i) in activeData" :key="i">
-            <nuxt-link :to="'/catalog/search?q=' + el.name">{{ el.name }}</nuxt-link>
+            <nuxt-link :to="`/catalog/brands?filters=%7B%22brand%22%3A%5B%22${encodeURIComponent(el.name)}%22%5D%7D&f=%7B%7D&page=0`">{{ el.name }}</nuxt-link>
           </div>
         </div>
       </div>

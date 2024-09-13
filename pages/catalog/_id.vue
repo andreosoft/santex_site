@@ -4,8 +4,15 @@
     <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
     <h1>{{ title }}</h1>
     <!-- {{ getFiltersPages }} -->
-    <base-catalog :data="data" :loading="loading" :dataFilters="dataFilters" :valueFilters="valueFilters"
-      :activeFilters="activeFilters" :pager="pager" :sort="sort" @update-data="valueFilters = $event" />
+    <base-catalog 
+      :data="data" 
+      :loading="loading" 
+      :dataFilters="dataFilters" 
+      :valueFilters="valueFilters"
+      :activeFilters="activeFilters" 
+      :pager="pager" 
+      :sort="sort" 
+      @update-data="valueFilters = $event" />
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -27,15 +34,16 @@ export default {
     ...mapGetters({ getFiltersPages: 'catalog/getFiltersPages' }),
   },
   async asyncData(params) {
-    console.log(params);
+    // console.log(params);
     return await getDataCatalog(params);
   },
   mounted() {
-    let obj = Object.assign({}, this.dataFilters);
-    if (Object.keys(this.getFiltersPages).length == 0) {
-      // console.log('qwewqewqeqweqweqweqwe')
-      // this.$store.commit('catalog/updateFilters', obj);
-    }
+  //   console.log(Object.keys(this.getFiltersPages.filters).length);
+  //   console.log('Mounted update')
+    // if (Object.keys(this.getFiltersPages.filters).length == 0) {
+    //   const obj = Object.assign({}, this.dataFilters);
+    //   this.$store.commit('catalog/updateFilters', {id: this.$route.params.id, type: 'catalog', filters: obj});
+    // }
   },
   watch: {
     valueFilters(v) {
@@ -54,7 +62,7 @@ export default {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getDataCatalog({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error, });
+        let p = await getDataCatalog({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error, store: this.$store});
         this.loading = false;
         this.data = p.data;
         this.activeFilters = p.activeFilters;

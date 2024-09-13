@@ -66,7 +66,7 @@ export default {
       showPopupConsult: false,
       leftLinks: [
         {
-          to: "/catalog/allcategories",
+          to: "/allcategories",
           title: "Каталог",
         },
         {

@@ -1,5 +1,9 @@
 export const state = ()=>({
-    filtersPages: {},
+    filtersPages: {
+        id: '',
+        type: '',
+        filters: {},
+    },
 })
 
 export const getters = {
@@ -10,7 +14,9 @@ export const getters = {
 
 export const mutations = {
     updateFilters(state, value){
-        state.filtersPages = value
+        state.filtersPages.id = value.id
+        state.filtersPages.type = value.type
+        state.filtersPages.filters = value.filters
     }
 }
 

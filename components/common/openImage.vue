@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-row class="parent-fullimage">
-            <v-col class="col-2 d-flex flex-column align-center overflow-scroll left-menu">
+            <v-col class="col-2 d-flex flex-column align-center overflow-y-auto overflow-x-hidden left-menu">
                 <v-card 
                 v-for="(el, i) in images" 
                 :key="i" 
@@ -112,7 +112,6 @@ computed: {
                 width: 140px;
                 left: 0;
                 top: 0;
-                overflow: scroll;
             }
             .middle-menu{
                 height: calc(100% - 48px);
