@@ -45,7 +45,7 @@
             </div>
           </div>
           <div class="s-header-menu-links pt-2" @click="disableMenu($event)">
-            <nuxt-link class="s-main-link" to="/brends">Бренды</nuxt-link>
+            <nuxt-link class="s-main-link" to="/brands">Бренды</nuxt-link>
             <nuxt-link class="s-main-link" to="/blog">Блог</nuxt-link>
             <nuxt-link class="s-main-link" to="/designers">Наши дизайнеры</nuxt-link>
             <nuxt-link class="s-main-link" to="/consulting">Запись на консультацию</nuxt-link>

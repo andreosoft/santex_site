@@ -21,13 +21,12 @@
     <base-catalog
     :loading="loading"
     :data="data"
-    :dataFilters="dataFilters"
+    :dataFilters="getFiltersPages.filters"
+    :activeFilters="getActiveFilters"
     :valueFilters="valueFilters"
-    :activeFilters="activeFilters"
     :pager="pager"
     :sort="sort"
-    @update-filters="dataFilters = $event" 
-    @update-data="valueFiltersFinal" />
+    @update-data="valueFilters = $event" />
     <div class="text-center mt-10 ">
       <common-pagination :value="pager" />
     </div>
@@ -37,7 +36,7 @@
 <script>
 import { getDataSearch } from "@/pages/catalog/search/getDataSearch";
 import BaseCatalog from "@/components/catalog/base-catalog.vue";
-
+import { mapGetters } from 'vuex';
 export default {
   components: { BaseCatalog },
   data() {
@@ -46,16 +45,39 @@ export default {
       search: ''
     };
   },
-  async asyncData({ route, $axios, $config, error }) {
-    return await getDataSearch({ route, $axios, $config, error })
+  computed: {
+    ...mapGetters({
+      getFiltersPages: 'catalog/getFiltersPages',
+      getId: 'catalog/getCatId',
+      getActiveFilters: "catalog/getActiveFilters",
+    }),
+  },
+  beforeDestroy() {
+    if(this.$route.name.match('catalog-brands') || this.$route.name.match('catalog-collections')) {
+      // console.log('Страница брендов или коллекций')
+      this.$store.commit("catalog/updateActiveFilters", {});
+      // this.$store.commit("catalog/updateQueryFilters", { f: {}, filters: {} });
+    } else if (this.getFiltersPages.id.id == this.$route.params.id || this.getFiltersPages.id.id == this.$route.query.q) {
+      // console.log("updateQueryFilters");
+      this.$store.commit("catalog/updateActiveFilters", {});
+      this.$store.commit("catalog/updateQueryFilters", { f: {}, filters: {} });
+    } else {
+      // console.log("clear all");
+      this.$store.commit("catalog/clearFilters");
+    }
+  },
+  async asyncData(params) {
+    return await getDataSearch(params)
   },
   methods: {
     submitSearch() {
       if(this.search.trim()){
         this.$router.push({ path: '/catalog/search', query: { q: this.search } })
       }
-    },
-    valueFiltersFinal(v) {
+    }
+  },
+  watch: {
+    valueFilters(v) {
       let filters = {};
       if (v.price && v.price.length > 0) {
         filters.price = v.price;
@@ -70,37 +92,37 @@ export default {
         this.$router.push({ query: Object.assign({}, this.$route.query, { filters: JSON.stringify(filters), f: JSON.stringify(v.f), page: 0 }) });
       }
     },
-  },
-  watch: {
     "$route": {
       async handler() {
         this.loading = true;
-        let p = await getDataSearch({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error });
+        let p = await getDataSearch({ route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error, store: this.$store });
         this.loading = false;
         this.data = p.data;
-
-        
-        for(const key in this.dataFilters) {
-          if(key == 'f') {
-            if(Object.values(this.dataFilters[key]).length > 0) {
-              break;
-            }
-          } else if (this.dataFilters[key].length > 0) {
-            break;  
-          } else {
-            this.dataFilters = p.dataFilters
-          }
-        }
+        // console.log('route')
+        // for(const key in this.dataFilters) {
+        //   if(key == 'f') {
+        //     if(Object.values(this.dataFilters[key]).length > 0) {
+        //       break;
+        //     }
+        //   } else if (this.dataFilters[key].length > 0) {
+        //     break;
+        //   } else {
+        //     this.dataFilters = p.dataFilters
+        //   }
+        // }
         window.scrollTo(0,0);
 
-
-
-        this.activeFilters = p.activeFilters;
+        // this.activeFilters = p.activeFilters;
         this.pager = p.pager;
         this.searchInput = p.searchInput;
         this.search = '';
       },
     },
+    '$route.query.q'() {
+      this.$store.commit("catalog/updateActiveFilters", {});
+      this.$store.commit("catalog/updateQueryFilters", { f: {}, filters: {} });
+      this.valueFilters = { "f":{} };
+  }
   }
 }
 </script>

@@ -74,7 +74,7 @@ export default {
           title: "Распродажа",
         },
         {
-          to: "/brends",
+          to: "/brands",
           title: "Бренды",
         },
         {

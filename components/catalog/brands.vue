@@ -1,8 +1,8 @@
 <template>
     <div>
       <b>Бренды</b>
-      <div class="a-catalog-check1" :class="{ close: !toggleOpen }">
-        <div v-for="(el, i) of params" :key="i">
+      <div class="a-catalog-check1">
+        <div v-for="(el, i) of paramsData" :key="i">
           <v-checkbox 
           v-if="el.brand" 
           :disabled="el.disabled"
@@ -17,7 +17,12 @@
         </div>
       </div>
       <div v-if="needExpand" class="mt-2">
-        <v-btn small plain @click="toggleOpen = !toggleOpen">{{ toggleOpen ? 'Скрыть': 'Показать все' }}</v-btn>
+        <v-btn 
+          small 
+          plain 
+          @click="paramsData.length <= 4 ? paramsData = paramsFilter() : paramsData = paramsFilter().slice(0, 4)">
+          {{ paramsData.length <= 4 ? 'Показать все' : 'Скрыть' }}
+        </v-btn>
       </div>
     </div>
   </template>
@@ -31,6 +36,12 @@
     data() {
       return {
         toggleOpen: false,
+        paramsData: this.paramsFilter().slice(0, 4)
+      }
+    },
+    methods: {
+      paramsFilter() {
+        return this.params.filter(el => el.brand);
       }
     },
     computed: {
@@ -49,16 +60,3 @@
     }
   };
   </script>
-  
-  <style lang="scss">
-  .a-catalog-check1 {
-    overflow: hidden;
-  
-    &.close {
-      max-height: 130px;
-    }
-  }
-  
-  
-  </style>
-  

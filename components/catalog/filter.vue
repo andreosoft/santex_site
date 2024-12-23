@@ -1,13 +1,13 @@
 <template>
   <div class="parent">
-    <catalog-filterResult ref="filterResult" :loading="loading" @filterResult="onUpdateData" 
+    <catalog-filterResult ref="filterResult" :loading="loading" @filterResult="onUpdateData"
       :locationRes="dy" :resultData="resultData" />
       <div class="space-check">
       <catalog-price @location="locationResult" title="Цена, руб." v-model="dataPrice"
-        :max="filters?.price?.max_price" 
+        :max="filters?.price?.max_price"
         :min="filters?.price?.min_price" />
-      <catalog-brands 
-        v-if="filters.brands && filters.brands.length > 1" @location="locationResult" 
+      <catalog-brands
+        v-if="filters.brands && filters.brands.length > 1" @location="locationResult"
         :params="filterBrand" v-model="dataF.brand"  />
       <v-divider v-if="filters.brands && filters.brands.length > 1" class="my-4" />
       <catalog-collections class="mt-4" v-if="filters.collections && filters.collections.length > 1"
@@ -133,7 +133,7 @@ export default {
     //           }
     //   }
     // },
-    filters: function () { 
+    filters: function () {
       this.initValueFilters();
     },
     value: function () {
@@ -143,7 +143,7 @@ export default {
       this.value.category_id ? this.dataF.category_id = this.value.category_id : this.dataF.category_id = [];
       // console.log('value updated');
       // let update;
-          
+
       // this.minPrice = this.activeFilters?.price?.min_price;
       // this.maxPrice = this.activeFilters?.price?.max_price;
     },
@@ -158,24 +158,30 @@ export default {
       this.locationResult(e.target);
     },
     clearFilters() {
+      this.dataPrice = [];
+
       if(this.$route.name.match('catalog-brands')){
             this.dataF.category_id = []
             this.dataF.collection = []
+            this.$store.commit('catalog/updateQueryFilters', {f: {}, filters: {"brand": this.dataF.brand[0]}})
       } else if(this.$route.name.match('catalog-collections')){
-            this.dataF.category_id = [] 
+            this.dataF.category_id = []
+            this.$store.commit('catalog/updateQueryFilters', {f: {}, filters: {"brand": this.dataF.brand[0], "collection": this.dataF.collection[0]}})
       } else {
             this.dataF = {
             brand: [],
             category_id: [],
             collection: []
-          };
-      }
+            };
+            this.$store.commit('catalog/updateQueryFilters', {f: {}, filters: {}})
+        }
 
-      this.dataPrice = [];
-      for (const key in this.filters.filters) {
-        this.$set(this.dataF, this.filters.filters[key]["filters_id"], []);
+        for (const key in this.filters.filters) {
+            this.$set(this.dataF, this.filters.filters[key]["filters_id"], []);
       }
-      this.resultData = {};
+          this.resultData = {};
+
+        this.$store.commit('catalog/updateActiveFilters', {})
     },
     initValueFilters() {
       this.dataF = {
@@ -257,7 +263,7 @@ export default {
           } catch (error) {
             console.error(error);
           }
-          
+
           this.loading = false;
         }
 
@@ -291,68 +297,115 @@ export default {
     }, 0),
     updateFiltersData(data) {
       const updatedData = data.filters;
-      // console.log(data);
-      // console.log(this.filters);
-      // console.log(data);
       for (const el of this.filters.filters) {
         if (el.type == 1) {
           const updatedFilter = updatedData.find(e => e.filters_id == el.filters_id);
           if (updatedFilter) {
-            for (const filterEl of el.filters_data) {
-              // console.log(filterEl.value)
+            // console.log(updatedFilter);
+            // console.log('yes filter ' + el.filters_id);
+            for (let ind = 0; ind < el.filters_data.length; ind++) {
+              const filterEl = el.filters_data[ind];
+              // console.log(el.filters_data[ind]);
+
               if (updatedFilter.filters_data.find(e => e.value == filterEl.value)) {
-                filterEl.disabled = false;
+                // filterEl.disabled = false;
+                this.$store.commit('catalog/updateFiltersProperty', {
+                  key1: "filters", 
+                  key2: el.filters_id, 
+                  key3: ind, 
+                  value: false
+                })
+                // console.log('yes filter ' + el.filters_id, filterEl.value);
+                continue;
               } else {
-                let r;
                 // console.log(el.filters_id)
                 for (const key in this.dataF) {
                   // console.log(el.filters_id)
                   if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
                     if(this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].find(item => item == filterEl.value)){
-                      r = false
+                      this.$store.commit('catalog/updateFiltersProperty', {
+                        key1: "filters", 
+                        key2: el.filters_id, 
+                        key3: ind, 
+                        value: false
+                      })
+                      // console.log('yes filter dataF' + el.filters_id, filterEl.value);
+                      continue;
                     } else {
-                      r = true
-                      break;
+                      // console.log(' dataF no el filters_id ' + el.filters_id, filterEl.value);
+                      this.$store.commit('catalog/updateFiltersProperty', {
+                        key1: "filters", 
+                        key2: el.filters_id, 
+                        key3: ind, 
+                        value: true
+                      })
+                      // console.log('yes filter dataF no' + el.filters_id, filterEl.value);
+                      // console.log(this.$store.getters['catalog/getFiltersPages'].filters.filters.find(item => item.filters_id == el.filters_id));
+                      continue;
+                      // break;
                     }
                     // console.log(+key == +el.filters_id ? [key, el.filters_id] : false)
                     // console.log(this.dataF[key]);
-                  } else {
-                    if(Object.values(this.dataF).find(item => item.length > 0)){
-                  r = false
-                } else {             
-                  r = true
-                }
-                  }
+                  } 
                   // console.log(r);
                 }
-                r ? filterEl.disabled = true : filterEl.disabled = false
+                // r ? filterEl.disabled = true : filterEl.disabled = false
+                // this.$store.commit('catalog/updateFiltersProperty', {key1: "filters", key2: el.filters_id, key3: ind, value: r})
               }
             }
           } else {
-            for (const filterEl of el.filters_data) {
-                let r;
-                for (const key in this.dataF) {
+            // console.log(el.filters_id);
+            // console.log('no filter ' + el.filters_id);
+            let twoF = false;
+            for (const key in this.dataF) {
                   if (this.dataF[key] && this.dataF[key].length > 0 && +key !== +el.filters_id) {
-                    if(this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].find(item => item == filterEl.value)){
-                      r = false
-                    } else {
-                      r = true
-                      break;
-                    }
-                    // console.log(this.dataF[key]);
-
-                  } else {
-                    if(Object.values(this.dataF).find(item => item.length > 0)){
-                      r = false
-                    } else {             
-                      r = true
-                    }
-                  }
-                  // console.log(r);
+                    twoF = true
+                  } 
+                  // else {
+                  //   if(Object.values(this.dataF).find(item => item.length > 0)){
+                  //     r = false
+                  //     console.log(el.filters_id)
+                  //   } else {
+                  //     r = true
+                  //     console.log(el.filters_id, r)
+                  //   }
+                  // }
                 }
-                // console.log('"Элемента ваще нигде нет"' + filterEl);
-                r ? filterEl.disabled = true : filterEl.disabled = false
-            }
+
+
+            if(this.dataF.hasOwnProperty(el.filters_id) && this.dataF[el.filters_id].length > 0 && twoF){
+                        for (let ind = 0; ind < el.filters_data.length; ind++) {
+                            const filterEl = el.filters_data[ind];
+                            // console.log(filterEl);
+                              if(this.dataF[el.filters_id].find(item => item == filterEl.value)) {
+                                this.$store.commit('catalog/updateFiltersProperty', {
+                                key1: "filters", 
+                                key2: el.filters_id, 
+                                key3: ind, 
+                                value: false
+                              })
+                                continue;
+                              } else {
+                                this.$store.commit('catalog/updateFiltersProperty', {
+                                key1: "filters", 
+                                key2: el.filters_id, 
+                                key3: ind, 
+                                value: true
+                              })
+                                continue;
+                              }
+                      }
+                    } else {
+                      this.$store.commit('catalog/updateFiltersProperty', {
+                            key1: "filters", 
+                            key2: el.filters_id, 
+                            key3: "all", 
+                            value: true
+                          })
+                      // console.log(el.filters_id, r + 'true dataF')
+                    }
+                
+                  
           }
         }
       }
@@ -360,13 +413,17 @@ export default {
       for (const el of this.filters.brands) {
         const a = data.brands.find(e => e.brand == el.brand);
         if (a) {
-          el.disabled = false;
+          // el.disabled = false;
+          // console.log(el.brand)
+          this.$store.commit('catalog/updateFiltersProperty', {key1: "brands", key2: el.brand, value: false})
         } else {
           // console.log(this.dataF.brand.find(item => item == el.brand));
           // console.log(this.dataF.brand);
           if (this.dataF.brand.find(item => item == el.brand)) {
             // console.log(el.brand)
-            el.disabled = false;
+            // el.disabled = false;
+            // console.log(el)
+            this.$store.commit('catalog/updateFiltersProperty', {key1: "brands", key2: el.brand, value: false})
           } else {
             let r;
             for (const key in this.dataF) {
@@ -382,13 +439,15 @@ export default {
               } else {
                 if(Object.values(this.dataF).find(item => item.length > 0)){
                   r = false
-                } else {             
+                } else {
                   r = true
                 }
               }
               // console.log(r);
             }
-            r ? el.disabled = true : el.disabled = false
+            // r ? el.disabled = true : el.disabled = false
+            // console.log(el)
+            this.$store.commit('catalog/updateFiltersProperty', {key1: "brands", key2: el.brand, value: r})
           }
         }
       }
@@ -396,10 +455,12 @@ export default {
       for (const el of this.filters.collections) {
         const b = data.collections.find(e => e.collection == el.collection);
         if (b) {
-          el.disabled = false;
+          // el.disabled = false;
+          this.$store.commit('catalog/updateFiltersProperty', {key1: "collections", key2: el.collection, value: false})
         } else {
           if (this.dataF.collection.find(item => item == el.collection)) {
-            el.disabled = false;
+            // el.disabled = false;
+            this.$store.commit('catalog/updateFiltersProperty', {key1: "collections", key2: el.collection, value: false})
           } else {
             let r;
             for (const key in this.dataF) {
@@ -415,16 +476,18 @@ export default {
               } else {
                 if(Object.values(this.dataF).find(item => item.length > 0)){
                   r = false
-                } else {             
+                } else {
                   r = true
                 }
               }
               // console.log(r);
             }
-            r ? el.disabled = true : el.disabled = false
+            // r ? el.disabled = true : el.disabled = false
+            this.$store.commit('catalog/updateFiltersProperty', {key1: "collections", key2: el.collection, value: r})
           }
         }
       }
+      // this.$store.commit('catalog/updateFilters', {id: this.$route.params.id, type: 'catalog', filters: this.dataF});
       // this.keyBrand++;
       // this.keyColl++;
     }

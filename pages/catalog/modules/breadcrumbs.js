@@ -1,6 +1,6 @@
-export function breadcrumbs(category_id, title, search, resCat) {
+export function breadcrumbs({category_id, title, searchInput, resCat}) {
     let breadcrumbsData;
-    if (search) {
+    if (searchInput) {
       breadcrumbsData = [
         {
           url: "",
@@ -16,15 +16,15 @@ export function breadcrumbs(category_id, title, search, resCat) {
           },
         ];
       } else if (resCat) {
-        if (resCat.data.data.parent_id) {
+        if (resCat.parent_id) {
           breadcrumbsData = [
             {
               url: "/allcategories",
               title: 'Каталог',
             },
             {
-              url: "/allcategories/" + resCat.data.data.parent_id,
-              title: resCat.data.data.parent_name,
+              url: "/allcategories/" + resCat.parent_id,
+              title: resCat.parent_name,
             },
             {
               url: "/catalog/" + category_id,

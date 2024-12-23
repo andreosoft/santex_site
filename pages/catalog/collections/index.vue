@@ -3,10 +3,16 @@
       <v-divider class="mb-8" />
       <common-beadcrumbs class="mb-4" :value="breadcrumbsData" />
       <h1>Каталог</h1>
+      <br />
+    {{ getQ }}
+    <br />
+    {{ getId }}
+    <br />
       <base-catalog 
         :data="data" 
         :loading="loading" 
-        :dataFilters="activeFilters" 
+        :dataFilters="getFiltersPages.filters" 
+        :activeFilters="getActiveFilters"
         :valueFilters="valueFilters" 
         :pager="pager"
         :sort="sort" 
@@ -20,6 +26,7 @@
   <script>
   import { getDataCollection } from "@/pages/catalog/collections/getDataCollection";
   import BaseCatalog from "@/components/catalog/base-catalog.vue";
+  import { mapGetters } from "vuex";
   export default {
     components: {BaseCatalog},
     data() {
@@ -27,8 +34,32 @@
         loading: true,
       }
     },
-    async asyncData({route, $axios, $config, error}) {
-      return await getDataCollection({route, $axios, $config, error});
+    computed: {
+    ...mapGetters({
+      getFiltersPages: "catalog/getFiltersPages",
+      getId: "catalog/getCatId",
+      getActiveFilters: "catalog/getActiveFilters",
+      getQ: "catalog/getQueryFilters",
+    }),
+  },
+  beforeDestroy() {
+    console.log(this.getFiltersPages)
+    console.log(this.$route.params.id)
+    if(this.$route.name.match('catalog-brands') || this.$route.name.match('catalog-collections')) {
+      console.log('Страница брендов или коллекций')
+      this.$store.commit("catalog/updateActiveFilters", {});
+      // this.$store.commit("catalog/updateQueryFilters", { f: {}, filters: {} });
+    } else if (this.getFiltersPages.id.id == this.$route.params.id || this.getFiltersPages.id.id == this.$route.query.q) {
+      console.log("updateQueryFilters Brands");
+      this.$store.commit("catalog/updateActiveFilters", {});
+      this.$store.commit("catalog/updateQueryFilters", { f: {}, filters: {} });
+    } else {
+      console.log("clear all Brands");
+      this.$store.commit("catalog/clearFilters");
+    }
+  },
+    async asyncData(params) {
+      return await getDataCollection(params);
     },
     watch: {
       valueFilters(v) {
@@ -47,12 +78,31 @@
       "$route": {
         async handler() {
           this.loading = true;
-          let p = await getDataCollection({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error});
+          let p = await getDataCollection({route: this.$route, $axios: this.$axios, $config: this.$config, error: this.$error, store: this.$store});
           this.loading = false;
           this.data = p.data;
-          this.activeFilters = p.activeFilters;
+          // this.activeFilters = p.activeFilters;
           this.pager = p.pager;
         },
+      },
+      '$route.query': {
+        handler(newValue, oldValue) {
+          if (newValue.filters) {
+            try {
+              const filters = JSON.parse(newValue.filters);
+              const oldfilters = JSON.parse(oldValue.filters);
+              if (filters.collection && filters.collection[0] !== oldfilters.collection[0]) {
+                console.log(filters.collection)
+                console.log(oldfilters.collection)
+                console.log('Смена collection')
+                this.valueFilters = { "f":{}, "collection": filters.collection };
+                // this.$store.commit("catalog/updateActiveFilters", {});
+                this.$store.commit("catalog/clearFilters");
+              }
+            } catch (e) {console.error(e);}
+          }
+        },
+        deep: true
       }
     },
   };
